@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · Launch scripts</title>
+<link rel="icon" href="../assets/aura-logo.png">
+<link rel="stylesheet" href="../css/aura.css">
+<style>
+.main{padding:0;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,11,10,.78);backdrop-filter:blur(14px);z-index:20}
+.sim-banner{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--gold-soft)} .sim-banner svg{width:15px;height:15px}
+.content{padding:clamp(22px,2.6vw,38px);max-width:1180px}
+.g-head{margin-bottom:26px;max-width:660px}
+.g-grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opt{padding:13px 14px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--glass);cursor:pointer;font-size:13.5px;font-weight:600;color:var(--t-mid);transition:all .18s;text-align:center}
+.opt:hover{border-color:var(--line-strong);color:var(--cream)}
+.opt.on{border-color:rgba(184,255,77,.45);background:rgba(184,255,77,.08);color:var(--lime)}
+.ctrl{margin-bottom:20px}
+.ctrl > .label{margin-bottom:9px}
+.out-stage{position:sticky;top:90px}
+.script-card{border:1px solid var(--line-strong);border-radius:var(--r-lg);overflow:hidden;background:var(--ink-700)}
+.script-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--ink-800)}
+.script-body{padding:24px}
+.script-empty{padding:60px 30px;text-align:center;color:var(--t-lo)}
+.script-empty .orb{width:72px;height:72px;border-radius:50%;margin:0 auto 20px;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,rgba(184,255,77,.15),transparent 70%);border:1px solid rgba(184,255,77,.2)}
+.block{margin-bottom:22px}
+.block-label{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:9px}
+.block-label.gold{color:var(--gold)}
+.block p{font-size:16px;line-height:1.6;color:var(--cream);white-space:pre-wrap}
+.block.body p{color:var(--beige)}
+.gen-loading{display:flex;flex-direction:column;align-items:center;padding:60px 20px;gap:18px}
+.var-tabs{display:flex;gap:6px;padding:14px 20px 0}
+.var-tabs button{width:34px;height:34px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--line);font-family:var(--mono);font-size:13px;color:var(--t-mid);transition:all .2s}
+.var-tabs button.active{background:var(--glass-2);color:var(--lime);border-color:rgba(184,255,77,.35)}
+.fade{animation:fadein .4s var(--ease) both}@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:980px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.g-grid{grid-template-columns:1fr}.out-stage{position:static}}
+</style>
+</head>
+<body>
+<div class="aura-bg"></div>
+<div class="app-shell" id="shell">
+  <main class="main">
+    <div class="topbar">
+      <h1 style="font-size:19px" data-t="g_title"></h1>
+      <div class="sim-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span data-t="sim_banner"></span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="g-head">
+        <div class="eyebrow gold"><span data-t="g_title"></span></div>
+        <h2 class="display-md" style="font-size:30px;margin-top:14px" data-t="g_head"></h2>
+        <p class="lede" data-t="g_sub"></p>
+      </div>
+
+      <div class="g-grid">
+        <div class="card card-pad-lg">
+          <div class="ctrl"><div class="label" data-t="g_what"></div><div class="opt-grid" id="offerOpts"></div></div>
+          <div class="ctrl"><div class="label" data-t="g_platform"></div><div class="opt-grid" id="platformOpts"></div></div>
+          <div class="ctrl"><div class="label" data-t="g_tone"></div><div class="opt-grid" style="grid-template-columns:1fr" id="toneOpts"></div></div>
+          <div class="ctrl"><div class="label" data-t="g_goal"></div><div class="opt-grid" style="grid-template-columns:1fr" id="goalOpts"></div></div>
+          <div class="ctrl"><div class="label" data-t="g_name"></div><input class="input" id="offerName" data-t-attr="placeholder:g_name_ph"></div>
+          <div class="field-row" style="display:flex;gap:14px">
+            <div class="ctrl field" style="flex:1"><div class="label" data-t="g_price"></div><input class="input" id="offerPrice" value="$19"></div>
+            <div class="ctrl field" style="flex:1"><div class="label" data-t="g_audience"></div><input class="input" id="offerHandle" value="@maya.studio"></div>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" id="genBtn"><span data-t="g_generate"></span></button>
+        </div>
+
+        <div class="out-stage">
+          <div class="script-card">
+            <div class="script-head">
+              <div class="eyebrow no-rule"><span data-t="g_output"></span></div>
+              <button class="btn btn-ghost btn-sm hide" id="copyBtn" data-t="g_copy"></button>
+            </div>
+            <div class="var-tabs hide" id="varTabs"></div>
+            <div id="scriptOut">
+              <div class="script-empty">
+                <div class="orb"><img src="../assets/aura-logo.png" width="38" height="38" alt=""></div>
+                <p style="max-width:24em;margin:0 auto" data-t="g_empty"></p>
+              </div>
+            </div>
+          </div>
+          <div class="alert info" style="margin-top:16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span data-t="g_tip"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="../js/aura-api.js"></script><script src="../js/i18n.js"></script>
+<script src="../js/product-shell.js"></script>
+<script src="../js/script-copy.js"></script>
+<script src="../js/script-templates.js"></script>
+<script src="../js/script.js"></script>
+</body>
+</html>

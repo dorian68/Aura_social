@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · Workspace</title>
+<link rel="icon" href="../assets/aura-logo.png">
+<link rel="stylesheet" href="../css/aura.css">
+<style>
+.main{padding:0;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,11,10,.78);backdrop-filter:blur(14px);z-index:20}
+.sim-banner{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--gold-soft)} .sim-banner svg{width:15px;height:15px}
+.content{padding:clamp(22px,2.6vw,38px);max-width:1280px}
+.ws-head{margin-bottom:26px;max-width:640px}
+
+/* kpi row */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kcard{background:linear-gradient(180deg,var(--glass-2),rgba(255,247,232,.012));border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;transition:border-color .25s,transform .25s var(--ease)}
+.kcard:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.kcard .kl{font-size:12.5px;color:var(--t-lo);font-weight:600;margin-bottom:12px}
+.kcard .kv{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:-.03em;color:var(--cream);line-height:1}
+.kcard .kfoot{margin-top:8px;display:flex;align-items:center;gap:7px;font-size:12px}
+
+.ws-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:start}
+.panel{background:linear-gradient(180deg,var(--glass-2),rgba(255,247,232,.01));border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.panel-head h3{font-size:16px;font-family:var(--display);font-weight:600;color:var(--cream)}
+
+/* integration grid */
+.int-grid{display:flex;flex-direction:column;gap:10px}
+
+@media (max-width:1100px){.kpi-row{grid-template-columns:1fr 1fr}}
+@media (max-width:980px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.ws-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.kpi-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="aura-bg"></div>
+<div class="app-shell" id="shell">
+  <main class="main">
+    <div class="topbar">
+      <h1 style="font-size:19px" data-t="ws_title"></h1>
+      <div class="row gap-12">
+        <div class="sim-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span data-t="ws_sim"></span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="refreshBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          <span data-t="ws_refresh"></span>
+        </button>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="ws-head">
+        <div class="eyebrow gold"><span data-t="ws_title"></span></div>
+        <h2 class="display-md" style="font-size:30px;margin-top:14px" data-t="ws_head"></h2>
+        <p class="lede" data-t="ws_sub"></p>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row" id="wsKpis">
+        <div class="kcard"><div class="kl" data-t="ws_score"></div><div class="kv skel" style="height:30px;width:80px;border-radius:8px"></div></div>
+        <div class="kcard"><div class="kl" data-t="ws_integrations"></div><div class="kv skel" style="height:30px;width:40px;border-radius:8px"></div></div>
+        <div class="kcard"><div class="kl" data-t="ws_connected"></div><div class="kv skel" style="height:30px;width:30px;border-radius:8px"></div></div>
+        <div class="kcard"><div class="kl" data-t="ws_issues"></div><div class="kv skel" style="height:30px;width:20px;border-radius:8px"></div></div>
+      </div>
+
+      <div class="ws-grid">
+        <!-- left: integrations -->
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3 data-t="ws_int_t"></h3></div>
+          </div>
+          <div class="int-grid" id="intGrid">
+            ${Array(6).fill(0).map(() => `<div class="skel" style="height:60px;border-radius:var(--r-md)"></div>`).join('')}
+          </div>
+        </div>
+
+        <!-- right: accounts + audit -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <div class="panel">
+            <div class="panel-head"><div><h3 data-t="ws_accounts_t"></h3></div></div>
+            <div id="accountsList">
+              <div class="skel" style="height:48px;border-radius:var(--r-md);margin-bottom:10px"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><div><h3 data-t="ws_audit_t"></h3></div></div>
+            <div id="auditList">
+              ${Array(3).fill(0).map(() => `<div class="skel" style="height:44px;border-radius:var(--r-md);margin-bottom:10px"></div>`).join('')}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="../js/aura-api.js"></script><script src="../js/i18n.js"></script>
+<script src="../js/product-shell.js"></script>
+<script src="../js/workspace-copy.js"></script>
+<script src="../js/workspace.js"></script>
+</body>
+</html>

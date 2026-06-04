@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · Fan Pass studio</title>
+<link rel="icon" href="../assets/aura-logo.png">
+<link rel="stylesheet" href="../css/aura.css">
+<style>
+.main{padding:0;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,11,10,.78);backdrop-filter:blur(14px);z-index:20}
+.sim-banner{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--gold-soft)} .sim-banner svg{width:15px;height:15px}
+.content{padding:clamp(22px,2.6vw,38px);max-width:1280px}
+.f-head{margin-bottom:26px;max-width:680px}
+.f-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:24px;align-items:start}
+.field-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.field-row .field{flex:1;min-width:150px}
+.art-row{display:flex;gap:10px}
+.art-opt{flex:1;height:54px;border-radius:var(--r-md);border:1.5px solid var(--line);cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s}
+.art-opt.on{border-color:var(--lime);box-shadow:var(--glow-lime-soft)}
+.art-opt span{position:absolute;bottom:6px;left:8px;font-size:11px;font-family:var(--mono);color:var(--cream);z-index:2}
+/* pass visual */
+.pass-stage{position:sticky;top:90px}
+.pass-card{aspect-ratio:1.586/1;border-radius:22px;padding:26px;position:relative;overflow:hidden;border:1px solid rgba(255,247,232,.16);box-shadow:var(--shadow-pop);display:flex;flex-direction:column;justify-content:space-between;transition:background .5s}
+.pass-card .grain{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1px);background-size:18px 18px;mix-blend-mode:overlay}
+.pass-card .pc-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.pass-card .pc-edition{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:rgba(10,18,6,.7);background:rgba(255,247,232,.85);padding:4px 10px;border-radius:var(--r-pill)}
+.pass-card .pc-name{font-family:var(--display);font-size:26px;font-weight:700;color:#0A1206;letter-spacing:-.02em;position:relative;line-height:1.05}
+.pass-card .pc-foot{display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+.pass-card .pc-price{font-family:var(--display);font-size:30px;font-weight:700;color:#0A1206}
+.pass-card .pc-id{font-family:var(--mono);font-size:11px;color:rgba(10,18,6,.6)}
+.art-aurora{background:linear-gradient(135deg,#B8FF4D,#7ad17a 50%,#4aa7c9)}
+.art-eclipse{background:linear-gradient(135deg,#C8A96A,#9a7d4a 55%,#3a2f1c);}
+.art-eclipse .pc-name,.art-eclipse .pc-price{color:#1a1408}
+.art-prism{background:linear-gradient(135deg,#CFFF80,#9be0c0 40%,#c8a9ff)}
+.supply-wrap{margin-top:6px}
+.supply-stats{display:flex;justify-content:space-between;font-size:13px;color:var(--t-mid);margin-bottom:8px}
+.view-toggle{display:inline-flex;padding:4px;gap:4px;background:var(--ink-700);border:1px solid var(--line);border-radius:var(--r-pill);margin-bottom:16px}
+.view-toggle button{padding:8px 16px;border-radius:var(--r-pill);font-size:13.5px;font-weight:600;color:var(--t-mid);transition:all .2s}
+.view-toggle button.active{background:var(--glass-2);color:var(--cream);box-shadow:inset 0 0 0 1px var(--line-strong)}
+.layer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.layer-card{padding:18px;border-radius:var(--r-md);border:1px solid var(--line);background:linear-gradient(180deg,var(--glass-2),transparent)}
+.layer-card b{font-family:var(--display);font-size:16px;color:var(--cream);display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.layer-card b svg{width:17px;height:17px;color:var(--lime)}
+.layer-card span{font-size:13px;color:var(--t-mid);line-height:1.5}
+.holders{display:flex;flex-direction:column;gap:0}
+.holder{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);animation:slideIn .4s var(--ease) both}
+.holder:last-child{border-bottom:none}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.holder .hav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2a3530,#12382b);display:grid;place-items:center;font-size:12px;color:var(--lime);font-family:var(--display);flex:none}
+.holder .hid{font-family:var(--mono);font-size:11.5px;color:var(--t-lo);margin-left:auto}
+.metric-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media (max-width:980px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.f-grid{grid-template-columns:1fr}.pass-stage{position:static}}
+</style>
+</head>
+<body>
+<div class="aura-bg"></div>
+<div class="app-shell" id="shell">
+  <main class="main">
+    <div class="topbar">
+      <h1 style="font-size:19px" data-t="f_title"></h1>
+      <div class="sim-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span data-t="sim_banner"></span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="f-head">
+        <div class="eyebrow gold"><span data-t="f_title"></span></div>
+        <h2 class="display-md" style="font-size:30px;margin-top:14px" data-t="f_head"></h2>
+        <p class="lede" data-t="f_sub"></p>
+      </div>
+
+      <div class="f-grid">
+        <!-- LEFT: design controls -->
+        <div class="card card-pad-lg">
+          <div class="eyebrow no-rule" style="margin-bottom:20px"><span data-t="f_design"></span></div>
+          <div class="field" style="margin-bottom:18px">
+            <div class="label" data-t="f_name"></div>
+            <input class="input" id="passName" data-t-attr="value:f_name_v">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <div class="label" data-t="f_edition"></div>
+              <input class="input" type="number" id="passEdition" value="500" min="10">
+            </div>
+            <div class="field">
+              <div class="label" data-t="f_price"></div>
+              <div class="price-input" style="display:flex;align-items:center;gap:4px;background:var(--ink-700);border:1px solid var(--line-strong);border-radius:var(--r-md);padding:0 14px;height:50px"><span style="color:var(--t-lo)">$</span><input type="number" id="passPrice" value="19" min="0" style="background:none;border:none;color:var(--cream);font-size:16px;width:100%;outline:none"></div>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:18px">
+            <div class="label" data-t="f_artwork"></div>
+            <div class="art-row" id="artRow"></div>
+          </div>
+          <div class="field">
+            <div class="label" data-t="f_perks"></div>
+            <ul class="price-feats" id="perkList" style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:6px"></ul>
+          </div>
+
+          <hr class="divider" style="margin:24px 0">
+          <div class="card" style="padding:18px;background:linear-gradient(135deg,rgba(18,56,43,.35),transparent)">
+            <div class="row between" style="margin-bottom:6px">
+              <b style="color:var(--cream);font-size:14.5px" data-t="f_airdrop"></b>
+              <span class="pill gold" data-t="f_sim"></span>
+            </div>
+            <p class="faint" style="font-size:12.5px;margin-bottom:14px" data-t="f_airdrop_d"></p>
+            <button class="btn btn-line btn-block btn-sm" id="airdropBtn" data-t="f_airdrop_btn"></button>
+          </div>
+        </div>
+
+        <!-- RIGHT: live pass + launch -->
+        <div class="pass-stage">
+          <div class="view-toggle" id="viewToggle"></div>
+
+          <div id="fanView">
+            <div class="pass-card art-aurora" id="passCard">
+              <div class="grain"></div>
+              <div class="pc-top">
+                <span class="pc-edition" id="pcEdition">/ 500</span>
+                <img src="../assets/aura-logo.png" width="30" height="30" alt="">
+              </div>
+              <div class="pc-name" id="pcName">Maya · Founders Pass</div>
+              <div class="pc-foot">
+                <span class="pc-price" id="pcPrice">$19</span>
+                <span class="pc-id">#0001</span>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:16px">
+              <div class="supply-wrap">
+                <div class="supply-stats">
+                  <span><b style="color:var(--cream);font-family:var(--display);font-size:18px" id="mintedCount">0</b> <span data-t="f_supply_label"></span></span>
+                  <span class="mono" id="remainCount">500 <span data-t="f_remaining"></span></span>
+                </div>
+                <div class="progress"><span id="supplyBar" style="width:0%"></span></div>
+              </div>
+              <div class="metric-2">
+                <div class="kpi"><div class="kpi-label" data-t="f_revenue"></div><div class="kpi-value tnum hl" id="launchRev">$0</div></div>
+                <div class="kpi"><div class="kpi-label" data-t="f_supply_label"></div><div class="kpi-value tnum" id="mintedKpi">0<span class="unit" id="mintedPct">%</span></div></div>
+              </div>
+              <button class="btn btn-primary btn-block btn-lg" id="launchBtn" data-t="f_launch"></button>
+              <button class="btn btn-ghost btn-block btn-sm hide" id="resetBtn" style="margin-top:10px" data-t="f_reset"></button>
+            </div>
+
+            <div class="card" style="margin-top:16px">
+              <div class="eyebrow no-rule" style="margin-bottom:14px"><span data-t="f_holders"></span></div>
+              <div class="holders" id="holders"><p class="faint" style="font-size:13px">—</p></div>
+            </div>
+          </div>
+
+          <div id="techView" class="hide">
+            <div class="layer-grid">
+              <div class="layer-card"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span data-t="f_layer_owner"></span></b><span data-t="f_layer_owner_d"></span></div>
+              <div class="layer-card"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 21 12 17l-5.5 4L8 13.5 3 9l6.5-.5z"/></svg><span data-t="f_layer_scarce"></span></b><span data-t="f_layer_scarce_d"></span></div>
+              <div class="layer-card"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16M14 6l6 6-6 6M10 18l-6-6 6-6"/></svg><span data-t="f_layer_port"></span></b><span data-t="f_layer_port_d"></span></div>
+              <div class="layer-card"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg><span data-t="f_layer_trans"></span></b><span data-t="f_layer_trans_d"></span></div>
+            </div>
+            <div class="alert sim" style="margin-top:16px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span data-t="f_disclaimer"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="../js/aura-api.js"></script><script src="../js/i18n.js"></script>
+<script src="../js/product-shell.js"></script>
+<script src="../js/fanpass-copy.js"></script>
+<script src="../js/fanpass.js"></script>
+</body>
+</html>

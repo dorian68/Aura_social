@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · Components</title>
+<link rel="icon" href="../assets/aura-logo.png">
+<link rel="stylesheet" href="../css/aura.css">
+<style>
+.main{padding:0;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,11,10,.78);backdrop-filter:blur(14px);z-index:20}
+.content{padding:clamp(22px,2.6vw,44px);max-width:1100px}
+.comp-head{margin-bottom:36px;max-width:640px}
+.cs{margin-bottom:44px}
+.cs-title{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:6px}
+.cs h3{font-size:22px;margin-bottom:18px}
+.demo{border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;background:linear-gradient(180deg,var(--glass),transparent)}
+.demo + .demo{margin-top:14px}
+.demo-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.swatch{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line)}
+.swatch .chip{height:64px}
+.swatch .meta{padding:10px 12px;background:var(--ink-700)}
+.swatch .meta b{font-size:13px;color:var(--cream);display:block}
+.swatch .meta span{font-family:var(--mono);font-size:11px;color:var(--t-lo)}
+.type-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
+.type-row:last-child{border-bottom:none}
+.type-row .spec{font-family:var(--mono);font-size:11.5px;color:var(--t-lo);white-space:nowrap}
+.demo-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.demo-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.demo-grid-2,.demo-grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="aura-bg"></div>
+<div class="app-shell" id="shell">
+  <main class="main">
+    <div class="topbar">
+      <h1 style="font-size:19px" data-t="nav_components">Components</h1>
+      <a href="../index.html" class="btn btn-ghost btn-sm" data-t="back_home">Back to site</a>
+    </div>
+    <div class="content">
+      <div class="comp-head">
+        <div class="logo-lockup" style="margin-bottom:18px"><img src="../assets/aura-logo.png" width="40" height="40" alt=""></div>
+        <div class="eyebrow gold"><span>Design system</span></div>
+        <h2 class="display-md" style="font-size:32px;margin-top:14px">The building blocks</h2>
+        <p class="lede">The visual language behind AURA — a private creator club rendered in deep forest-black, warm cream and electric lime, with muted gold for moments of luxe.</p>
+      </div>
+
+      <!-- BRAND -->
+      <section class="cs">
+        <div class="cs-title">Brand</div>
+        <h3>Logo &amp; mark</h3>
+        <div class="demo demo-row" style="gap:40px;justify-content:flex-start">
+          <div class="logo-lockup"><img src="../assets/aura-logo.png" width="44" height="44" alt=""></div>
+          <img src="../assets/aura-logo.png" width="56" height="56" alt="">
+          <div style="background:var(--cream);padding:14px 18px;border-radius:var(--r-md);display:flex;align-items:center;gap:10px"><img src="../assets/aura-logo.png" width="30" height="30" alt=""><span style="font-family:var(--display);font-weight:600;font-size:20px;color:#0A1206;letter-spacing:.04em">AURA</span></div>
+          <span class="mono" style="font-size:12px;color:var(--lime);letter-spacing:.14em">REVEAL · CONNECT · REWARD</span>
+        </div>
+      </section>
+
+      <!-- COLOR -->
+      <section class="cs">
+        <div class="cs-title">Colors</div>
+        <h3>Palette</h3>
+        <div class="demo">
+          <div class="swatch-grid" id="swatches"></div>
+        </div>
+      </section>
+
+      <!-- TYPE -->
+      <section class="cs">
+        <div class="cs-title">Type</div>
+        <h3>Typographic scale</h3>
+        <div class="demo">
+          <div class="type-row"><span class="display-lg txt-grad">Superfan</span><span class="spec">Space Grotesk · display-lg</span></div>
+          <div class="type-row"><span class="display-md">Reveal the value</span><span class="spec">Space Grotesk · display-md</span></div>
+          <div class="type-row"><span class="h-lg">Section heading</span><span class="spec">Space Grotesk · h-lg</span></div>
+          <div class="type-row"><span class="lede" style="margin:0">A warm, readable lede paragraph in Inter.</span><span class="spec">Inter · lede</span></div>
+          <div class="type-row"><span style="font-size:15px;color:var(--t-mid)">Body copy and UI text.</span><span class="spec">Inter · body</span></div>
+          <div class="type-row"><span class="mono" style="color:var(--lime)">MONO · LABELS · 9.1K</span><span class="spec">Space Mono · mono</span></div>
+        </div>
+      </section>
+
+      <!-- BUTTONS -->
+      <section class="cs">
+        <div class="cs-title">Components</div>
+        <h3>Buttons</h3>
+        <div class="demo demo-row">
+          <button class="btn btn-primary">Analyze my Instagram</button>
+          <button class="btn btn-gold">Upgrade</button>
+          <button class="btn btn-ghost">Secondary</button>
+          <button class="btn btn-line">See how it works</button>
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary" disabled>Disabled</button>
+        </div>
+      </section>
+
+      <!-- PILLS / BADGES -->
+      <section class="cs">
+        <h3>Pills, badges &amp; tiers</h3>
+        <div class="demo demo-row">
+          <span class="pill">Default</span>
+          <span class="pill lime dot">Ready to launch</span>
+          <span class="pill gold">Simulation</span>
+          <span class="badge pos">+18%</span>
+          <span class="badge warn">New</span>
+          <span class="badge neg">-4%</span>
+          <span class="tier-badge" style="color:var(--gold);border-color:var(--gold);background:rgba(200,169,106,.12)">Founder</span>
+          <span class="tier-badge" style="color:var(--lime);border-color:var(--lime);background:rgba(184,255,77,.1)">VIP</span>
+          <span class="tier-badge" style="color:var(--info);border-color:var(--info);background:rgba(127,182,255,.1)">Insider</span>
+        </div>
+      </section>
+
+      <!-- KPI + RING -->
+      <section class="cs">
+        <h3>Metrics</h3>
+        <div class="demo demo-grid-3">
+          <div class="kpi hover"><div class="kpi-label">Superfan Score</div><div class="kpi-value tnum">87<span class="unit">/100</span></div><div class="kpi-foot"><span class="badge pos">+4</span> vs last period</div></div>
+          <div class="kpi hover"><div class="kpi-label">Est. monthly revenue</div><div class="kpi-value tnum hl">$9.1K</div><div class="kpi-foot"><span class="badge pos">+18%</span></div></div>
+          <div class="demo" style="display:grid;place-items:center;padding:8px;border:none">
+            <div class="ring">
+              <svg width="92" height="92" viewBox="0 0 92 92">
+                <circle cx="46" cy="46" r="40" fill="none" stroke="rgba(232,220,200,.1)" stroke-width="7"/>
+                <circle cx="46" cy="46" r="40" fill="none" stroke="var(--lime)" stroke-width="7" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="33" style="filter:drop-shadow(0 0 6px rgba(184,255,77,.6))"/>
+              </svg>
+              <div class="ring-num"><b style="font-size:24px;color:var(--cream)" class="tnum">87</b></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORMS -->
+      <section class="cs">
+        <h3>Inputs &amp; controls</h3>
+        <div class="demo demo-grid-2" style="align-items:start">
+          <div class="stack gap-16">
+            <div class="field"><div class="label">Text input</div><input class="input" placeholder="your.username"></div>
+            <div class="input-ig"><span class="at">@</span><input type="text" placeholder="your.username"><button class="btn btn-primary">Analyze</button></div>
+            <div class="field"><div class="label">Textarea</div><textarea class="textarea" placeholder="Write something…"></textarea></div>
+          </div>
+          <div class="stack gap-16">
+            <div class="row gap-12"><span class="switch on" id="sw"></span><span class="muted">Toggle switch</span></div>
+            <div class="segmented"><button>7d</button><button class="active">30d</button><button>90d</button></div>
+            <div class="field"><div class="label">Progress</div><div class="progress"><span style="width:62%"></span></div></div>
+            <div class="row gap-12"><span class="spinner"></span><span class="muted">Loading state</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ALERTS -->
+      <section class="cs">
+        <h3>Alerts</h3>
+        <div class="demo stack gap-12">
+          <div class="alert pos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg><div><b style="color:var(--cream)">Recommended path</b> — Launch a Fan Pass at $19 to your top 4%.</div></div>
+          <div class="alert sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Simulation environment — numbers are projections, the token layer is not live.</span></div>
+          <div class="alert info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Always review AI-generated scripts before posting.</span></div>
+        </div>
+      </section>
+
+      <!-- CARDS -->
+      <section class="cs">
+        <h3>Cards</h3>
+        <div class="demo-grid-2">
+          <div class="card hover">
+            <div class="eyebrow gold no-rule" style="margin-bottom:14px"><span>Fan Pass</span></div>
+            <h3 class="h-md">Founders Pass</h3>
+            <p class="muted mt-12">A limited collectible that grants lifetime VIP status and private drops.</p>
+            <div class="row gap-12 mt-20"><span class="pill lime dot">500 supply</span><span class="pill">$19</span></div>
+          </div>
+          <div class="card glow">
+            <div class="eyebrow no-rule" style="margin-bottom:14px"><span>Projected revenue</span></div>
+            <div class="kpi-value tnum hl" style="font-size:42px">$9,120</div>
+            <div class="bars" style="height:80px;margin-top:14px">
+              <div class="bar muted" style="height:40%"></div><div class="bar muted" style="height:55%"></div><div class="bar" style="height:72%"></div><div class="bar" style="height:90%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="faint" style="font-size:12.5px;border-top:1px solid var(--line);padding-top:18px">AURA design system · built on Space Grotesk, Inter &amp; Space Mono.</p>
+    </div>
+  </main>
+</div>
+<script src="../js/aura-api.js"></script><script src="../js/i18n.js"></script>
+<script src="../js/product-shell.js"></script>
+<script>
+(function(){
+  AuraI18n.init({ en: AURA_PRODUCT_COPY.en, fr: AURA_PRODUCT_COPY.fr });
+  auraMountShell('components');
+  const COLORS = [
+    ['Ink 800','#080B0A','--ink-800'],['Ink 600','#101614','--ink-600'],['Forest','#12382B','--forest'],
+    ['Lime','#B8FF4D','--lime'],['Lime soft','#CFFF80','--lime-soft'],['Cream','#FFF7E8','--cream'],
+    ['Beige','#E8DCC8','--beige'],['Gold','#C8A96A','--gold'],['Info','#7FB6FF','--info']
+  ];
+  document.getElementById('swatches').innerHTML = COLORS.map(([n,hex])=>
+    `<div class="swatch"><div class="chip" style="background:${hex}"></div><div class="meta"><b>${n}</b><span>${hex}</span></div></div>`).join('');
+  const sw = document.getElementById('sw');
+  sw && sw.addEventListener('click', ()=> sw.classList.toggle('on'));
+  AuraI18n.apply();
+})();
+</script>
+</body>
+</html>

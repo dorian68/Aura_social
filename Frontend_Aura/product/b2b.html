@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · B2B Growth Engine</title>
+<link rel="icon" href="../assets/aura-logo.png">
+<link rel="stylesheet" href="../css/aura.css">
+<style>
+.main{padding:0;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,11,10,.78);backdrop-filter:blur(14px);z-index:20}
+.sim-banner{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--gold-soft)} .sim-banner svg{width:15px;height:15px}
+.content{padding:clamp(22px,2.6vw,38px);max-width:1280px}
+.b2b-head{margin-bottom:26px;max-width:640px}
+
+/* selector panel */
+.ctrl-panel{background:linear-gradient(180deg,var(--glass-2),rgba(255,247,232,.01));border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;margin-bottom:24px}
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:20px;align-items:end}
+.ctrl-label{font-size:13px;font-weight:600;color:var(--t-mid);margin-bottom:10px}
+.opt-chips{display:flex;flex-wrap:wrap;gap:7px}
+.opt{padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--line);background:var(--glass);cursor:pointer;font-size:13px;font-weight:600;color:var(--t-mid);transition:all .18s;white-space:nowrap}
+.opt:hover{border-color:var(--line-strong);color:var(--cream)}
+.opt.on{border-color:rgba(184,255,77,.45);background:rgba(184,255,77,.08);color:var(--lime)}
+
+/* results grid */
+.b2b-grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:14px}
+
+/* kpi row */
+.kcard{background:linear-gradient(180deg,var(--glass-2),rgba(255,247,232,.012));border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;transition:border-color .25s,transform .25s var(--ease);position:relative;overflow:hidden}
+.kcard:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.kcard .kl{font-size:12.5px;color:var(--t-lo);font-weight:600;margin-bottom:12px}
+.kcard .kv{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-.03em;color:var(--cream);line-height:1}
+.kcard .kv.lime{color:var(--lime)}
+.kcard .kfoot{margin-top:10px;display:flex;align-items:center;gap:7px;font-size:12px}
+
+.panel{background:linear-gradient(180deg,var(--glass-2),rgba(255,247,232,.01));border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.panel-head h3{font-size:16px;font-family:var(--display);font-weight:600;color:var(--cream)}
+.panel-head .sub{font-size:12.5px;color:var(--t-lo);margin-top:3px}
+
+.pitch-body::-webkit-scrollbar{width:6px}.pitch-body::-webkit-scrollbar-track{background:var(--ink-800)}.pitch-body::-webkit-scrollbar-thumb{background:var(--ink-500);border-radius:3px}
+
+@media (max-width:1100px){.ctrl-grid{grid-template-columns:1fr 1fr}.ctrl-grid .run-wrap{grid-column:1/-1}}
+@media (max-width:980px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.b2b-grid{grid-template-columns:1fr}.b2b-grid > [style*="grid-column"]{grid-column:1/-1}}
+@media (max-width:560px){.ctrl-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="aura-bg"></div>
+<div class="app-shell" id="shell">
+  <main class="main">
+    <div class="topbar">
+      <h1 style="font-size:19px" data-t="b2b_title"></h1>
+      <div class="sim-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span data-t="sim_banner"></span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="b2b-head">
+        <div class="eyebrow gold"><span data-t="b2b_title"></span></div>
+        <h2 class="display-md" style="font-size:30px;margin-top:14px" data-t="b2b_head"></h2>
+        <p class="lede" data-t="b2b_sub"></p>
+      </div>
+
+      <!-- configurator -->
+      <div class="ctrl-panel">
+        <div class="ctrl-grid">
+          <div>
+            <div class="ctrl-label" data-t="b2b_location"></div>
+            <div class="opt-chips" id="locChips"></div>
+          </div>
+          <div>
+            <div class="ctrl-label" data-t="b2b_category"></div>
+            <div class="opt-chips" id="catChips"></div>
+          </div>
+          <div>
+            <div class="ctrl-label" data-t="b2b_budget"></div>
+            <div class="opt-chips" id="budgetChips"></div>
+          </div>
+          <div class="run-wrap" style="display:flex;align-items:flex-end">
+            <button class="btn btn-primary btn-lg" id="runBtn" style="white-space:nowrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M5 3l14 9-14 9V3z"/></svg>
+              <span data-t="b2b_run"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- results -->
+      <div class="b2b-grid" id="b2bResults"></div>
+
+    </div>
+  </main>
+</div>
+<script src="../js/aura-api.js"></script><script src="../js/i18n.js"></script>
+<script src="../js/product-shell.js"></script>
+<script src="../js/b2b-copy.js"></script>
+<script src="../js/b2b.js"></script>
+</body>
+</html>
