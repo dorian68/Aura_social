@@ -9,9 +9,9 @@ import "./tools/contractTools";
 import "./tools/navigationTools";
 
 import { enrichContextWithDefaults } from "./mockOperatorContext";
-import { buildConfirmationPrompt, requiresConfirmation } from "./safety";
+import { buildConfirmationPrompt, issueConfirmationToken, requiresConfirmation } from "./safety";
 import { getTool, getToolsMetadata } from "./toolRegistry";
-import { executeTool } from "./toolExecutor";
+import { executeTool, type ToolExecutionOptions } from "./toolExecutor";
 import { routeIntent } from "./intentRouter";
 import {
   collectNextActions,
@@ -72,6 +72,8 @@ export async function handleOperatorChat(request: OperatorChatRequest): Promise<
         tool: route.toolName,
         args: route.args,
         warning: "This action requires explicit confirmation before execution.",
+        // Single-use token bound to this exact (tool, args). Echo it to /execute to run.
+        confirmationToken: issueConfirmationToken(route.toolName, route.args),
       },
     };
   }
@@ -94,9 +96,10 @@ export async function executeToolDirect(
   toolName: string,
   args: Record<string, unknown>,
   context: Partial<OperatorContext> = {},
+  options: ToolExecutionOptions = {},
 ): Promise<{ result: ToolResult; record: ToolCallRecord }> {
   const enrichedContext = enrichContextWithDefaults(context);
-  return executeTool(toolName, args, enrichedContext);
+  return executeTool(toolName, args, enrichedContext, options);
 }
 
 export { getOperatorAuditLog } from "./toolExecutor";

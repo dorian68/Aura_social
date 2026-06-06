@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+.DS_Store
+*.log
+*.tsbuildinfo
+.env*
+!.env.example
+data/instagram/
+
+# Secrets — ne jamais committer
+.env.local
+.env*.local
+
+# Runtime / generated
+cache/
+Frontend_Aura/uploads/
+Frontend_Aura/screenshots/
+artifacts/
+reports/
+prospecting/

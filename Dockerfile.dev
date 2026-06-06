@@ -1,0 +1,30 @@
+# ── Aura — DEVELOPMENT image ─────────────────────────────────────────────
+# Runs `next dev` with hot reload. In docker-compose the repo is bind-mounted
+# over /app and node_modules / .next live in anonymous volumes, so edits on the
+# host reload live. Debian slim (not alpine) for reliable native deps (hardhat).
+FROM node:22-bookworm-slim
+
+WORKDIR /app
+ENV NODE_ENV=development \
+    NEXT_TELEMETRY_DISABLED=1
+
+# ca-certificates for outbound HTTPS (Meta Graph API, etc.)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install deps first (cached unless package files change)
+COPY package.json package-lock.json* ./
+RUN npm ci || npm install
+# The committed lockfile may only carry the host-OS SWC binary, making Next fall
+# back to slow WASM in the (Linux) container. Install the matching native binary.
+RUN npm install --no-save --no-audit --no-fund "@next/swc-linux-x64-gnu@$(node -p "require('next/package.json').version")" || true
+
+# App source (overlaid by the bind mount in compose; kept so the image also runs standalone)
+COPY . .
+
+# Default Next port (overridable via PORT). The server binds 0.0.0.0 (see CMD/script).
+EXPOSE 3000
+
+# next dev -H 0.0.0.0 (reads PORT from env). See package.json "dev:docker".
+CMD ["npm", "run", "dev:docker"]

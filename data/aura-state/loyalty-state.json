@@ -1,0 +1,919 @@
+{
+  "creators": [
+    {
+      "id": "creator_ig_mock-ig-1",
+      "name": "Aura Demo Creator",
+      "handle": "@aura.demo",
+      "category": "Creator",
+      "region": "",
+      "connectedInstagramAccount": "mock-ig-1",
+      "loyaltyProgramId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "createdAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "creator_aura_demo",
+      "name": "Aura Demo Creator",
+      "handle": "@aura.creator",
+      "category": "Creator education and community",
+      "region": "Caribbean / France",
+      "connectedInstagramAccount": "@aura.creator",
+      "loyaltyProgramId": "program_aura_inner_circle",
+      "createdAt": "2026-06-04T08:00:00.000Z"
+    }
+  ],
+  "programs": [
+    {
+      "id": "program_aura_inner_circle",
+      "creatorId": "creator_aura_demo",
+      "name": "Aura Inner Circle",
+      "description": "A non-speculative loyalty program for activating superfans.",
+      "pointsName": "Aura Points",
+      "pointsSymbol": "AURA",
+      "status": "active",
+      "tokenizationMode": "offchain",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "creatorId": "creator_ig_mock-ig-1",
+      "name": "aura.demo Inner Circle",
+      "description": "Loyalty program for @aura.demo",
+      "pointsName": "Aura Points",
+      "pointsSymbol": "AURA",
+      "status": "active",
+      "tokenizationMode": "offchain",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    }
+  ],
+  "rules": [
+    {
+      "id": "rule_program_aura_inner_circle_like",
+      "programId": "program_aura_inner_circle",
+      "actionType": "like",
+      "points": 1,
+      "active": true,
+      "description": "Like a creator post",
+      "source": "instagram",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_comment",
+      "programId": "program_aura_inner_circle",
+      "actionType": "comment",
+      "points": 5,
+      "active": true,
+      "description": "Comment on a post or reel",
+      "source": "instagram",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_save",
+      "programId": "program_aura_inner_circle",
+      "actionType": "save",
+      "points": 10,
+      "active": true,
+      "description": "Save useful content",
+      "source": "instagram",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_share",
+      "programId": "program_aura_inner_circle",
+      "actionType": "share",
+      "points": 15,
+      "active": true,
+      "description": "Share to story or DM",
+      "source": "instagram",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_purchase",
+      "programId": "program_aura_inner_circle",
+      "actionType": "purchase",
+      "points": 100,
+      "pointsPerUnit": 100,
+      "active": true,
+      "description": "Purchase a product, ticket, or service",
+      "source": "purchase",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_event_attendance",
+      "programId": "program_aura_inner_circle",
+      "actionType": "event_attendance",
+      "points": 250,
+      "active": true,
+      "description": "Attend an event or live session",
+      "source": "event",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_referral",
+      "programId": "program_aura_inner_circle",
+      "actionType": "referral",
+      "points": 500,
+      "active": true,
+      "description": "Refer a new fan or customer",
+      "source": "referral",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_aura_inner_circle_manual_bonus",
+      "programId": "program_aura_inner_circle",
+      "actionType": "manual_bonus",
+      "points": 100,
+      "active": true,
+      "description": "Manual creator bonus",
+      "source": "manual",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_like",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "like",
+      "points": 1,
+      "active": true,
+      "description": "Like a creator post",
+      "source": "instagram",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_comment",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "comment",
+      "points": 5,
+      "active": true,
+      "description": "Comment on a post or reel",
+      "source": "instagram",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_save",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "save",
+      "points": 10,
+      "active": true,
+      "description": "Save useful content",
+      "source": "instagram",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_share",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "share",
+      "points": 15,
+      "active": true,
+      "description": "Share to story or DM",
+      "source": "instagram",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_purchase",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "purchase",
+      "points": 100,
+      "pointsPerUnit": 100,
+      "active": true,
+      "description": "Purchase a product, ticket, or service",
+      "source": "purchase",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_event_attendance",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "event_attendance",
+      "points": 250,
+      "active": true,
+      "description": "Attend an event or live session",
+      "source": "event",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_referral",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "referral",
+      "points": 500,
+      "active": true,
+      "description": "Refer a new fan or customer",
+      "source": "referral",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    },
+    {
+      "id": "rule_program_78ced758-7437-4582-b50b-64f5cbc1e5a6_manual_bonus",
+      "programId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "actionType": "manual_bonus",
+      "points": 100,
+      "active": true,
+      "description": "Manual creator bonus",
+      "source": "manual",
+      "createdAt": "2026-06-05T20:17:42.122Z",
+      "updatedAt": "2026-06-05T20:17:42.122Z"
+    }
+  ],
+  "fans": [
+    {
+      "id": "fan_lina",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Lina Creation",
+      "instagramHandle": "@lina.creation",
+      "pointsBalance": 2480,
+      "lifetimePoints": 2515,
+      "tier": "Inner Circle",
+      "tags": [
+        "top_fan",
+        "buyer"
+      ],
+      "passIds": [
+        "pass_vip"
+      ],
+      "lastInteractionAt": "2026-06-05T19:32:05.131Z",
+      "createdAt": "2026-05-31T08:00:00.000Z"
+    },
+    {
+      "id": "fan_max",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Max Visuals",
+      "instagramHandle": "@max.visuals",
+      "pointsBalance": 1680,
+      "lifetimePoints": 1800,
+      "tier": "Superfan",
+      "tags": [
+        "superfan",
+        "creator_peer"
+      ],
+      "passIds": [
+        "pass_gold"
+      ],
+      "lastInteractionAt": "2026-06-03T08:00:00.000Z",
+      "createdAt": "2026-05-30T08:00:00.000Z"
+    },
+    {
+      "id": "fan_sofia",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Sofia Brand",
+      "instagramHandle": "@sofia.brand",
+      "pointsBalance": 920,
+      "lifetimePoints": 1160,
+      "tier": "Superfan",
+      "tags": [
+        "buyer",
+        "ugc"
+      ],
+      "passIds": [
+        "pass_silver"
+      ],
+      "lastInteractionAt": "2026-06-02T08:00:00.000Z",
+      "createdAt": "2026-05-29T08:00:00.000Z"
+    },
+    {
+      "id": "fan_kevin",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Kevin Motion",
+      "instagramHandle": "@kevin.motion",
+      "pointsBalance": 470,
+      "lifetimePoints": 470,
+      "tier": "Engaged Fan",
+      "tags": [
+        "near_superfan"
+      ],
+      "passIds": [],
+      "lastInteractionAt": "2026-06-01T08:00:00.000Z",
+      "createdAt": "2026-05-28T08:00:00.000Z"
+    },
+    {
+      "id": "fan_jade",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Jade Community",
+      "instagramHandle": "@jade.community",
+      "pointsBalance": 430,
+      "lifetimePoints": 550,
+      "tier": "Engaged Fan",
+      "tags": [
+        "near_superfan"
+      ],
+      "passIds": [],
+      "lastInteractionAt": "2026-05-31T08:00:00.000Z",
+      "createdAt": "2026-05-27T08:00:00.000Z"
+    },
+    {
+      "id": "fan_marie",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Marie Live",
+      "instagramHandle": "@marie.live",
+      "pointsBalance": 180,
+      "lifetimePoints": 420,
+      "tier": "Engaged Fan",
+      "tags": [
+        "commenter"
+      ],
+      "passIds": [],
+      "lastInteractionAt": "2026-05-30T08:00:00.000Z",
+      "createdAt": "2026-05-26T08:00:00.000Z"
+    },
+    {
+      "id": "fan_noah",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Noah Studio",
+      "instagramHandle": "@noah.studio",
+      "pointsBalance": 95,
+      "lifetimePoints": 95,
+      "tier": "New Fan",
+      "tags": [
+        "new"
+      ],
+      "passIds": [],
+      "lastInteractionAt": "2026-05-29T08:00:00.000Z",
+      "createdAt": "2026-05-25T08:00:00.000Z"
+    },
+    {
+      "id": "fan_ines",
+      "programId": "program_aura_inner_circle",
+      "displayName": "Ines Art",
+      "instagramHandle": "@ines.art",
+      "pointsBalance": 55,
+      "lifetimePoints": 175,
+      "tier": "New Fan",
+      "tags": [
+        "new"
+      ],
+      "passIds": [],
+      "lastInteractionAt": "2026-05-28T08:00:00.000Z",
+      "createdAt": "2026-05-24T08:00:00.000Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "txn_seed_fan_lina_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "comment",
+      "pointsDelta": 2420,
+      "source": "instagram",
+      "referenceId": "seed_media_1",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-06-02T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_max_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_max",
+      "actionType": "share",
+      "pointsDelta": 1800,
+      "source": "instagram",
+      "referenceId": "seed_media_2",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-06-01T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_max_redeemed",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_max",
+      "actionType": "reward_redemption",
+      "pointsDelta": -120,
+      "source": "manual",
+      "referenceId": "reward_seed",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-06-02T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_sofia_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_sofia",
+      "actionType": "comment",
+      "pointsDelta": 1160,
+      "source": "instagram",
+      "referenceId": "seed_media_3",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-31T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_sofia_redeemed",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_sofia",
+      "actionType": "reward_redemption",
+      "pointsDelta": -240,
+      "source": "manual",
+      "referenceId": "reward_seed",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-06-01T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_kevin_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_kevin",
+      "actionType": "share",
+      "pointsDelta": 470,
+      "source": "instagram",
+      "referenceId": "seed_media_4",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-30T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_jade_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_jade",
+      "actionType": "comment",
+      "pointsDelta": 550,
+      "source": "instagram",
+      "referenceId": "seed_media_5",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-29T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_jade_redeemed",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_jade",
+      "actionType": "reward_redemption",
+      "pointsDelta": -120,
+      "source": "manual",
+      "referenceId": "reward_seed",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-30T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_marie_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_marie",
+      "actionType": "share",
+      "pointsDelta": 420,
+      "source": "instagram",
+      "referenceId": "seed_media_6",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-28T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_marie_redeemed",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_marie",
+      "actionType": "reward_redemption",
+      "pointsDelta": -240,
+      "source": "manual",
+      "referenceId": "reward_seed",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-29T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_noah_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_noah",
+      "actionType": "comment",
+      "pointsDelta": 95,
+      "source": "instagram",
+      "referenceId": "seed_media_7",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-27T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_ines_earned",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_ines",
+      "actionType": "share",
+      "pointsDelta": 175,
+      "source": "instagram",
+      "referenceId": "seed_media_8",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-26T08:00:00.000Z"
+    },
+    {
+      "id": "txn_seed_fan_ines_redeemed",
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_ines",
+      "actionType": "reward_redemption",
+      "pointsDelta": -120,
+      "source": "manual",
+      "referenceId": "reward_seed",
+      "metadata": {
+        "seeded": true
+      },
+      "createdAt": "2026-05-27T08:00:00.000Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "manual_bonus",
+      "pointsDelta": 17,
+      "source": "manual",
+      "referenceId": "smoke_journey_award_1780687455900",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_f9aaa066-21a5-4db3-a54f-a694cf3c4794",
+      "createdAt": "2026-06-05T19:24:17.477Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "reward_redemption",
+      "pointsDelta": -7,
+      "source": "manual",
+      "referenceId": "smoke_journey_redeem_1780687457486",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_b15d1021-c46f-43e5-b753-2560121248f3",
+      "createdAt": "2026-06-05T19:24:21.078Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "manual_bonus",
+      "pointsDelta": 17,
+      "source": "manual",
+      "referenceId": "smoke_journey_award_1780687502966",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_03643fa6-3bc2-43bb-ad02-5dc3356c641d",
+      "createdAt": "2026-06-05T19:25:03.003Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "reward_redemption",
+      "pointsDelta": -7,
+      "source": "manual",
+      "referenceId": "smoke_journey_redeem_1780687503006",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_75588212-71d0-44f6-9d72-a3af310b7940",
+      "createdAt": "2026-06-05T19:25:03.036Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "manual_bonus",
+      "pointsDelta": 17,
+      "source": "manual",
+      "referenceId": "smoke_journey_award_1780687537625",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_0811fb68-dcd1-4b61-90e8-6d6c643bfcff",
+      "createdAt": "2026-06-05T19:25:37.645Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "reward_redemption",
+      "pointsDelta": -7,
+      "source": "manual",
+      "referenceId": "smoke_journey_redeem_1780687537648",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_6029f9ef-7d7c-47b1-8032-ee4ca40ad3c8",
+      "createdAt": "2026-06-05T19:25:37.666Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_71518f3e-e820-4ab7-87f3-feeb37d50c7d",
+      "createdAt": "2026-06-05T19:28:44.693Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_cf804694-23e4-4e0b-9765-5b678b83ab69",
+      "createdAt": "2026-06-05T19:28:44.697Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_04fc5a0f-b9bc-4060-9445-c1f2d70dd1a9",
+      "createdAt": "2026-06-05T19:28:44.699Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_a60200f7-6b06-430c-bcd4-63049ff5e7b5",
+      "createdAt": "2026-06-05T19:28:44.702Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_01b0ec71-c5f4-4471-963e-e8906dfc998e",
+      "createdAt": "2026-06-05T19:28:44.704Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_65e99cb4-5fa7-4110-801a-6b1d61a5922d",
+      "createdAt": "2026-06-05T19:28:44.706Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_a00a2baf-85d4-4f44-a458-a16d1fa6a296",
+      "createdAt": "2026-06-05T19:28:44.709Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_d42f4f9b-81f4-4949-a8fb-e71b5b2314f2",
+      "createdAt": "2026-06-05T19:28:44.711Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_a673f4ff-e377-4c6d-9f6e-048438d85c52",
+      "createdAt": "2026-06-05T19:28:44.714Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "like",
+      "pointsDelta": 1,
+      "source": "instagram",
+      "metadata": {},
+      "id": "txn_6a01e52c-d69c-422b-8cc1-c5bd2519aaf8",
+      "createdAt": "2026-06-05T19:28:44.717Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "manual_bonus",
+      "pointsDelta": 17,
+      "source": "manual",
+      "referenceId": "smoke_journey_award_1780687869020",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_f72ccc22-f672-4b1b-a97b-aa0489198de7",
+      "createdAt": "2026-06-05T19:31:09.285Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "reward_redemption",
+      "pointsDelta": -7,
+      "source": "manual",
+      "referenceId": "smoke_journey_redeem_1780687869288",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_b3661e5c-f361-402d-8deb-d6acbfe69b71",
+      "createdAt": "2026-06-05T19:31:09.597Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "manual_bonus",
+      "pointsDelta": 17,
+      "source": "manual",
+      "referenceId": "smoke_journey_award_1780687925076",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_2cd9b11f-71af-4f3e-8e1a-69195eeca21c",
+      "createdAt": "2026-06-05T19:32:05.105Z"
+    },
+    {
+      "programId": "program_aura_inner_circle",
+      "fanId": "fan_lina",
+      "actionType": "reward_redemption",
+      "pointsDelta": -7,
+      "source": "manual",
+      "referenceId": "smoke_journey_redeem_1780687925109",
+      "metadata": {
+        "smoke": true,
+        "journey": "main"
+      },
+      "id": "txn_00b31e2b-dce5-480f-adf6-9a459afab146",
+      "createdAt": "2026-06-05T19:32:05.131Z"
+    }
+  ],
+  "rewards": [
+    {
+      "id": "reward_discount_10",
+      "programId": "program_aura_inner_circle",
+      "name": "10% creator shop discount",
+      "description": "A simple commerce reward for engaged fans.",
+      "costInPoints": 250,
+      "rewardType": "discount",
+      "stock": null,
+      "redeemedCount": 8,
+      "status": "active",
+      "unlockCondition": "Available to Engaged Fans and above",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "reward_private_live",
+      "programId": "program_aura_inner_circle",
+      "name": "Private strategy live",
+      "description": "Access to a private monthly session.",
+      "costInPoints": 750,
+      "rewardType": "event_access",
+      "stock": 30,
+      "redeemedCount": 6,
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "reward_vip_community",
+      "programId": "program_aura_inner_circle",
+      "name": "VIP community access",
+      "description": "Unlock the private community channel.",
+      "costInPoints": 1000,
+      "rewardType": "private_community",
+      "stock": 50,
+      "redeemedCount": 3,
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    }
+  ],
+  "fanPasses": [
+    {
+      "id": "pass_bronze",
+      "programId": "program_aura_inner_circle",
+      "name": "Bronze Pass",
+      "tier": "bronze",
+      "price": 9,
+      "currency": "EUR",
+      "supply": 200,
+      "holders": 32,
+      "benefits": [
+        "Member badge",
+        "Monthly reward drop"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "pass_gold",
+      "programId": "program_aura_inner_circle",
+      "name": "Gold Pass",
+      "tier": "gold",
+      "price": 19,
+      "currency": "EUR",
+      "supply": 100,
+      "holders": 18,
+      "benefits": [
+        "Early access",
+        "Private live replay",
+        "Priority rewards"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    },
+    {
+      "id": "pass_vip",
+      "programId": "program_aura_inner_circle",
+      "name": "VIP Pass",
+      "tier": "vip",
+      "price": 49,
+      "currency": "EUR",
+      "supply": 25,
+      "holders": 7,
+      "benefits": [
+        "VIP channel",
+        "Quarterly group call",
+        "Premium drops"
+      ],
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    }
+  ],
+  "tokenEconomies": [
+    {
+      "programId": "program_aura_inner_circle",
+      "totalSupply": 1000000,
+      "communityRewardsPool": 500000,
+      "launchAirdropPool": 200000,
+      "creatorReserve": 150000,
+      "partnerRewardsPool": 100000,
+      "campaignBufferPool": 50000,
+      "isTransferable": false,
+      "isSpeculative": false,
+      "pointsToTokenRatio": 1,
+      "fanPassAllocation": 50000,
+      "redemptionPressure": 0,
+      "estimatedLiability": 0,
+      "tokenizationMode": "offchain",
+      "disclaimer": "This is a loyalty economy simulation, not an investment product. Points and fan passes are access and reward infrastructure."
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec_552fb5e0-5ba1-446a-a7f1-fef791b61c67",
+      "status": "executed",
+      "createdAt": "2026-06-05T22:45:34.687Z",
+      "programId": "program_aura_inner_circle",
+      "type": "campaign",
+      "priority": "high",
+      "title": "Launch a double-points challenge this weekend",
+      "message": "2 fans are close to the Superfan tier.",
+      "rationale": "Near-superfans usually need a small engagement push, not a new product.",
+      "suggestedAction": "Give 2x points for comments and shares for 48 hours.",
+      "expectedImpact": "Estimated 2 fans can move closer to Superfan status.",
+      "confidence": 0.82
+    },
+    {
+      "id": "rec_8531ff05-1ec4-4223-b6ab-1d4f1986bd33",
+      "status": "pending",
+      "createdAt": "2026-06-05T22:45:34.687Z",
+      "programId": "program_aura_inner_circle",
+      "type": "pricing",
+      "priority": "medium",
+      "title": "Push VIP Pass to top fans",
+      "message": "Estimated EUR 0 launch potential for 0 VIP Pass holders.",
+      "rationale": "Your top fans already show access and community behavior.",
+      "suggestedAction": "Create an approved DM draft for the top fan segment before a public launch.",
+      "expectedImpact": "Use this as a demand test before scaling pass supply.",
+      "confidence": 0.74
+    }
+  ],
+  "campaigns": []
+}

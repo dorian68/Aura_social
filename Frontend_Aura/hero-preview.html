@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AURA — Hero physics preview</title>
+  <style>
+    :root { --lime: #b0f046; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #05080a; color: #e9f3df;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .wrap { display: flex; flex-direction: column; height: 100%; }
+    header { padding: 14px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      border-bottom: 1px solid rgba(176,240,70,.15); }
+    h1 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+    h1 small { color: #8aa07a; font-weight: 400; }
+    .modes { display: flex; gap: 8px; margin-left: auto; }
+    button { background: rgba(176,240,70,.08); color: #d7eeb6; border: 1px solid rgba(176,240,70,.25);
+      padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: 13px; transition: .15s; }
+    button:hover { background: rgba(176,240,70,.16); }
+    button.active { background: var(--lime); color: #06100a; border-color: var(--lime); font-weight: 600; }
+    .stage { position: relative; flex: 1; min-height: 0; }
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .caption { position: absolute; left: 22px; bottom: 18px; max-width: 540px; font-size: 13px;
+      line-height: 1.5; color: #b7cda3; text-shadow: 0 1px 8px #000; }
+    .caption b { color: #eaf6cf; }
+    code { color: var(--lime); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>AURA · Hero figures <small>— vraie physique relativiste (canvas 2D)</small></h1>
+      <div class="modes">
+        <button data-mode="wave">wave · ondes grav.</button>
+        <button data-mode="lens">lens · lentille grav.</button>
+        <button data-mode="vortex">vortex · trou noir</button>
+      </div>
+    </header>
+    <div class="stage">
+      <canvas id="hero"></canvas>
+      <div class="caption" id="cap"></div>
+    </div>
+  </div>
+
+  <script src="js/hero-figures.js"></script>
+  <script>
+    const canvas = document.getElementById('hero');
+    const cap = document.getElementById('cap');
+    const btns = [...document.querySelectorAll('button[data-mode]')];
+    const CAPTIONS = {
+      wave:   "<b>Ondes gravitationnelles</b> — binaire compact en inspirale. L'orbite décroît " +
+              "<code>a ∝ (t_c−t)^¼</code>, la fréquence « chirpe » (<code>f ∝ a^−3/2</code>) et le réseau de masses " +
+              "test est déformé par la déformation transverse-traceless <code>δx = ½(h₊x + hₓy)</code>.",
+      lens:   "<b>Lentille gravitationnelle</b> — photons sur géodésiques nulles, déviés de " +
+              "<code>α = 4GM/c²b = 2Rₛ/b</code>. Les rayons se focalisent sur l'<b>anneau d'Einstein</b> " +
+              "<code>θ_E = √(2Rₛ·D)</code> ; sous la sphère de photons (<code>r &lt; 1.5Rₛ</code>) la lumière est capturée → l'ombre.",
+      vortex: "<b>Disque d'accrétion</b> — orbites képlériennes <code>ω ∝ r^−3/2</code> depuis l'ISCO " +
+              "(<code>r = 3Rₛ</code>). Le <b>beaming Doppler relativiste</b> rend le côté qui s'approche " +
+              "plus brillant et bleuté (<code>flux ∝ δ³</code>) ; ombre + anneau de photons au centre."
+    };
+    function setMode(mode) {
+      window.AuraHero.mount(canvas, mode);
+      btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      cap.innerHTML = CAPTIONS[mode];
+    }
+    btns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    // start on a random figure, like the real landing
+    setMode(window.AuraHero.randomMode());
+  </script>
+</body>
+</html>

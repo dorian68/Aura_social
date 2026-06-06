@@ -34,6 +34,17 @@ export function getToolsMetadata() {
   }));
 }
 
+const MAX_ARG_STRING_LENGTH = 4_000;
+const MAX_ARG_ARRAY_LENGTH = 200;
+const MAX_ABS_NUMBER = 1e12;
+
+/**
+ * Strict argument validation. Beyond required-presence and enum membership,
+ * this now enforces declared types, numeric finiteness/bounds, string length,
+ * array bounds, and rejects unknown arguments — so loosely-coerced tool inputs
+ * (e.g. `Number(input.amount)`) can no longer receive NaN/Infinity/oversized or
+ * unexpected values that flow into side-effecting calls.
+ */
 export function validateToolArgs(
   toolName: string,
   args: Record<string, unknown>,
@@ -52,9 +63,37 @@ export function validateToolArgs(
 
   for (const [key, value] of Object.entries(args)) {
     const prop = schema.properties[key];
-    if (!prop) continue;
-    if (prop.enum && typeof value === "string" && !prop.enum.includes(value)) {
-      errors.push(`Argument "${key}" must be one of: ${prop.enum.join(", ")}`);
+    if (!prop) {
+      errors.push(`Unexpected argument: "${key}"`);
+      continue;
+    }
+    if (value === undefined || value === null) continue;
+
+    switch (prop.type) {
+      case "number": {
+        const num = typeof value === "number" ? value : typeof value === "string" && value.trim() !== "" ? Number(value) : NaN;
+        if (!Number.isFinite(num)) errors.push(`Argument "${key}" must be a finite number.`);
+        else if (Math.abs(num) > MAX_ABS_NUMBER) errors.push(`Argument "${key}" is out of range.`);
+        break;
+      }
+      case "boolean": {
+        if (typeof value !== "boolean" && value !== "true" && value !== "false") {
+          errors.push(`Argument "${key}" must be a boolean.`);
+        }
+        break;
+      }
+      case "array": {
+        if (!Array.isArray(value)) errors.push(`Argument "${key}" must be an array.`);
+        else if (value.length > MAX_ARG_ARRAY_LENGTH) errors.push(`Argument "${key}" has too many items.`);
+        break;
+      }
+      case "string":
+      default: {
+        if (typeof value !== "string") errors.push(`Argument "${key}" must be a string.`);
+        else if (value.length > MAX_ARG_STRING_LENGTH) errors.push(`Argument "${key}" exceeds maximum length.`);
+        else if (prop.enum && !prop.enum.includes(value)) errors.push(`Argument "${key}" must be one of: ${prop.enum.join(", ")}`);
+        break;
+      }
     }
   }
 

@@ -1,0 +1,44 @@
+# ── Dependencies & build artifacts (reinstalled/rebuilt in the image) ──
+node_modules
+**/node_modules
+.next
+out
+dist
+build
+coverage
+
+# ── Git / IDE / OS ──
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# ── Secrets & local env (never bake into an image) ──
+.env
+.env.local
+.env.*.local
+
+# ── Runtime/generated state & logs (live in volumes, not the image) ──
+data
+cache
+artifacts
+
+# ── Separate prototype app (SignalFrame) — not part of the Aura Next app ──
+instagram-analytics-prototype
+
+# ── Large design exports / backups (not needed to run the app) ──
+aura-landing-standalone*.html
+Frontend_Aura/index.prev-landing.html.bak
+Frontend_Aura/uploads
+Frontend_Aura/screenshots
+Frontend_Aura/.thumbnail
+
+# ── Docker files themselves ──
+Dockerfile
+Dockerfile.dev
+docker-compose*.yml
+.dockerignore

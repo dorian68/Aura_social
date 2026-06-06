@@ -86,16 +86,9 @@
         <div class="eyebrow" style="justify-content:center;margin-bottom:16px"><span data-t="a_eyebrow"></span></div>
         <h2 class="display-md txt-grad" data-t="a_title"></h2>
         <p class="lede" style="margin:16px auto 30px;max-width:30em" data-t="a_sub"></p>
-        <div class="input-ig" style="max-width:460px;margin:0 auto;padding-right:6px">
-          <span class="at">@</span>
-          <input type="text" id="igInput" data-t-attr="placeholder:a_ph" autocomplete="off">
-          <button class="btn btn-primary" id="analyzeBtn" data-t="a_btn"></button>
-        </div>
-        <div class="suggest">
-          <button data-u="maya.studio">@maya.studio</button>
-          <button data-u="leo.trains">@leo.trains</button>
-          <button data-u="thekitchenella">@thekitchenella</button>
-        </div>
+        <!-- Connected-account analyze CTA (filled by analyzer.js). Real data only —
+             no free-text creator search until Business Discovery is configured. -->
+        <div id="analyzeTarget" style="max-width:460px;margin:0 auto"></div>
         <p class="faint" style="font-size:12.5px;margin-top:22px" data-t="a_note"></p>
       </section>
 

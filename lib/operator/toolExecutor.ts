@@ -1,8 +1,26 @@
 import crypto from "node:crypto";
 import { recordAuditEvent } from "@/lib/workspace/store";
-import { sanitizeArgSummary } from "./safety";
+import { isDangerous, redactArgs, requiresConfirmation, sanitizeArgSummary, verifyConfirmationToken } from "./safety";
 import { getTool, validateToolArgs } from "./toolRegistry";
 import type { OperatorAuditEvent, OperatorContext, ToolCallRecord, ToolResult } from "./types";
+
+export interface ToolExecutionOptions {
+  /** Single-use, server-issued token required to run a `confirmation_required` tool. */
+  confirmationToken?: string;
+}
+
+function blockedResult(error: string, args: Record<string, unknown>, tool: { category: ToolCallRecord["category"]; riskLevel: ToolCallRecord["riskLevel"] }, toolName: string) {
+  const record: ToolCallRecord = {
+    toolName,
+    category: tool.category,
+    riskLevel: tool.riskLevel,
+    args: redactArgs(args),
+    success: false,
+    simulated: false,
+    durationMs: 0,
+  };
+  return { result: { success: false, error, simulated: false, uiBlocks: [], nextActions: [] } as ToolResult, record };
+}
 
 const operatorAuditLog: OperatorAuditEvent[] = [];
 
@@ -14,6 +32,7 @@ export async function executeTool(
   toolName: string,
   args: Record<string, unknown>,
   context: OperatorContext,
+  options: ToolExecutionOptions = {},
 ): Promise<{ result: ToolResult; record: ToolCallRecord }> {
   const tool = getTool(toolName);
   if (!tool) {
@@ -21,7 +40,7 @@ export async function executeTool(
       toolName,
       category: "workspace",
       riskLevel: "safe",
-      args,
+      args: redactArgs(args),
       success: false,
       simulated: false,
       durationMs: 0,
@@ -38,13 +57,19 @@ export async function executeTool(
     };
   }
 
+  // Central risk gate — enforced here so EVERY caller (chat, execute route,
+  // future LLM loop) inherits it, not just the routes that remember to check.
+  if (isDangerous(tool.riskLevel)) {
+    return blockedResult(`Tool "${toolName}" is classified dangerous and cannot be executed.`, args, tool, toolName);
+  }
+
   const validation = validateToolArgs(toolName, args);
   if (!validation.valid) {
     const record: ToolCallRecord = {
       toolName,
       category: tool.category,
       riskLevel: tool.riskLevel,
-      args,
+      args: redactArgs(args),
       success: false,
       simulated: false,
       durationMs: 0,
@@ -61,6 +86,17 @@ export async function executeTool(
     };
   }
 
+  // Confirmation gate — a valid single-use server-issued token bound to this
+  // exact (tool, args) pair is required. Verified centrally (single source of truth).
+  if (requiresConfirmation(tool.riskLevel) && !verifyConfirmationToken(options.confirmationToken, toolName, args)) {
+    return blockedResult(
+      `Tool "${toolName}" requires a valid confirmation token. Request one, then resend with it.`,
+      args,
+      tool,
+      toolName,
+    );
+  }
+
   const startMs = Date.now();
   let result: ToolResult;
 
@@ -73,7 +109,7 @@ export async function executeTool(
       toolName,
       category: tool.category,
       riskLevel: tool.riskLevel,
-      args,
+      args: redactArgs(args),
       success: false,
       simulated: false,
       durationMs,
@@ -109,7 +145,7 @@ export async function executeTool(
     toolName,
     category: tool.category,
     riskLevel: tool.riskLevel,
-    args,
+    args: redactArgs(args),
     success: result.success,
     simulated: result.simulated,
     durationMs,

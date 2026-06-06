@@ -1,0 +1,4214 @@
+{
+  "workspaces": [
+    {
+      "id": "workspace_aura_demo",
+      "name": "Aura Prototype Workspace",
+      "slug": "aura-prototype",
+      "plan": "prototype",
+      "status": "active",
+      "createdAt": "2026-06-04T08:00:00.000Z",
+      "updatedAt": "2026-06-04T08:00:00.000Z"
+    }
+  ],
+  "connectedAccounts": [
+    {
+      "id": "instagram_17841469953520508",
+      "workspaceId": "workspace_aura_demo",
+      "provider": "instagram",
+      "externalId": "17841469953520508",
+      "displayName": "optiquant_ia",
+      "username": "@optiquant_ia",
+      "accountType": "instagram_business_or_creator",
+      "authProvider": "instagram",
+      "status": "connected",
+      "capabilities": [
+        "private_insights",
+        "media_insights",
+        "owned_account_dashboard"
+      ],
+      "diagnostics": [
+        "followers_count_available",
+        "media_count_available",
+        "instagram_login_direct"
+      ],
+      "lastConnectedAt": "2026-06-05T03:16:33.768Z",
+      "connectionExpiresAt": "2026-07-05T03:16:33.768Z",
+      "createdAt": "2026-06-05T01:53:25.932Z",
+      "updatedAt": "2026-06-05T03:16:33.768Z"
+    },
+    {
+      "id": "instagram_mock-ig-1",
+      "workspaceId": "workspace_aura_demo",
+      "provider": "instagram",
+      "externalId": "mock-ig-1",
+      "displayName": "Aura Demo Creator",
+      "username": "@aura.demo",
+      "accountType": "instagram_business_or_creator",
+      "authProvider": "instagram",
+      "status": "mock",
+      "capabilities": [
+        "private_insights",
+        "media_insights",
+        "owned_account_dashboard"
+      ],
+      "diagnostics": [
+        "mock_meta_connection",
+        "followers_count_available",
+        "media_count_available",
+        "instagram_login_direct"
+      ],
+      "lastConnectedAt": "2026-06-05T22:25:38.276Z",
+      "connectionExpiresAt": "2026-07-05T22:25:38.276Z",
+      "createdAt": "2026-06-04T14:19:02.197Z",
+      "updatedAt": "2026-06-05T22:25:38.276Z"
+    }
+  ],
+  "auditEvents": [
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "agent.recommendation_acknowledged",
+      "targetType": "recommendation",
+      "targetId": "rec_552fb5e0-5ba1-446a-a7f1-fef791b61c67",
+      "severity": "info",
+      "message": "Acknowledged recommendation \"Launch a double-points challenge this weekend\" (campaign).",
+      "metadata": {
+        "recommendationId": "rec_552fb5e0-5ba1-446a-a7f1-fef791b61c67",
+        "type": "campaign"
+      },
+      "id": "audit_65bab4d3-1556-4129-ae95-ffc97441f532",
+      "createdAt": "2026-06-05T22:45:35.297Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "agent.recommendation_acknowledged",
+      "targetType": "recommendation",
+      "targetId": "rec_b09fa55e-a22f-4fe2-8837-0c8aa3ddff16",
+      "severity": "info",
+      "message": "Acknowledged recommendation \"Launch a double-points challenge this weekend\" (campaign).",
+      "metadata": {
+        "recommendationId": "rec_b09fa55e-a22f-4fe2-8837-0c8aa3ddff16",
+        "type": "campaign"
+      },
+      "id": "audit_d98d13b3-5fdd-44a4-8aec-4ad363410783",
+      "createdAt": "2026-06-05T22:37:52.804Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_b2420b9a-59e4-46e0-9a8a-047b60007ffd",
+      "createdAt": "2026-06-05T22:25:39.742Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_6837230a-008e-4490-ab4e-d28a0cab7329",
+      "createdAt": "2026-06-05T22:25:38.278Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_0382ec0a-ed3b-4f13-94a4-612daebe7e5d",
+      "createdAt": "2026-06-05T22:25:37.852Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_379c367b-9210-4572-9785-798290fdabb3",
+      "createdAt": "2026-06-05T20:17:42.498Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "creator",
+      "action": "loyalty.program_launched",
+      "targetType": "loyalty_program",
+      "targetId": "program_78ced758-7437-4582-b50b-64f5cbc1e5a6",
+      "severity": "info",
+      "message": "@aura.demo launched loyalty program \"aura.demo Inner Circle\".",
+      "metadata": {
+        "creatorId": "creator_ig_mock-ig-1",
+        "igUserId": "mock-ig-1",
+        "ruleCount": 8
+      },
+      "id": "audit_d710b934-8f49-4c37-ab07-22a5dc00b586",
+      "createdAt": "2026-06-05T20:17:42.123Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_296d4d2b-a017-4ae1-b1cb-fc732927735f",
+      "createdAt": "2026-06-05T20:17:41.548Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_1aab4ffa-945c-4d4f-8faf-4fb3b25a971a",
+      "createdAt": "2026-06-05T20:17:40.986Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_5ccfaf92-8a7b-4dc1-a283-ba1a38b2b3e8",
+      "createdAt": "2026-06-05T19:30:59.574Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_2be8f820-d826-4b8b-b04d-33a846f96417",
+      "createdAt": "2026-06-05T19:30:58.200Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_29e86032-8065-473e-bb52-b411dfb225a7",
+      "createdAt": "2026-06-05T19:30:57.772Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_c82eb31b-7860-41e7-8599-5154a9d461d5",
+      "createdAt": "2026-06-05T19:30:57.496Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 35ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 35,
+        "tokenPrinted": false
+      },
+      "id": "audit_9938994f-b15f-4f52-9660-b46a046fc6f1",
+      "createdAt": "2026-06-05T19:28:02.056Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_381494f5-fa79-4326-8001-3700bcb80fd8",
+      "createdAt": "2026-06-05T19:28:02.017Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_28cb4d1f-cab7-4a57-9416-f3d5d2128967",
+      "createdAt": "2026-06-05T19:28:02.015Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 21ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 21,
+        "tokenPrinted": false
+      },
+      "id": "audit_e6f8cd5e-4aa2-4de3-a830-2bda02802b16",
+      "createdAt": "2026-06-05T19:28:02.011Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 10ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 10,
+        "tokenPrinted": false
+      },
+      "id": "audit_55c9472e-b950-4658-a231-86934cd6b898",
+      "createdAt": "2026-06-05T19:28:01.986Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_5f74f907-e183-4fcc-b49c-919eef5c727f",
+      "createdAt": "2026-06-05T19:27:50.268Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 23ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 23,
+        "tokenPrinted": false
+      },
+      "id": "audit_d603458f-6dc0-4366-bdb3-303edb46cec1",
+      "createdAt": "2026-06-05T19:27:50.265Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_25e94c9e-4ca6-425f-81bf-0c1d6c1de68c",
+      "createdAt": "2026-06-05T19:27:50.241Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_a867096c-b84c-4129-9893-c5cb99811ca0",
+      "createdAt": "2026-06-05T19:27:50.237Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_66f07e37-0cc6-43e2-a109-74931bfa2ead",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_66f07e37-0cc6-43e2-a109-74931bfa2ead",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_ccaec468-f440-4223-978f-16b68bf52db8",
+      "createdAt": "2026-06-05T19:27:50.236Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_1f9d41e3-5896-4c50-8941-8c7a3aadb3aa",
+      "createdAt": "2026-06-05T19:27:50.234Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_b55afa4b-7df3-4f35-9ca4-50f54cd06900",
+      "createdAt": "2026-06-05T19:27:50.232Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 5ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 5,
+        "tokenPrinted": false
+      },
+      "id": "audit_04ba4d08-40a0-4e78-81e8-f915380fa3aa",
+      "createdAt": "2026-06-05T19:27:50.230Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780687670225",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_3aeb9bd2-1e5e-4442-955a-8e2108eb7089",
+      "createdAt": "2026-06-05T19:27:50.229Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_7e35aafe-8404-4f0f-8534-98f14a165890",
+      "createdAt": "2026-06-05T19:27:50.223Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 9ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 9,
+        "tokenPrinted": false
+      },
+      "id": "audit_1299e7ea-f6f1-4ec3-9b7b-bb7ac9ab6e4d",
+      "createdAt": "2026-06-05T19:27:50.221Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_0ea7b4a4-f3a2-4c0c-a9ea-4d7a6864d85e",
+      "createdAt": "2026-06-05T19:27:50.210Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_6bd663fc-f213-4429-870f-3b9ee89b4cc0",
+      "createdAt": "2026-06-05T19:27:02.362Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_a9140494-81e1-43f9-901a-e8d6c8000802",
+      "createdAt": "2026-06-05T19:24:55.142Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_dd48fdcc-a371-4742-a80a-f516d8cdd571",
+      "createdAt": "2026-06-05T19:24:54.796Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_20723aa2-5665-46fe-af7a-5c97be9ac34e",
+      "createdAt": "2026-06-05T19:24:54.731Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_4126f714-91eb-4abe-a78f-e7a85e50ca6d",
+      "createdAt": "2026-06-05T19:24:54.685Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_e522adf0-9b54-4283-96d2-6f687bf1e3cb",
+      "createdAt": "2026-06-05T19:24:28.053Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_d13b0a48-00be-456d-a304-e7765813e883",
+      "createdAt": "2026-06-05T19:24:23.198Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_d7f1a32a-4c0e-4d72-9f1e-8a14b637ee29",
+      "createdAt": "2026-06-05T19:24:22.125Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_5f23f382-db98-48f5-8b75-0ec6f3755bf2",
+      "createdAt": "2026-06-05T19:24:21.106Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_6ea0d201-c2d2-4f13-b763-3a3890437938",
+      "createdAt": "2026-06-05T17:46:40.364Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_de6e776d-b35f-4fdf-84bb-977af89c469e",
+      "createdAt": "2026-06-05T17:46:37.508Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_68ef8a18-fc44-4c0e-aba0-e72dc230da2f",
+      "createdAt": "2026-06-05T17:46:37.008Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_3a24c645-6083-4ddf-87c4-cb797eb76609",
+      "createdAt": "2026-06-05T17:46:36.558Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_17d5086f-3daa-46cc-83cf-e35c5efe7dbb",
+      "createdAt": "2026-06-05T17:38:33.270Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_ded14370-ef2d-4375-9771-bc27b84261ec",
+      "createdAt": "2026-06-05T04:51:35.142Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "creator",
+      "action": "meta.discovery_source.saved",
+      "targetType": "instagram_account",
+      "targetId": "17841469953520508",
+      "severity": "info",
+      "message": "@optiquant_ia is now the public Business Discovery source.",
+      "metadata": {
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_6d3833de-d3a6-4ebc-b499-5917098aaff6",
+      "createdAt": "2026-06-05T03:36:22.245Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_ec67cb7f-ff39-4e21-8d99-820c640ef444",
+      "createdAt": "2026-06-05T03:31:09.025Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_c1795ca3-f4ca-4891-a57e-9609c3f75367",
+      "createdAt": "2026-06-05T03:31:08.818Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_a46090c4-105e-438b-bf41-0abe81318329",
+      "createdAt": "2026-06-05T03:30:31.206Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_761d82c2-432b-4e40-b684-2a9fb71bfeac",
+      "createdAt": "2026-06-05T03:30:30.673Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "17841469953520508",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_6e036efa-9674-41c3-98d2-3f97770f3063",
+      "createdAt": "2026-06-05T03:16:33.771Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "17841469953520508",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_e6c9625a-6e1c-4eb3-b551-9220a705cb92",
+      "createdAt": "2026-06-05T02:45:00.477Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_de429f97-8f03-4fc0-b9c7-265a0dea0e40",
+      "createdAt": "2026-06-05T02:24:34.745Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 31ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 31,
+        "tokenPrinted": false
+      },
+      "id": "audit_11d9d8a3-d06a-479d-98ad-10c5224a652e",
+      "createdAt": "2026-06-05T02:24:29.639Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_0c3a2fe6-2e53-4504-8eae-211d7b1472af",
+      "createdAt": "2026-06-05T02:24:29.607Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_9a0fbcf3-b432-40a1-88f4-de34ec0ec55f",
+      "createdAt": "2026-06-05T02:24:29.606Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 9ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 9,
+        "tokenPrinted": false
+      },
+      "id": "audit_0ac80f79-cbb3-4336-a47a-43f1393ac22d",
+      "createdAt": "2026-06-05T02:24:29.604Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_38cbf235-23f7-4823-ac54-90a465add8bb",
+      "createdAt": "2026-06-05T02:24:29.593Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_199ecfa5-c472-40f8-b3a9-cb1e425607fa",
+      "createdAt": "2026-06-05T02:24:17.803Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_e39998bc-73b0-4f5e-93f8-c6b2965466b2",
+      "createdAt": "2026-06-05T02:24:16.525Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_063f69d5-6ccb-421f-aa13-0bbb15c182c8",
+      "createdAt": "2026-06-05T02:24:16.290Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_7b9ee179-1bae-47ee-8c67-042288d577b9",
+      "createdAt": "2026-06-05T02:24:16.010Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_1681d842-65df-4931-9ed6-8f27d72f1a82",
+      "createdAt": "2026-06-05T02:24:03.131Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 22ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 22,
+        "tokenPrinted": false
+      },
+      "id": "audit_2af9c938-b8ba-45e7-8af7-6175a4772fb3",
+      "createdAt": "2026-06-05T02:24:03.129Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_22cf9108-5820-4dca-b22f-6353a24f607b",
+      "createdAt": "2026-06-05T02:24:03.106Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_97c89131-ba98-47b5-b8b6-e0ba98b83b0d",
+      "createdAt": "2026-06-05T02:24:03.104Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_h0sdo4d1",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_h0sdo4d1",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_aef106cf-5021-4323-a009-c257c6c19e45",
+      "createdAt": "2026-06-05T02:24:03.103Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_423b4a5e-cfd5-47b1-a32c-37ccc6594425",
+      "createdAt": "2026-06-05T02:24:03.101Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_94b5f1bc-b51f-45ef-afc8-7f778c2f83a9",
+      "createdAt": "2026-06-05T02:24:03.100Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 4ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_38ac4062-681a-44ac-8a3d-5a4ded09fb6c",
+      "createdAt": "2026-06-05T02:24:03.098Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780626243094",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_f4d9a76e-cea8-42bb-ac30-0cae2d22307d",
+      "createdAt": "2026-06-05T02:24:03.097Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_6a6d5369-5d5c-47e4-8967-78c1c09db85a",
+      "createdAt": "2026-06-05T02:24:03.092Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 10ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 10,
+        "tokenPrinted": false
+      },
+      "id": "audit_0691b4c6-22eb-4fbb-b906-a7e01ccc0fa9",
+      "createdAt": "2026-06-05T02:24:03.090Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_4db90acb-6fef-4b9e-aac5-6e13fd6326ea",
+      "createdAt": "2026-06-05T02:24:03.079Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_12032644-92b5-4a68-878d-4090a711530e",
+      "createdAt": "2026-06-05T02:23:59.416Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_d571a18a-56a2-4838-94a9-6085a89cfbe0",
+      "createdAt": "2026-06-05T02:22:07.348Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_be82c953-2015-42b7-8769-d22447b8e28e",
+      "createdAt": "2026-06-05T02:22:04.785Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_bc941612-9b9b-400b-8c97-6157a12d2fe1",
+      "createdAt": "2026-06-05T02:22:04.468Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 20ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 20,
+        "tokenPrinted": false
+      },
+      "id": "audit_876f5b68-a0b2-4546-bdba-c15480ebb14f",
+      "createdAt": "2026-06-05T02:21:54.516Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_67c30c83-c0c1-4dd5-8745-439ed87bac55",
+      "createdAt": "2026-06-05T02:21:54.495Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_2dcf3ffe-788f-4606-acf2-5edbdedf6529",
+      "createdAt": "2026-06-05T02:21:54.494Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 9ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 9,
+        "tokenPrinted": false
+      },
+      "id": "audit_87538140-0280-428b-a5c1-6c63be0863c8",
+      "createdAt": "2026-06-05T02:21:54.493Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_287c235b-bcf6-4c89-8756-ca0409e6b062",
+      "createdAt": "2026-06-05T02:21:54.482Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_5d8b7969-7ac3-4476-8981-0678ae34b97b",
+      "createdAt": "2026-06-05T02:19:55.113Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: true. Duration: 23ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 23,
+        "tokenPrinted": false
+      },
+      "id": "audit_587aad8c-2cbb-4a8f-b0ae-f96827085f77",
+      "createdAt": "2026-06-05T02:19:55.109Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_89b0379b-7f3a-4d4d-b9b5-a1b9d00bbbec",
+      "createdAt": "2026-06-05T02:19:55.085Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_72da1946-ff41-40da-a92f-730e61859611",
+      "createdAt": "2026-06-05T02:19:55.083Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_9h167di9",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_9h167di9",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_1737fde9-f03c-4768-b34d-5472a46d195e",
+      "createdAt": "2026-06-05T02:19:55.081Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_c5b2d8fe-0b8a-414d-a35d-8c3cbba1ef84",
+      "createdAt": "2026-06-05T02:19:55.074Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_2780a397-f8b7-47bb-9ff9-7088dde725b0",
+      "createdAt": "2026-06-05T02:19:55.072Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 8ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 8,
+        "tokenPrinted": false
+      },
+      "id": "audit_8de9df30-a880-4366-b87c-6df13915dbee",
+      "createdAt": "2026-06-05T02:19:55.070Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780625995062",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_f3940813-d6e7-45ae-bee7-6bbd23e4ffd0",
+      "createdAt": "2026-06-05T02:19:55.067Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_4cda3d7c-cad4-4288-bb8f-e150b70f91cf",
+      "createdAt": "2026-06-05T02:19:55.058Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 13ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 13,
+        "tokenPrinted": false
+      },
+      "id": "audit_c18afecc-a9f8-4a93-9ceb-6ed4deafbc31",
+      "createdAt": "2026-06-05T02:19:55.055Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 6ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 6,
+        "tokenPrinted": false
+      },
+      "id": "audit_c1da4589-e9ed-4f9e-a587-18aa3dcf465e",
+      "createdAt": "2026-06-05T02:19:55.039Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "17841469953520508",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_de63baf5-5f36-47d4-8951-6b9a46ba4d9c",
+      "createdAt": "2026-06-05T01:54:05.966Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "17841469953520508",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_04c1ab19-df3f-43e2-9656-f2a3073f3b8e",
+      "createdAt": "2026-06-05T01:53:25.935Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintPoints",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintPoints",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintPoints\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "simulateMintPoints",
+        "category": "contracts",
+        "riskLevel": "confirmation_required",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_6e987001-4133-4f2b-b544-7de10950430b",
+      "createdAt": "2026-06-04T21:36:57.398Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_dfeee306-d6a4-4a6f-86dc-2cb55d018569",
+      "createdAt": "2026-06-04T21:34:59.462Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_d9d4ce40-863c-4c8c-8834-083babe63ca3",
+      "createdAt": "2026-06-04T21:34:56.015Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_a6c6e04a-b825-478a-80ec-86f13c994cef",
+      "createdAt": "2026-06-04T21:34:55.442Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_2f50ebf2-2d33-4cd2-bb5e-6a028c1072da",
+      "createdAt": "2026-06-04T20:14:22.620Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_4f11a804-ec22-4e2f-8c07-e5ae38ba6c3b",
+      "createdAt": "2026-06-04T19:35:12.245Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_c3d6121f-4072-4e8a-9615-fe302c2e5b60",
+      "createdAt": "2026-06-04T19:35:12.152Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_59656b36-e8a7-4a9a-9607-be0ffce6af77",
+      "createdAt": "2026-06-04T19:35:12.072Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_800c428c-b77d-43d1-ad8b-cf5abdb042ce",
+      "createdAt": "2026-06-04T19:35:11.983Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_83d008f9-c204-4415-bade-42e897279fa5",
+      "createdAt": "2026-06-04T19:35:11.889Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_9244c3c5-70d2-4a79-9647-06c42b5f1aee",
+      "createdAt": "2026-06-04T19:34:29.544Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_4e688acb-a0ca-47ce-bddb-1d8902fa6733",
+      "createdAt": "2026-06-04T19:34:29.225Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_a7b7dbcc-d179-4dcf-8e60-107431a746b8",
+      "createdAt": "2026-06-04T19:34:29.173Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_1107a9d4-08d8-4759-aa4a-1d04ff76cbe8",
+      "createdAt": "2026-06-04T19:34:29.131Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_d485008b-f1ca-4a1d-9ce4-9c480ac39914",
+      "createdAt": "2026-06-04T19:34:22.873Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_d2d3e1bd-aaa1-40fd-96f5-e19a40141759",
+      "createdAt": "2026-06-04T19:34:18.962Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_b46f9769-9924-4b30-9471-7acdf7b0e766",
+      "createdAt": "2026-06-04T19:34:18.913Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_71612b2e-d7c9-4480-b8db-055b8bc8383a",
+      "createdAt": "2026-06-04T19:34:18.833Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_bfd98756-4a44-4953-aa1b-8fa1cb2ac16f",
+      "createdAt": "2026-06-04T19:33:26.010Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_e36da326-d6d2-41bf-8cb4-74b2881056ae",
+      "createdAt": "2026-06-04T19:33:25.906Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_4ca32579-1879-4e67-9ad2-2aba8c3287d9",
+      "createdAt": "2026-06-04T19:33:25.813Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_739c10a6-d10f-4bd6-80af-69fcc19e8814",
+      "createdAt": "2026-06-04T19:33:25.690Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintFanPass",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintFanPass",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintFanPass\" succeeded. Simulated: false. Duration: 233ms.",
+      "metadata": {
+        "toolName": "simulateMintFanPass",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 233,
+        "tokenPrinted": false
+      },
+      "id": "audit_3c9044a4-aedf-478a-b7f1-6e128493163d",
+      "createdAt": "2026-06-04T18:43:12.681Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintPoints",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintPoints",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintPoints\" succeeded. Simulated: false. Duration: 186ms.",
+      "metadata": {
+        "toolName": "simulateMintPoints",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 186,
+        "tokenPrinted": false
+      },
+      "id": "audit_9eada0a2-b4f8-4448-baa6-bdf3b65b6889",
+      "createdAt": "2026-06-04T18:43:11.317Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintFanPass",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintFanPass",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintFanPass\" succeeded. Simulated: true. Duration: 271ms.",
+      "metadata": {
+        "toolName": "simulateMintFanPass",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 271,
+        "tokenPrinted": false
+      },
+      "id": "audit_81eff6b4-e91d-429b-8713-8ecd973ad8e1",
+      "createdAt": "2026-06-04T18:42:21.521Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintPoints",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintPoints",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintPoints\" succeeded. Simulated: false. Duration: 467ms.",
+      "metadata": {
+        "toolName": "simulateMintPoints",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 467,
+        "tokenPrinted": false
+      },
+      "id": "audit_556c9578-6694-4bc3-ba41-6358f41d715c",
+      "createdAt": "2026-06-04T18:42:21.123Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintFanPass",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintFanPass",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintFanPass\" succeeded. Simulated: true. Duration: 476ms.",
+      "metadata": {
+        "toolName": "simulateMintFanPass",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 476,
+        "tokenPrinted": false
+      },
+      "id": "audit_ce2785a3-a19e-403b-91f4-f5e55e7eaff5",
+      "createdAt": "2026-06-04T18:41:52.048Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintFanPass",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintFanPass",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintFanPass\" succeeded. Simulated: true. Duration: 114ms.",
+      "metadata": {
+        "toolName": "simulateMintFanPass",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 114,
+        "tokenPrinted": false
+      },
+      "id": "audit_da9f9f24-443f-4c74-b165-3a730e19f902",
+      "createdAt": "2026-06-04T18:40:20.070Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintPoints",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintPoints",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintPoints\" succeeded. Simulated: false. Duration: 229ms.",
+      "metadata": {
+        "toolName": "simulateMintPoints",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 229,
+        "tokenPrinted": false
+      },
+      "id": "audit_85768d8c-296a-4fe2-a6f1-76e7f52f3647",
+      "createdAt": "2026-06-04T18:40:19.837Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintFanPass",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintFanPass",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintFanPass\" succeeded. Simulated: true. Duration: 4ms.",
+      "metadata": {
+        "toolName": "simulateMintFanPass",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_38644880-49f0-4313-a4e5-887ff7d5c424",
+      "createdAt": "2026-06-04T18:39:02.473Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.simulateMintPoints",
+      "targetType": "operator_tool",
+      "targetId": "simulateMintPoints",
+      "severity": "info",
+      "message": "Operator tool \"simulateMintPoints\" succeeded. Simulated: false. Duration: 239ms.",
+      "metadata": {
+        "toolName": "simulateMintPoints",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 239,
+        "tokenPrinted": false
+      },
+      "id": "audit_e1dfdf1c-0508-404e-8939-3f36b58e6cc7",
+      "createdAt": "2026-06-04T18:38:51.421Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": true,
+        "hasAppSecret": true,
+        "authMode": "instagram",
+        "mockMeta": false
+      },
+      "id": "audit_e82bb6b7-92ed-4890-8c79-f0ca9f567a31",
+      "createdAt": "2026-06-04T18:20:16.500Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_2f3a71d1-1f00-4d1a-b318-3387d6c06927",
+      "createdAt": "2026-06-04T17:46:40.011Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_7536ec5e-0d18-4a21-b577-aebd736f09a5",
+      "createdAt": "2026-06-04T17:46:39.971Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_5b5bf11c-1b32-4c30-aadb-a762df7a4ede",
+      "createdAt": "2026-06-04T17:46:39.926Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 12ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 12,
+        "tokenPrinted": false
+      },
+      "id": "audit_ee6d26c3-1ef2-4c46-9fd8-758ffc20a5c3",
+      "createdAt": "2026-06-04T17:46:39.884Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780595199873",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_894bbf9a-8654-4b45-9c27-5f427bd50555",
+      "createdAt": "2026-06-04T17:46:39.881Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_69d67b40-3d56-44ca-a31a-a03a587e60e5",
+      "createdAt": "2026-06-04T17:46:39.772Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_819ada2d-4b1c-44fb-9246-94cc3c6aa5e8",
+      "createdAt": "2026-06-04T17:46:18.932Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_6bc6d498-b1f3-45de-b6a7-9bb9386690c6",
+      "createdAt": "2026-06-04T17:46:17.819Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_ca814c1f-81e1-45ba-ab6c-0e7110512368",
+      "createdAt": "2026-06-04T16:25:02.298Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_496c1585-1c22-421e-9846-5386ac7f8ff2",
+      "createdAt": "2026-06-04T16:24:58.883Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_0dc80326-be48-4e73-a3f4-c28e768449ca",
+      "createdAt": "2026-06-04T16:24:58.466Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_f7153a92-f6b4-4b8c-88aa-707ac9c6db46",
+      "createdAt": "2026-06-04T16:24:58.011Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_0b537293-3d29-498a-b94e-ebb365d1408a",
+      "createdAt": "2026-06-04T16:22:48.016Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_0e03c1ad-08aa-480b-8090-362a2c52e6c8",
+      "createdAt": "2026-06-04T16:22:46.600Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_390c5058-ff2d-4985-89c4-f3e1aca7667c",
+      "createdAt": "2026-06-04T16:22:46.345Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_dc58a60a-b447-4067-959e-d5b8db9d0b6f",
+      "createdAt": "2026-06-04T16:22:46.103Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_aac5536e-b556-4431-ac2b-5707c86403ac",
+      "createdAt": "2026-06-04T16:22:26.187Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_35a33c51-6469-4c0c-9e5c-947a3be3e047",
+      "createdAt": "2026-06-04T16:22:26.185Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_2751637f-28ae-4f9e-ab33-78d407f2a14f",
+      "createdAt": "2026-06-04T16:22:26.183Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 15ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 15,
+        "tokenPrinted": false
+      },
+      "id": "audit_e7d2e700-18ba-4dd3-b6b3-051e53246445",
+      "createdAt": "2026-06-04T16:22:26.181Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_28b45b86-0e63-4eb8-85a4-7e8ba2f88b1a",
+      "createdAt": "2026-06-04T16:22:26.163Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_ce932c82-78f8-4a87-809c-be9e9de893bd",
+      "createdAt": "2026-06-04T16:22:14.718Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_856e7679-3206-4eda-82ea-dfff5f09ec33",
+      "createdAt": "2026-06-04T16:22:14.716Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_87d8d623-270c-4d94-94b0-e3736824e6c8",
+      "createdAt": "2026-06-04T16:22:14.713Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 7ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 7,
+        "tokenPrinted": false
+      },
+      "id": "audit_24376203-68a2-4e3f-8fde-ed8914a68ec1",
+      "createdAt": "2026-06-04T16:22:14.711Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_hrabubla",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_hrabubla",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_4d370640-0039-43b3-b383-6b90d3d67650",
+      "createdAt": "2026-06-04T16:22:14.709Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_17900d31-16f7-4ed2-a471-1b3720ae225f",
+      "createdAt": "2026-06-04T16:22:14.702Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_38115fde-f40d-4789-9714-b29035dada12",
+      "createdAt": "2026-06-04T16:22:14.700Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 5ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 5,
+        "tokenPrinted": false
+      },
+      "id": "audit_70101bd1-492f-4423-8ea9-9ad7da615369",
+      "createdAt": "2026-06-04T16:22:14.698Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780590134692",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_1edec784-3b7b-489a-8136-797ed6af153b",
+      "createdAt": "2026-06-04T16:22:14.696Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_940265b0-4642-47cc-aeff-f67468fce7c7",
+      "createdAt": "2026-06-04T16:22:14.689Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 27ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 27,
+        "tokenPrinted": false
+      },
+      "id": "audit_8ea71366-b268-4ab9-bd4e-25f8ca7c6da0",
+      "createdAt": "2026-06-04T16:22:14.685Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_07db8a4c-4a14-4e0e-a6da-3e884508bed7",
+      "createdAt": "2026-06-04T16:22:14.644Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_9b101fca-e164-44eb-9ef6-40218325ead1",
+      "createdAt": "2026-06-04T16:21:12.532Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_7d64451a-ec03-4f45-9a0e-bd6219ed409d",
+      "createdAt": "2026-06-04T15:33:49.710Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_68ae88e2-9350-4511-b010-93275b992efc",
+      "createdAt": "2026-06-04T15:33:49.707Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_888248e1-d54d-4ec4-b12d-d482353ca2c9",
+      "createdAt": "2026-06-04T15:33:49.704Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_8363459f-71dc-41d7-87c2-0f14fb1c2ea1",
+      "createdAt": "2026-06-04T15:33:49.702Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_yy0p57g6",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_yy0p57g6",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_6f93575b-1ea8-4621-ba7f-aafdab7a67fe",
+      "createdAt": "2026-06-04T15:33:49.701Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_60f0029e-73d1-4121-a0a0-9f47dd875ce3",
+      "createdAt": "2026-06-04T15:33:49.697Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_03e26e43-4a63-4011-b71f-75ce3914c736",
+      "createdAt": "2026-06-04T15:33:49.695Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 7ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 7,
+        "tokenPrinted": false
+      },
+      "id": "audit_dab93328-4855-4a07-9c61-b60e6351a8e9",
+      "createdAt": "2026-06-04T15:33:49.692Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780587229685",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_a356c20a-c8c9-48e8-b616-f39b3c04b692",
+      "createdAt": "2026-06-04T15:33:49.689Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_17ff52d7-e105-4419-bd5f-8cc986972984",
+      "createdAt": "2026-06-04T15:33:49.681Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 15ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 15,
+        "tokenPrinted": false
+      },
+      "id": "audit_d554f770-4e97-44e7-8a9d-1b7053d63fc0",
+      "createdAt": "2026-06-04T15:33:49.677Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_dd339ae2-3bff-4786-b1cd-7f3fef963fa9",
+      "createdAt": "2026-06-04T15:33:49.660Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_88b30076-729b-43e6-8991-aa465f8e51a2",
+      "createdAt": "2026-06-04T15:33:47.452Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_de3c91eb-134b-4dcb-8c96-8424e2e0310e",
+      "createdAt": "2026-06-04T15:33:47.449Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_71989f19-0be1-4723-ab41-88b00482cf9b",
+      "createdAt": "2026-06-04T15:33:47.447Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 17ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 17,
+        "tokenPrinted": false
+      },
+      "id": "audit_ede69a68-dd0d-4873-bc1a-77d8e703e698",
+      "createdAt": "2026-06-04T15:33:47.444Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_03ee1977-7f03-481e-a5ce-8c95aaabd691",
+      "createdAt": "2026-06-04T15:33:47.425Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_35cf8dbc-1419-4fb7-9e43-41b4b9c7c84a",
+      "createdAt": "2026-06-04T15:33:27.246Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_03493f68-636d-485f-a42e-b2f83600966c",
+      "createdAt": "2026-06-04T15:33:25.210Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_098b1d89-c516-4e43-a556-11e139040d1a",
+      "createdAt": "2026-06-04T15:33:24.898Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_b730a3c3-a69f-4897-b0dd-542e9ed22806",
+      "createdAt": "2026-06-04T15:33:24.300Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_12d07ff5-90a6-4a02-b6d2-d206e14daafe",
+      "createdAt": "2026-06-04T15:32:25.292Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_2d6c8c20-6367-44d8-8657-ca46f777231b",
+      "createdAt": "2026-06-04T15:32:17.025Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_d0b15412-3925-4d49-b455-1d58d8d88402",
+      "createdAt": "2026-06-04T15:32:17.024Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_1627335d-b891-42bf-a0b7-9f1bcb9a3e78",
+      "createdAt": "2026-06-04T15:32:17.022Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_139d03e8-de13-4db4-97af-3a55411119d2",
+      "createdAt": "2026-06-04T15:32:17.020Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_mwv3gl8m",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_mwv3gl8m",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_fa6f8bac-96b9-4e24-8ee4-3b72bd8a4218",
+      "createdAt": "2026-06-04T15:32:17.019Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_fe13879c-4df0-4619-881d-f976e7a5a678",
+      "createdAt": "2026-06-04T15:32:17.015Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.recommendations.dmDraft",
+      "targetType": "operator_tool",
+      "targetId": "generateDMDraft",
+      "severity": "info",
+      "message": "Operator tool \"generateDMDraft\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "generateDMDraft",
+        "category": "recommendations",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_5a643932-faba-46ef-9312-d98822c05db1",
+      "createdAt": "2026-06-04T15:32:17.013Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 4ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_397d69fe-e832-45b9-ba61-ba3ccb9b7baf",
+      "createdAt": "2026-06-04T15:32:17.011Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780587137007",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_ec6ff8b4-f7cf-4736-a05e-deacfe53795d",
+      "createdAt": "2026-06-04T15:32:17.010Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_23202654-3527-49d3-8237-ce80e0904b29",
+      "createdAt": "2026-06-04T15:32:17.004Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 16ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 16,
+        "tokenPrinted": false
+      },
+      "id": "audit_80791041-24e2-4fac-ac68-fa18a4fd485c",
+      "createdAt": "2026-06-04T15:32:17.001Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_4389a6d5-5aca-4fa5-bb06-6079572efeeb",
+      "createdAt": "2026-06-04T15:32:16.982Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_319a09b0-8323-4301-9d95-73ca633a4ee8",
+      "createdAt": "2026-06-04T15:31:36.960Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_6878fc12-f955-4470-9b23-f9a377665512",
+      "createdAt": "2026-06-04T15:31:36.958Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_2b36e1d0-38be-45dc-b728-e279f5ae1fb3",
+      "createdAt": "2026-06-04T15:31:36.956Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "operator_tool",
+      "targetId": "createReward",
+      "severity": "info",
+      "message": "Operator tool \"createReward\" succeeded. Simulated: false. Duration: 3ms.",
+      "metadata": {
+        "toolName": "createReward",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 3,
+        "tokenPrinted": false
+      },
+      "id": "audit_8f51ef98-898c-4085-a67d-a13667405a7c",
+      "createdAt": "2026-06-04T15:31:36.954Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.createReward",
+      "targetType": "reward",
+      "targetId": "reward_oqbkkeu7",
+      "severity": "info",
+      "message": "Reward \"costing 500 points\" created via Operator (500 pts).",
+      "metadata": {
+        "rewardId": "reward_oqbkkeu7",
+        "costInPoints": 500,
+        "rewardType": "custom"
+      },
+      "id": "audit_76c7cafb-aa79-4e3b-a9cb-2efa9f0a9b84",
+      "createdAt": "2026-06-04T15:31:36.953Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_1ab605da-3c78-4910-b4ef-6e4a4cdf6e24",
+      "createdAt": "2026-06-04T15:31:36.949Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_f7aafeae-507c-49b2-af2a-745b64c6d82b",
+      "createdAt": "2026-06-04T15:31:36.947Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 6ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 6,
+        "tokenPrinted": false
+      },
+      "id": "audit_a570be67-6557-46dd-8239-b1c9b9cd4a31",
+      "createdAt": "2026-06-04T15:31:36.945Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780587096940",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_d0b5d6a6-d508-4a20-b8b5-81a1807b438b",
+      "createdAt": "2026-06-04T15:31:36.943Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 0ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_b414dde5-d22d-43b9-b5e0-60b6c829276e",
+      "createdAt": "2026-06-04T15:31:36.937Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 14ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 14,
+        "tokenPrinted": false
+      },
+      "id": "audit_d682211f-103e-4a72-8a66-050aac19b79f",
+      "createdAt": "2026-06-04T15:31:36.935Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_c2d53e64-c0f8-4c8f-a847-392a5a7a191b",
+      "createdAt": "2026-06-04T15:31:36.919Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 2ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 2,
+        "tokenPrinted": false
+      },
+      "id": "audit_e5258c10-4f0d-4e80-9016-0c643ae5bf8d",
+      "createdAt": "2026-06-04T15:30:59.015Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.fanpass.list",
+      "targetType": "operator_tool",
+      "targetId": "listFanPasses",
+      "severity": "info",
+      "message": "Operator tool \"listFanPasses\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listFanPasses",
+        "category": "fan_pass",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_6bb422b8-3b8c-4f1c-8d4a-991ad39defcd",
+      "createdAt": "2026-06-04T15:30:59.012Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.explainReadiness",
+      "targetType": "operator_tool",
+      "targetId": "explainTokenReadiness",
+      "severity": "info",
+      "message": "Operator tool \"explainTokenReadiness\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "explainTokenReadiness",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_2739504a-84bf-4ddc-93ef-19f64832f973",
+      "createdAt": "2026-06-04T15:30:59.010Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getTopFans",
+      "targetType": "operator_tool",
+      "targetId": "getTopFans",
+      "severity": "info",
+      "message": "Operator tool \"getTopFans\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTopFans",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_7ee94f99-0d8a-458c-a445-aed8c2ee3e18",
+      "createdAt": "2026-06-04T15:30:59.008Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "operator_tool",
+      "targetId": "runB2BExpansionAgent",
+      "severity": "info",
+      "message": "Operator tool \"runB2BExpansionAgent\" succeeded. Simulated: true. Duration: 7ms.",
+      "metadata": {
+        "toolName": "runB2BExpansionAgent",
+        "category": "b2b_agent",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 7,
+        "tokenPrinted": false
+      },
+      "id": "audit_e6d7a3ca-6703-40fc-9f15-a4b60bdb8d6d",
+      "createdAt": "2026-06-04T15:30:59.005Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.b2b.runAgent",
+      "targetType": "b2b_run",
+      "targetId": "b2b_run_1780587058997",
+      "severity": "info",
+      "message": "B2B Expansion Agent ran in Fort-de-France: 4 businesses discovered, 4 opportunities.",
+      "metadata": {
+        "location": "Fort-de-France",
+        "businessesDiscovered": 4,
+        "opportunitiesGenerated": 4,
+        "revenuePotential": 2.4,
+        "simulated": true,
+        "externalCalls": 0
+      },
+      "id": "audit_713d834e-b1e0-4a48-bf05-2474ba0aa71b",
+      "createdAt": "2026-06-04T15:30:59.001Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.simulate",
+      "targetType": "operator_tool",
+      "targetId": "simulateTokenEconomy",
+      "severity": "info",
+      "message": "Operator tool \"simulateTokenEconomy\" succeeded. Simulated: true. Duration: 1ms.",
+      "metadata": {
+        "toolName": "simulateTokenEconomy",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": true,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_d6235c4d-0644-466c-881c-4a29730664c9",
+      "createdAt": "2026-06-04T15:30:58.995Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 14ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 14,
+        "tokenPrinted": false
+      },
+      "id": "audit_b8315776-0f41-455a-8a03-983a781bc5e2",
+      "createdAt": "2026-06-04T15:30:58.992Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 4ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 4,
+        "tokenPrinted": false
+      },
+      "id": "audit_9c482ae0-c267-4039-af25-6a9b41b2fb73",
+      "createdAt": "2026-06-04T15:30:58.975Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.contracts.getStatus",
+      "targetType": "operator_tool",
+      "targetId": "getContractStatus",
+      "severity": "info",
+      "message": "Operator tool \"getContractStatus\" succeeded. Simulated: false. Duration: 1ms.",
+      "metadata": {
+        "toolName": "getContractStatus",
+        "category": "contracts",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 1,
+        "tokenPrinted": false
+      },
+      "id": "audit_e3c44687-88b9-41d7-927c-1830d5f011ed",
+      "createdAt": "2026-06-04T15:30:53.502Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.listRewards",
+      "targetType": "operator_tool",
+      "targetId": "listRewards",
+      "severity": "info",
+      "message": "Operator tool \"listRewards\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "listRewards",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_f88fc7e9-e008-4eff-92a7-131bcda0239a",
+      "createdAt": "2026-06-04T15:30:53.499Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.token.getState",
+      "targetType": "operator_tool",
+      "targetId": "getTokenEconomyState",
+      "severity": "info",
+      "message": "Operator tool \"getTokenEconomyState\" succeeded. Simulated: false. Duration: 0ms.",
+      "metadata": {
+        "toolName": "getTokenEconomyState",
+        "category": "token_economy",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_ee0bc8de-3d56-4341-9d3b-a66b15c9b229",
+      "createdAt": "2026-06-04T15:30:53.498Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.loyalty.getStats",
+      "targetType": "operator_tool",
+      "targetId": "getLoyaltyStats",
+      "severity": "info",
+      "message": "Operator tool \"getLoyaltyStats\" succeeded. Simulated: false. Duration: 16ms.",
+      "metadata": {
+        "toolName": "getLoyaltyStats",
+        "category": "loyalty",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 16,
+        "tokenPrinted": false
+      },
+      "id": "audit_6cb7137a-a1d9-445e-9142-f98f8ff978c1",
+      "createdAt": "2026-06-04T15:30:53.496Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "agent",
+      "action": "operator.workspace.getState",
+      "targetType": "operator_tool",
+      "targetId": "getWorkspaceState",
+      "severity": "info",
+      "message": "Operator tool \"getWorkspaceState\" succeeded. Simulated: false. Duration: 5ms.",
+      "metadata": {
+        "toolName": "getWorkspaceState",
+        "category": "workspace",
+        "riskLevel": "safe",
+        "simulated": false,
+        "durationMs": 5,
+        "tokenPrinted": false
+      },
+      "id": "audit_170794da-a032-40cb-9c49-aeebef45574e",
+      "createdAt": "2026-06-04T15:30:53.478Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_9805c7e1-2196-450f-bf8a-0ebeeddfb23e",
+      "createdAt": "2026-06-04T14:20:05.910Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_ae49827c-f2ad-4c94-b9c9-c130f615888c",
+      "createdAt": "2026-06-04T14:20:05.686Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_32cebda6-fda0-4cc4-ac7e-84d3f3db3981",
+      "createdAt": "2026-06-04T14:20:05.546Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_d8074f13-975f-4e93-8b3b-edf7e3e60782",
+      "createdAt": "2026-06-04T14:20:05.512Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": false
+      },
+      "id": "audit_5b470895-439f-493d-b4f1-337b755f4815",
+      "createdAt": "2026-06-04T14:19:05.424Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "meta.accounts_connected",
+      "targetType": "instagram_account",
+      "targetId": "mock-ig-1",
+      "severity": "info",
+      "message": "1 Instagram account metadata record(s) updated. Tokens remain in memory only.",
+      "metadata": {
+        "accountCount": 1,
+        "authProvider": "instagram",
+        "tokenPersisted": false
+      },
+      "id": "audit_f2c5fb1a-14ad-4ca5-8aad-e84de94f3d4f",
+      "createdAt": "2026-06-04T14:19:02.201Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "meta.runtime_config.saved",
+      "targetType": "integration",
+      "targetId": "meta_login",
+      "severity": "info",
+      "message": "Meta runtime configuration was updated from the local dashboard/API.",
+      "metadata": {
+        "hasAppId": false,
+        "hasAppSecret": false,
+        "authMode": null,
+        "mockMeta": true
+      },
+      "id": "audit_3f3c386d-b6b4-476f-b04d-2d7146914d25",
+      "createdAt": "2026-06-04T14:19:01.692Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "smoke.workspace.audit",
+      "targetType": "workspace",
+      "targetId": "",
+      "severity": "info",
+      "message": "Smoke test audit event.",
+      "metadata": {
+        "externalCalls": 0,
+        "tokenPrinted": false
+      },
+      "id": "audit_cb3e9778-7ddd-4d61-a21a-495eb7790353",
+      "createdAt": "2026-06-04T14:19:01.124Z"
+    },
+    {
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "developer",
+      "action": "workspace.debug.ran",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Backend-first workspace diagnostic executed.",
+      "metadata": {
+        "tokenPrinted": false,
+        "externalCalls": 0
+      },
+      "id": "audit_0889b6af-6ffe-4bce-a48f-aad2ea398e3d",
+      "createdAt": "2026-06-04T14:15:45.179Z"
+    },
+    {
+      "id": "audit_workspace_seeded",
+      "workspaceId": "workspace_aura_demo",
+      "actorType": "system",
+      "action": "workspace.seeded",
+      "targetType": "workspace",
+      "targetId": "workspace_aura_demo",
+      "severity": "info",
+      "message": "Default Aura prototype workspace initialized.",
+      "metadata": {
+        "safeMode": true
+      },
+      "createdAt": "2026-06-04T08:00:00.000Z"
+    }
+  ]
+}

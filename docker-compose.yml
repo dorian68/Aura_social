@@ -1,0 +1,53 @@
+# ── Aura — DEV docker-compose (VPS-friendly) ─────────────────────────────
+# Usage:
+#   cp .env.example .env   # then edit if needed (mock mode works out of the box)
+#   docker compose up --build
+#
+# Services:
+#   app  → Next.js (API + Next pages) with hot reload, on ${PORT:-3000}
+#   web  → static Frontend_Aura product UI, on ${WEB_PORT:-8080}
+#
+# Code is bind-mounted; node_modules/.next live in anonymous volumes so host
+# edits reload live and Linux deps aren't shadowed by host (Windows) ones.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: aura-app-dev
+    container_name: aura-app
+    env_file:
+      - .env
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev:docker
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/system/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: aura-app-dev
+    container_name: aura-web
+    environment:
+      WEB_PORT: "${WEB_PORT:-8080}"
+    ports:
+      - "${WEB_PORT:-8080}:${WEB_PORT:-8080}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: node scripts/serve-frontend.mjs
+    depends_on:
+      - app
+    restart: unless-stopped

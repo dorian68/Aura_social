@@ -112,6 +112,7 @@ export interface OperatorChatResponse {
     tool: string;
     args: Record<string, unknown>;
     warning: string;
+    confirmationToken?: string;
   };
 }
 

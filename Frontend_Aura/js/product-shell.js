@@ -68,13 +68,8 @@ function auraSidebar(active) {
     ${link('workspace.html','workspace','workspace')}
     ${link('components.html','components','components')}
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;padding:10px 8px 4px">
-      <div class="card card-pad-sm" style="padding:14px">
-        <div class="row between" style="margin-bottom:10px">
-          <span class="pill gold" data-t="creator_plan">${c('creator_plan')}</span>
-        </div>
-        <div class="progress" style="height:6px"><span style="width:62%"></span></div>
-        <div style="font-size:11.5px;color:var(--t-lo);margin-top:8px">3,1K / 5K credits</div>
-      </div>
+      <!-- Plan/credits card removed: showed a fabricated "Creator Pro" plan and
+           "3,1K / 5K credits" with no billing backend. Re-add when wired to real account data. -->
       <div class="lang-toggle" style="align-self:stretch;justify-content:center;display:flex;padding:3px;gap:2px;background:var(--ink-700);border:1px solid var(--line);border-radius:var(--r-pill)">
         <button data-lang-btn="en" style="flex:1;height:28px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--t-lo);font-family:var(--mono)">EN</button>
         <button data-lang-btn="fr" style="flex:1;height:28px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--t-lo);font-family:var(--mono)">FR</button>
@@ -93,14 +88,22 @@ function auraMountShell(active) {
 
   // Inject Aura Operator widget after DOM is ready
   function mountOperator() {
-    if (document.getElementById('aura-op-root')) return; // already mounted
+    if (document.getElementById('aura-op-root')) return;
     const s = document.createElement('script');
     s.src = '../js/operator-widget.js';
     document.body.appendChild(s);
   }
+  // Inject Instagram connect widget
+  function mountIGConnect() {
+    if (window.AuraIGConnect) return;
+    const s = document.createElement('script');
+    s.src = '../js/instagram-connect.js';
+    document.body.appendChild(s);
+  }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountOperator);
+    document.addEventListener('DOMContentLoaded', () => { mountOperator(); mountIGConnect(); });
   } else {
     mountOperator();
+    mountIGConnect();
   }
 }

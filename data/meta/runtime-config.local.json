@@ -1,0 +1,13 @@
+{
+  "appId": "1527834862266177",
+  "appSecret": "899b9943754a5bd1c55e107253df4d29",
+  "graphApiVersion": "v23.0",
+  "authMode": "instagram",
+  "facebookLoginConfigId": "",
+  "frontendUrl": "http://localhost:3000",
+  "mockMeta": false,
+  "discoverySourceIgUserId": "",
+  "discoverySourceToken": "",
+  "discoverySourceUsername": "",
+  "updatedAt": "2026-06-05T22:25:39.740Z"
+}

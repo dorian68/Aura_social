@@ -1,0 +1,18 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AURA">
+  <defs>
+    <linearGradient id="auraTri" x1="0.1" y1="1" x2="0.9" y2="0.1">
+      <stop offset="0" stop-color="#CFFF6A"></stop>
+      <stop offset="0.42" stop-color="#9BE000"></stop>
+      <stop offset="0.75" stop-color="#3F6B2A"></stop>
+      <stop offset="1" stop-color="#2C5224"></stop>
+    </linearGradient>
+    <filter id="auraTriGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.4" result="b"></feGaussianBlur>
+      <feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+    </filter>
+  </defs>
+  
+  <path d="M50 14 L86 84 L17 84" fill="none" stroke="url(#auraTri)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#auraTriGlow)"></path>
+  
+  <path d="M46.5 22 L24 66" fill="none" stroke="#B8FF4D" stroke-width="7.5" stroke-linecap="round" opacity="0.95"></path>
+</svg>
