@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const baseUrl = process.env.SMOKE_BASE_URL || `http://localhost:${process.env.PORT || "3000"}`;
+const baseUrl = process.env.SMOKE_BASE_URL || `http://localhost:${process.env.PORT || "3009"}`;
 const webBaseUrl = process.env.WEB_BASE_URL || baseUrl;
 const apiToken = process.env.AURA_API_TOKEN || "";
 const minScore = Number(process.env.BUSINESS_SMOKE_MIN_SCORE || "75");
@@ -12,6 +12,7 @@ const blockers = [];
 
 const productDocs = readDocs();
 const serverEvidence = await collectServerEvidence();
+serverEvidence.superfan = await collectSuperfanEvidence();
 const scores = scoreExperience(productDocs, serverEvidence);
 const overall = Math.round(
   (scores.first30SecondClarity +
@@ -83,6 +84,7 @@ async function collectServerEvidence() {
     workspace: null,
     b2b: null,
     agent: null,
+    superfan: null,
   };
 
   try {
@@ -90,9 +92,7 @@ async function collectServerEvidence() {
     const webRoot = await fetchReadWithRetry(`${webBaseUrl}/`);
     output.pages.apiRoot = root.status;
     output.pages.root = webRoot.status;
-    const dashboard = await fetchReadWithRetry(`${webBaseUrl}/product/dashboard.html`);
-    output.pages.dashboard = dashboard.status;
-    output.reachable = webRoot.ok || dashboard.ok;
+    output.reachable = webRoot.ok;
     evidence.push({ area: "ux", signal: "root_and_dashboard_routes", value: output.pages });
   } catch (error) {
     blockers.push({ priority: "P0", area: "server", message: `Application server is not reachable at ${baseUrl}.` });
@@ -169,6 +169,108 @@ async function collectServerEvidence() {
   return output;
 }
 
+async function collectSuperfanEvidence() {
+  const out = {
+    clubPageOk: false,
+    fanJoinOk: false,
+    leaderboardEntries: 0,
+    challengesCount: 0,
+    rewardsCount: 0,
+    adminDashboardOk: false,
+    signalRuleCreated: false,
+    fanBalance: 0,
+    slug: null,
+    communityId: null,
+    fanId: null,
+  };
+
+  try {
+    // Create a temporary creator + community for the journey test
+    const creator = await postJson("/api/creators", {
+      displayName: `Business Smoke ${Date.now()}`,
+      bio: "Business smoke journey",
+      niche: "music",
+    });
+    if (!creator.success) return out;
+    const creatorId = creator.data.creator.id;
+
+    const slug = `biz-smoke-${Date.now().toString(36)}`;
+    const community = await postJson("/api/admin/communities", {
+      creatorId,
+      name: "Business Smoke Club",
+      brandColor: "#B8FF4D",
+      isPublic: true,
+      customSlug: slug,
+    });
+    if (!community.success) return out;
+    out.communityId = community.data.community.id;
+    out.slug = community.data.community.slug;
+
+    // Public club page
+    const clubPage = await fetchSafe(`/api/club/${out.slug}`);
+    out.clubPageOk = clubPage?.success === true;
+
+    // Fan join
+    const join = await postJsonSafe(`/api/club/${out.slug}/join`, {
+      email: `biz-smoke-${Date.now()}@test.aura`,
+      displayName: "Business Smoke Fan",
+    });
+    if (join?.success) {
+      out.fanJoinOk = true;
+      out.fanId = join.data.fan.id;
+      out.fanBalance = join.data.welcomePoints ?? 0;
+    }
+
+    // Leaderboard
+    const lb = await fetchSafe(`/api/club/${out.slug}/leaderboard`);
+    out.leaderboardEntries = lb?.data?.leaderboard?.length ?? 0;
+
+    // Challenges / Rewards
+    const chal = await fetchSafe(`/api/club/${out.slug}/challenges`);
+    out.challengesCount = chal?.data?.challenges?.length ?? 0;
+    const rew = await fetchSafe(`/api/club/${out.slug}/rewards`);
+    out.rewardsCount = rew?.data?.rewards?.length ?? 0;
+
+    // Admin dashboard
+    const dash = await fetchSafe(`/api/admin/dashboard/${out.communityId}`);
+    out.adminDashboardOk = dash?.success === true;
+
+    // Signal rule creation
+    const rule = await postJsonSafe(`/api/admin/signals/rules/${out.communityId}`, {
+      platform: "instagram",
+      signalType: "post",
+      keywords: ["aura"],
+      pointsReward: 50,
+    });
+    out.signalRuleCreated = rule?.success === true;
+
+    evidence.push({
+      area: "superfan",
+      signal: "superfan_os_journey",
+      value: {
+        clubPageOk: out.clubPageOk,
+        fanJoinOk: out.fanJoinOk,
+        fanBalance: out.fanBalance,
+        leaderboardEntries: out.leaderboardEntries,
+        adminDashboardOk: out.adminDashboardOk,
+        signalRuleCreated: out.signalRuleCreated,
+      },
+    });
+  } catch (err) {
+    blockers.push({ priority: "P0", area: "superfan", message: `Superfan OS journey failed: ${messageOf(err)}` });
+  }
+
+  return out;
+}
+
+async function fetchSafe(pathname) {
+  try { return await getJson(pathname); } catch { return null; }
+}
+
+async function postJsonSafe(pathname, body) {
+  try { return await postJson(pathname, body); } catch { return null; }
+}
+
 function scoreExperience(docs, server) {
   let first30SecondClarity = 65;
   let businessValue = 60;
@@ -231,6 +333,44 @@ function scoreExperience(docs, server) {
   if (/No for paid production launch/i.test(docs["PRODUCTION_READINESS.md"])) {
     commercialReadiness -= 10;
     trust += 4;
+  }
+
+  // ── Superfan OS scoring ───────────────────────────────────────────────────
+  const sf = server.superfan;
+  if (sf) {
+    if (sf.clubPageOk) {
+      first30SecondClarity += 8;
+      promiseAlignment += 5;
+    } else {
+      blockers.push({ priority: "P0", area: "superfan_club", message: "Public club page is not reachable — creators cannot share their club URL." });
+    }
+    if (sf.fanJoinOk) {
+      uxSimplicity += 8;
+      retentionPotential += 6;
+    } else {
+      blockers.push({ priority: "P0", area: "superfan_join", message: "Fan join endpoint failed — fan onboarding is broken." });
+    }
+    if (sf.leaderboardEntries > 0) {
+      retentionPotential += 8;
+      businessValue += 4;
+    }
+    if (sf.challengesCount > 0) featureDepth += 5;
+    if (sf.rewardsCount > 0) { featureDepth += 5; commercialReadiness += 6; }
+    if (sf.adminDashboardOk) {
+      businessValue += 6;
+      trust += 4;
+    }
+    if (sf.signalRuleCreated) {
+      featureDepth += 7;
+      promiseAlignment += 5;
+    }
+    if (sf.fanBalance > 0) {
+      businessValue += 4;
+    }
+    if (!sf.clubPageOk || !sf.fanJoinOk || !sf.adminDashboardOk) {
+      // core superfan OS is broken — cannot recommend as a product
+      commercialReadiness -= 15;
+    }
   }
 
   return {

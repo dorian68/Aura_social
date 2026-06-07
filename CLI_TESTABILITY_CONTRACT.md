@@ -25,10 +25,10 @@ npm run dev
 - Default app URL:
 
 ```bash
-SMOKE_BASE_URL=http://localhost:3000
+SMOKE_BASE_URL=http://localhost:3009
 ```
 
-Some existing scripts default to `http://localhost:3170`; set `SMOKE_BASE_URL` explicitly when the app runs on another port.
+Aura runs on port **3009** by default (`PORT=3009 npm run dev`). Port 3000 and 3170 are occupied by unrelated local apps. Always set `SMOKE_BASE_URL` when the app is on another port.
 
 ## Existing Commands
 
@@ -64,7 +64,9 @@ Some existing scripts default to `http://localhost:3170`; set `SMOKE_BASE_URL` e
 | Command | Required coverage |
 | --- | --- |
 | `npm run smoke:journey` | Main customer journey from analysis to loyalty/reward/B2B monetization outcome. |
-| `npm run smoke:business` | Client mystere checks for clarity, value, trust and payment likelihood. |
+| `npm run smoke:superfan` | Full Superfan OS journey: creator → community → fan join → points → leaderboard → signal rules → admin dashboard (20 assertions). |
+| `npm run smoke:signals` | Alias for smoke:superfan; covers signal rule CRUD, admin scan endpoint, and no-token graceful fallback. |
+| `npm run smoke:business` | Client mystere checks for clarity, value, trust and payment likelihood — now includes Superfan OS journey. |
 | `npm run audit:commercial` | Structured commercial readiness audit and scoring. |
 | `npm run production:check` | Environment, build, auth, mock-mode, persistence, provider and safety-gate readiness. |
 
@@ -208,8 +210,45 @@ It should fail when:
 - safety gates for payments, outreach and on-chain writes are explicit.
 - `npm run typecheck`, `npm run lint`, `npm run build`, `npm run smoke:security` pass in the target profile.
 
+### Superfan OS
+
+Required assertions:
+
+- Creator can be created via API.
+- Community can be created and attached to a creator.
+- Fan joins and receives welcome points.
+- Fan balance is correct after join.
+- Fan appears on leaderboard.
+- Admin dashboard reflects fan count and points.
+- Signal rule can be created, listed.
+- Scan endpoint returns graceful no-token error (not 500) when no OAuth token is configured.
+- Analytics and report endpoints are reachable for a community.
+
+Command coverage:
+
+- **New**: `npm run smoke:superfan` — 20 assertions covering the full Superfan OS journey. **Status: PASS**
+- **Updated**: `npm run smoke:business` — includes Superfan OS evidence and scoring.
+
+### Signal Detection
+
+Required assertions:
+
+- Signal rule can be created for a community (platform, signalType, keywords, pointsReward).
+- Signal rules list endpoint returns the created rule.
+- Scan endpoint returns `{ mode: "single_fan", result: { signalsDetected: 0, error: "no_token" } }` when no OAuth token is available.
+- Detected signals list returns `{ stats: { total: 0 } }` for a fresh community.
+- Instagram webhook GET returns 200 when `hub.mode=subscribe` and correct verify token.
+- Discord webhook POST returns 401 when HMAC signature is wrong.
+
+Command coverage:
+
+- **New**: `npm run smoke:signals` (alias for smoke:superfan) — covers rules CRUD and scan endpoint.
+- Gap: end-to-end signal detection test requires real OAuth tokens and platform API access (external validation).
+
 ## Current Testability Verdict
 
-PARTIAL.
+PASS for core Superfan OS journey.
 
-The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke and Chromium browser checks. Remaining gaps are external validation and production architecture: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.
+PARTIAL for production readiness.
+
+The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke, Chromium browser checks, and a 20-assertion Superfan OS smoke covering the full P0 product journey. Remaining gaps are external validation: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.

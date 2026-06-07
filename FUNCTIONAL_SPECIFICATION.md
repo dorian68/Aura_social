@@ -567,3 +567,101 @@ Aura can be production-ready only when:
 - security smoke passes with `AURA_API_TOKEN`;
 - business smoke confirms that the main journey communicates value, trust and clear next steps;
 - limitations around tokenization, simulation and financial claims are visible.
+
+## 19. Fan Platform OAuth
+
+### Purpose
+
+Allow fans to connect their social accounts (Instagram, TikTok, YouTube, Twitch, Discord) so Aura can detect their actions and award points automatically.
+
+### Data Model
+
+`sf_fan_platform_accounts` stores one row per (fan_id, platform):
+
+| Column | Description |
+| --- | --- |
+| `fan_id` | References `sf_fans.id` |
+| `platform` | One of: `instagram`, `tiktok`, `youtube`, `twitch`, `discord` |
+| `access_token` | Encrypted OAuth access token |
+| `refresh_token` | Optional refresh token |
+| `token_expires_at` | ISO timestamp of token expiry |
+| `connected_status` | `connected` or `disconnected` |
+| `metadata` | JSON blob for platform-specific IDs (e.g. `instagram_user_id`, `discord_user_id`) |
+| `last_scanned_at` | ISO timestamp of last signal scan |
+
+### API Routes
+
+| Route | Method | Description |
+| --- | --- | --- |
+| `/api/fan-auth/[platform]/start` | GET | Redirect fan to platform OAuth |
+| `/api/auth/platforms/[platform]/callback` | GET | Exchange code, store tokens |
+| `/api/fan/[fanId]/platforms` | GET | List connected platforms |
+| `/api/platforms/[creatorId]` | GET | List creator platform accounts |
+
+### Acceptance Criteria
+
+- Fan can initiate OAuth for each supported platform.
+- OAuth callback stores access_token, refresh_token, token_expires_at and metadata.
+- `connected_status` is `connected` after successful OAuth.
+- Connected platforms appear in the fan's platform list.
+- Expired tokens are detected before scan and `error: "token_expired"` is returned in the scan result.
+- No token → `error: "no_token"` in scan result (not 500).
+
+## 20. Signal Detection
+
+### Purpose
+
+Automatically detect fan actions on each connected platform and award points based on configurable rules.
+
+### Architecture
+
+```
+Platform scanner (pull, per fan, per platform)
+  → RawSignal[]
+  → matcher (platform + signalType + keyword + quota check)
+  → processor (INSERT OR IGNORE dedup + awardPoints + challenge auto-complete)
+  → PlatformSignal persisted with rewarded=1
+```
+
+Webhook handlers (push, platform-initiated):
+- `POST /api/signals/webhook/instagram` — Meta mentions/comments
+- `POST /api/signals/webhook/discord` — Discord bot, HMAC-signed
+
+### Signal Rules
+
+Each community has a set of `sf_signal_rules`:
+
+| Field | Description |
+| --- | --- |
+| `platform` | Target platform |
+| `signalType` | `post`, `story`, `video`, `comment`, `clip`, `raid`, `message` |
+| `keywords` | Array of strings; empty = match all |
+| `pointsReward` | Points awarded per match |
+| `maxPerFan` | Max total matches per fan (optional) |
+| `maxPerDay` | Max matches per fan per day (optional) |
+
+### API Routes
+
+| Route | Method | Description |
+| --- | --- | --- |
+| `/api/admin/signals/rules/[communityId]` | GET, POST | List / create rules |
+| `/api/admin/signals/rules/rule/[ruleId]` | PATCH, DELETE | Update / delete rule |
+| `/api/admin/signals/[communityId]` | GET | List detected signals + stats |
+| `/api/admin/signals/scan/[communityId]` | POST | Trigger scan (community or single fan) |
+| `/api/signals/webhook/instagram` | GET, POST | Meta webhook verification and mention events |
+| `/api/signals/webhook/discord` | POST | Discord bot webhook (HMAC-signed) |
+
+### Acceptance Criteria
+
+- Signal rule can be created, listed, updated and deleted for a community.
+- Scan endpoint returns `{ mode: "single_fan", result: { signalsDetected: 0, error: "no_token" } }` when no OAuth token is configured.
+- Duplicate signals (same fan + platform + content_id) are silently ignored (INSERT OR IGNORE).
+- Points are awarded only once per unique signal.
+- Instagram webhook GET returns 200 with challenge when `hub.mode=subscribe` and correct verify token.
+- Discord webhook returns 403 when HMAC signature is invalid.
+- Community scan iterates fans with connected platforms and active rules.
+
+### CLI Coverage
+
+- `npm run smoke:superfan` — covers signal rule CRUD and scan endpoint (20 assertions, PASS).
+- Gap: full end-to-end signal reward test requires real OAuth tokens and platform API access.

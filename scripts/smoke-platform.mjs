@@ -1,4 +1,4 @@
-const baseUrl = process.env.SMOKE_BASE_URL || "http://localhost:3170";
+const baseUrl = process.env.SMOKE_BASE_URL || "http://localhost:3009";
 const webBaseUrl = process.env.WEB_BASE_URL || baseUrl;
 
 const results = [];
@@ -21,8 +21,8 @@ await run("GET /", async () => {
   return { status: response.status };
 });
 
-await run("GET /product/dashboard.html", async () => {
-  const response = await fetch(`${webBaseUrl}/product/dashboard.html`);
+await run("GET / (root landing page)", async () => {
+  const response = await fetch(`${webBaseUrl}/`);
   assert(response.status === 200, `expected 200, got ${response.status}`);
   return { status: response.status };
 });

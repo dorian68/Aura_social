@@ -34,6 +34,8 @@
     "smoke:authz": "node scripts/smoke-authz.mjs",
     "smoke:integrations": "node scripts/smoke-integrations.mjs",
     "smoke:browser": "playwright test",
+    "smoke:superfan": "node scripts/smoke-superfan.mjs",
+    "smoke:signals": "node scripts/smoke-superfan.mjs",
     "smoke:business": "node scripts/business-smoke.mjs --report",
     "audit:commercial": "node scripts/business-smoke.mjs --audit",
     "production:check": "node scripts/production-check.mjs",
