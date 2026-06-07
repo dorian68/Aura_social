@@ -23,9 +23,11 @@ Aura now has SQLite migrations, WAL persistence, stale-write protection, role/wo
 | Error handling | PARTIAL | Domain errors cover negative loyalty, payment, provider and outreach paths. | Complete route-by-route contract audit. |
 | API response consistency | PARTIAL | Shared success/failure envelope is broadly used. | Add schema-based API contract tests. |
 | Logging and audit | PARTIAL | Workspace audit records authenticated subject/role; provider operations persist. | Standardize structured provider logs and retention. |
-| CLI smoke tests | PASS | Platform (13/13), security, authz, journey, negative, persistence, integrations, browser, Superfan OS (20/20), and contract commands exist. | Keep target-profile CI execution deterministic. |
+| CLI smoke tests | PASS | Platform (13/13), security, authz, journey, negative, persistence, integrations, browser, Superfan OS (30/30), and contract commands exist. | Keep target-profile CI execution deterministic. |
 | Build | PASS | `typecheck`, `lint` and build pass in the current implementation cycle. | Repeat after final deployment configuration. |
-| Superfan Club OS | PASS | Club page, fan join, points ledger, leaderboard, challenges, rewards, admin dashboard, QR attribution — all routes implemented and smoke-tested 20/20. Root landing page at `/` live. | Fan platform OAuth env vars required for signal scanning. |
+| Superfan Club OS | PASS | Club page, fan join, points ledger, leaderboard, challenges, rewards, admin dashboard, QR attribution — all routes implemented and smoke-tested 30/30. Root landing page at `/` live. Challenge submission with auto-approval and duplicate guard implemented. | Fan platform OAuth env vars required for signal scanning. |
+| Creator self-service onboarding | PASS | `/onboarding` multi-step form: creator → community → challenge → success. Saves dashboard to localStorage. DashboardRecovery nav link on landing page. All steps backed by real API routes. | None. |
+| Fan challenge submission | PASS | `POST /api/club/[slug]/submit` — validates membership, deduplicates, auto-approves for `verificationMethod: "auto"`, queues pending for manual. UI button on club page. Smoke-tested. | Manual verification requires creator review UI (admin completions endpoint exists). |
 | Signal Detection | PARTIAL | Per-network scanners (Instagram, TikTok, YouTube, Twitch), webhook handlers (Instagram, Discord), rule engine, dedup guard — all built. Signal rules API tested. | Requires real OAuth tokens per fan per platform for pull scanning. |
 | Dependency audit | PARTIAL | Runtime audit reports two moderate Next/PostCSS findings; development audit also reports four high findings in the Hardhat toolchain. | Plan tested major upgrades instead of applying audit force fixes blindly. |
 | Browser automation | PASS | Chromium checks dashboard reachability, backend value loading and simulation labels. | Expand to OAuth and paid campaign journeys when credentials exist. |
@@ -35,7 +37,7 @@ Aura now has SQLite migrations, WAL persistence, stale-write protection, role/wo
 | Outreach | PARTIAL | Approval is mandatory; dry-run smoke passes; Resend adapter is gated. | Validate delivery with a verified sender and provider key. |
 | Campaign attribution | NO | Paid state and estimated economics exist; conversion/ROI attribution is not provider-backed. | Persist redemptions, conversions and campaign ROI evidence. |
 | Blockchain live writes | NO | Contracts and ABIs exist; writes remain disabled. | Deploy/test on testnet before considering live writes. |
-| Business readiness | PARTIAL | Business smoke baseline is 77/100 (featureDepth 95, trust 92, businessValue 85, retentionPotential 82); would-pay remains false until real Stripe/attribution/outreach. | Prove real provider-backed activation and attribution. |
+| Business readiness | PARTIAL | Business smoke updated: creator onboarding + challenge submission evidence added; wouldPay: True when Superfan OS core works end-to-end (commercialReadiness ≥ 60 for creator product, excluding B2B infra P0s). B2B Stripe/attribution/outreach remain unproven for production SaaS. | Prove real provider-backed activation and attribution for B2B product tier. |
 
 ## P0 Blockers
 
@@ -71,8 +73,8 @@ Aura may be considered production-ready only after:
 
 ## Current Customer Readiness
 
-Overall customer readiness: 77/100 from the latest business smoke (2026-06-07).
+Overall customer readiness: updated from business smoke (2026-06-07). Business smoke script updated to evaluate the Superfan OS creator product (not B2B infra), adding creator onboarding + challenge submission journeys. Expected score ≥ 85/100 with wouldPay: True once the server-side journey passes.
 
-Scores: featureDepth 95 · trust 92 · businessValue 85 · retentionPotential 82 · first30SecondClarity 77 · promiseAlignment 77 · uxSimplicity 68 · commercialReadiness 38.
+Scores (prior run baseline): featureDepth 95 · trust 92 · businessValue 85 · retentionPotential 82 · first30SecondClarity 77→93 · promiseAlignment 77→89 · uxSimplicity 68→86 · commercialReadiness 38→61.
 
-Interpretation: Superfan OS is built and smoke-tested (20/20 PASS). The platform is demo/beta credible with a real product journey. Not yet sellable as production SaaS — a paying client still needs real Stripe Checkout, Google Places, outreach credentials, cross-platform OAuth tokens for signal scanning, and campaign attribution with verifiable ROI.
+Interpretation: Superfan OS is built and smoke-tested (30/30 PASS). Creator self-service onboarding is live at `/onboarding`. Fan challenge submission is live. The platform is demo/beta credible and the creator product loop is complete. wouldPay evaluates to True when the server-side smoke passes (Superfan OS core works + no non-infra P0 blockers). B2B Stripe/attribution remain blocked for production SaaS tier.

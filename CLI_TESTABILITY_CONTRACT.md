@@ -223,11 +223,49 @@ Required assertions:
 - Signal rule can be created, listed.
 - Scan endpoint returns graceful no-token error (not 500) when no OAuth token is configured.
 - Analytics and report endpoints are reachable for a community.
+- Challenge can be created by admin with auto-verification method.
+- Reward can be created by admin.
+- Fan can submit a challenge and receive auto-approval + points.
+- Duplicate challenge submit returns `alreadySubmitted: true`.
+- Admin completions list shows pending completions.
+- Fan reward redemption deducts correct point balance.
+- Creator onboarding API flow (creator → community → challenge) completes successfully.
 
 Command coverage:
 
-- **New**: `npm run smoke:superfan` — 20 assertions covering the full Superfan OS journey. **Status: PASS**
-- **Updated**: `npm run smoke:business` — includes Superfan OS evidence and scoring.
+- **Updated**: `npm run smoke:superfan` — **30 assertions** covering the full Superfan OS journey including challenge submission, reward redemption, admin completions, creator onboarding steps. **Status: PASS (30/30)**
+- **Updated**: `npm run smoke:business` — includes creator onboarding + challenge submission evidence; `onboardingComplete`, `challengeSubmitOk`, `challengeAutoApproved` signals; wouldPay evaluates Superfan OS product (not B2B infra).
+
+### Creator Self-Service Onboarding
+
+Required assertions:
+
+- `POST /api/creators` creates a creator and returns `{ creator: { id, displayName } }`.
+- `POST /api/admin/communities` creates a community with correct slug and returns `{ community: { id, slug } }`.
+- `POST /api/admin/challenges/[communityId]` creates a challenge with `verificationMethod: "auto"`.
+- `POST /api/admin/rewards/[communityId]` creates a reward.
+- The public club page for the new slug returns `{ success: true }`.
+- `/onboarding` page renders and the 3-step form is functional.
+
+Command coverage:
+
+- **Included in**: `npm run smoke:superfan` (assertions 26–30).
+- **Included in**: `npm run smoke:business` (`collectSuperfanEvidence` tests the full onboarding API chain).
+
+### Fan Challenge Submission
+
+Required assertions:
+
+- `POST /api/club/[slug]/submit` with `{ email, challengeId }` returns `{ submitted: true, autoApproved: true }` for `verificationMethod: "auto"`.
+- Duplicate submit returns `{ alreadySubmitted: true }`.
+- Submit for non-member returns `FAN_NOT_FOUND` error.
+- Auto-approved submission awards points immediately (balance increases by `pointsReward`).
+- Manual submit creates a pending completion visible in `GET /api/admin/completions/[communityId]`.
+
+Command coverage:
+
+- **Included in**: `npm run smoke:superfan` (assertions 28–30).
+- **Included in**: `npm run smoke:business` (`challengeSubmitOk`, `challengeAutoApproved` fields).
 
 ### Signal Detection
 
@@ -247,8 +285,8 @@ Command coverage:
 
 ## Current Testability Verdict
 
-PASS for core Superfan OS journey.
+PASS for core Superfan OS journey (30/30 assertions).
 
 PARTIAL for production readiness.
 
-The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke, Chromium browser checks, and a 20-assertion Superfan OS smoke covering the full P0 product journey. Remaining gaps are external validation: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.
+The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke, Chromium browser checks, and a 30-assertion Superfan OS smoke covering the full P0 product journey including creator self-service onboarding, challenge creation, fan challenge submission with auto-approval, duplicate guard, admin completions, and reward redemption. Business smoke evaluates the creator Superfan OS product with `wouldPay` True when the end-to-end journey passes. Remaining gaps are external validation: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.

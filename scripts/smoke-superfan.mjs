@@ -192,7 +192,83 @@ await run("GET /api/fan/[fanId]/points (verify balance after award)", async () =
   return { balance: r.data.ledger.balance };
 });
 
-// ── 15. Signal rules (admin) ──────────────────────────────────────────────────
+// ── 15. Onboarding flow (creator self-service) ────────────────────────────────
+
+await run("POST /api/creators (onboarding — creator)", async () => {
+  const r = await postJson("/api/creators", {
+    displayName: `Smoke Onboard Creator ${Date.now().toString(36)}`,
+    niche: "music",
+  });
+  assert(r.success, "creator created");
+  assert(r.data.creator.id, "creator has id");
+  state.onboardCreatorId = r.data.creator.id;
+  return { creatorId: state.onboardCreatorId.slice(0, 8) };
+});
+
+await run("POST /api/admin/communities (onboarding — community)", async () => {
+  const slug = `onboard-smoke-${Date.now().toString(36)}`;
+  const r = await postJson("/api/admin/communities", {
+    creatorId: state.onboardCreatorId,
+    name: "Onboard Smoke Club",
+    brandColor: "#C8B4FA",
+    isPublic: true,
+    customSlug: slug,
+  });
+  assert(r.success, "community created");
+  state.onboardCommunityId = r.data.community.id;
+  state.onboardSlug = r.data.community.slug;
+  return { communityId: state.onboardCommunityId.slice(0, 8), slug: state.onboardSlug };
+});
+
+await run("POST /api/club/[slug]/submit (fan submits challenge)", async () => {
+  // Create a challenge first
+  const ch = await postJson(`/api/admin/challenges/${state.onboardCommunityId}`, {
+    title: "Smoke challenge submit",
+    pointsReward: 75,
+    type: "post",
+    verificationMethod: "manual",
+  });
+  assert(ch.success, "challenge created");
+  state.onboardChallengeId = ch.data.challenge.id;
+
+  // Fan must join first
+  const email = `smoke-submit-${Date.now()}@test.aura`;
+  const join = await postJson(`/api/club/${state.onboardSlug}/join`, {
+    email, displayName: "Submit Tester",
+  });
+  assert(join.success, "fan joined");
+  state.onboardFanEmail = email;
+
+  // Fan submits the challenge
+  const sub = await postJson(`/api/club/${state.onboardSlug}/submit`, {
+    email, challengeId: state.onboardChallengeId,
+  });
+  assert(sub.success, "submission success");
+  assert(sub.data.submitted === true, "submitted is true");
+  assert(sub.data.status === "pending" || sub.data.autoApproved === true, "status is pending or auto-approved");
+  return { submitted: sub.data.submitted, status: sub.data.status ?? "auto-approved" };
+});
+
+await run("POST /api/club/[slug]/submit (duplicate returns alreadySubmitted)", async () => {
+  const sub = await postJson(`/api/club/${state.onboardSlug}/submit`, {
+    email: state.onboardFanEmail,
+    challengeId: state.onboardChallengeId,
+  });
+  assert(sub.success, "duplicate call succeeds");
+  assert(sub.data.alreadySubmitted === true, "alreadySubmitted is true");
+  return { alreadySubmitted: sub.data.alreadySubmitted };
+});
+
+await run("GET /api/admin/completions/[communityId] (pending after submit)", async () => {
+  const r = await getJson(`/api/admin/completions/${state.onboardCommunityId}`);
+  assert(r.success, "completions list success");
+  assert(r.data.completions.length >= 1, "at least one pending completion");
+  const found = r.data.completions.find((c) => c.challengeId === state.onboardChallengeId);
+  assert(found, "submitted challenge in pending list");
+  return { pending: r.data.completions.length };
+});
+
+// ── 20. Signal rules (admin) ──────────────────────────────────────────────────
 
 await run("POST /api/admin/signals/rules/[communityId] (create signal rule)", async () => {
   const r = await postJson(`/api/admin/signals/rules/${state.communityId}`, {

@@ -1,5 +1,6 @@
 import { getAuraDatabase } from "@/lib/storage/sqliteStore";
 import Link from "next/link";
+import DashboardRecovery from "./DashboardRecovery";
 
 function getPublicCommunities() {
   try {
@@ -39,15 +40,16 @@ export default function HomePage() {
         <span className="font-black text-lg tracking-tight">
           <span className="text-[#B8FF4D]">Aura</span> Superfan
         </span>
-        <div className="flex items-center gap-4 text-sm">
-          <a href="#clubs" className="text-white/50 hover:text-white/80 transition-colors">
+        <div className="flex items-center gap-3 text-sm">
+          <a href="#clubs" className="text-white/50 hover:text-white/80 transition-colors hidden sm:inline">
             Explore Clubs
           </a>
+          <DashboardRecovery />
           <a
-            href="/api/system/health"
-            className="text-white/30 hover:text-white/50 transition-colors text-xs"
+            href="/onboarding"
+            className="px-4 py-2 rounded-xl font-bold text-xs text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all"
           >
-            Status
+            Launch Club
           </a>
         </div>
       </nav>
@@ -76,16 +78,16 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <a
-              href="#clubs"
+              href="/onboarding"
               className="px-8 py-3 rounded-xl font-bold text-[#060A08] text-sm bg-[#B8FF4D] hover:brightness-110 active:scale-[0.97] transition-all"
             >
-              Explore Fan Clubs
+              Launch your Fan Club — Free →
             </a>
             <a
-              href="mailto:contact@aura.app"
+              href="#clubs"
               className="px-8 py-3 rounded-xl font-bold text-sm border border-[#1e2820] text-white/60 hover:border-[#B8FF4D40] hover:text-white/80 transition-all"
             >
-              Creator Sign Up →
+              Explore Clubs
             </a>
           </div>
         </div>
@@ -129,12 +131,15 @@ export default function HomePage() {
         </div>
 
         {communities.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#1e2820] bg-[#0B0F0E] p-12 text-center space-y-3">
-            <p className="text-white/20 text-sm">No public clubs yet.</p>
-            <p className="text-white/30 text-xs">
-              Creators launch clubs at{" "}
-              <code className="text-white/50 bg-white/5 px-1 py-0.5 rounded">/dashboard/[communityId]</code>
-            </p>
+          <div className="rounded-2xl border border-dashed border-[#1e2820] bg-[#0B0F0E] p-12 text-center space-y-4">
+            <p className="text-4xl">🌱</p>
+            <p className="text-white/40 text-sm">No public clubs yet — be the first creator.</p>
+            <a
+              href="/onboarding"
+              className="inline-block px-6 py-2.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all"
+            >
+              Launch the first club →
+            </a>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

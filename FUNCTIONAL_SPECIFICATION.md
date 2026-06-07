@@ -33,27 +33,32 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 
 ## 4. Core User Journeys
 
-### Journey G - Launch a Superfan Club (P0)
+### Journey G - Launch a Superfan Club (P0) ✅ COMPLETE
 
-1. Creator visits Aura dashboard and clicks "Launch my Superfan Club".
-2. Creator sets club name, description, brand color and cover image.
-3. Creator configures initial challenges (e.g. "Follow on Instagram", "Share a story", "Visit our partner").
-4. Creator sets initial rewards (e.g. DM session, early merch access, partner offer).
-5. Aura generates a public club page at `/club/:slug`.
+1. Creator visits `/onboarding` and completes the 3-step self-service form (creator profile → community settings → first challenge).
+2. Creator sets club name, description, brand color (preset or custom) and niche.
+3. Creator configures an initial challenge (type, description, points reward, verification method).
+4. Aura generates a public club page at `/club/:slug` and saves dashboard URL to localStorage.
+5. Creator returns to their dashboard via the "My Dashboard" recovery link in the nav.
 6. Creator shares the club URL with their audience.
 7. Fans visit the page, see the leaderboard and sign up with their email.
 8. Fans earn welcome points (50 pts) automatically on signup.
-9. Creator sees fan activity in real-time dashboard.
+9. Creator sees fan activity in admin dashboard at `/api/admin/dashboard/:communityId`.
 
-### Journey H - Fan earns points and redeems a reward (P0)
+**Implementation status:** `POST /api/creators`, `POST /api/admin/communities`, `POST /api/admin/challenges/[communityId]`, `POST /api/admin/rewards/[communityId]` all implemented. `/onboarding` multi-step form live. DashboardRecovery localStorage nav link live. Smoke-tested in `smoke:superfan` (assertions 26–30) and `smoke:business` (`onboardingComplete` signal).
 
-1. Fan signs up to a Superfan Club via club page or referral link.
-2. Fan sees available challenges and picks one (e.g. "Visit our partner store and scan the QR code").
-3. Fan completes the challenge and submits proof (scan, screenshot, or honor).
-4. Points are awarded (auto for QR/coupon, after creator approval for manual).
-5. Fan sees their rank on the leaderboard update.
-6. Fan browses reward catalog and redeems a reward with their points.
-7. Creator is notified and marks the reward as fulfilled.
+### Journey H - Fan earns points and redeems a reward (P0) ✅ COMPLETE
+
+1. Fan signs up to a Superfan Club via club page or referral link (`POST /api/club/[slug]/join`).
+2. Fan sees available challenges on the club page with `+{pts}` badge per challenge.
+3. Fan clicks "Complete Challenge" on any challenge card, enters email, optionally adds proof URL/text.
+4. Fan submits via `POST /api/club/[slug]/submit`. For `verificationMethod: "auto"` challenges, points are awarded immediately and the button shows `+{pts} earned`. For `"manual"` challenges, a pending state is shown.
+5. Fan sees their updated rank on the leaderboard (page refresh).
+6. Fan browses reward catalog and clicks "Redeem" on any reward they can afford.
+7. Fan enters email, redemption is created via `POST /api/club/[slug]/redeem`, points deducted.
+8. Creator sees pending redemptions via `GET /api/admin/redemptions/[communityId]` and marks fulfilled.
+
+**Implementation status:** `POST /api/club/[slug]/submit` with auto-approval, duplicate guard, and pending queue. `POST /api/club/[slug]/redeem` with insufficient-points, out-of-stock, unavailable error handling. `SubmitChallengeButton` and `RedeemButton` client components on club page. Smoke-tested in `smoke:superfan` (assertions 21–30).
 
 ### Journey I - Creator runs a partner campaign (P0)
 

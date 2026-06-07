@@ -6,6 +6,7 @@ import {
 } from "@/lib/superfan/db";
 import JoinForm from "./JoinForm";
 import RedeemButton from "./RedeemButton";
+import SubmitChallengeButton from "./SubmitChallengeButton";
 
 const TIER_STYLES: Record<string, { label: string; color: string; bg: string }> = {
   vip:      { label: "VIP",      color: "#f59e0b", bg: "#f59e0b18" },
@@ -130,19 +131,27 @@ export default async function ClubPage({
             </div>
             <div className="grid gap-3">
               {challenges.map(c => (
-                <div key={c.id} className="flex items-start gap-4 px-4 py-4 rounded-xl bg-[#0B0F0E] border border-[#1e2820]">
-                  <span className="text-2xl leading-none mt-0.5">{CHALLENGE_ICONS[c.type] ?? "⭐"}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-[#FFF7E8]">{c.title}</p>
-                    {c.description && <p className="text-xs text-white/40 mt-0.5 line-clamp-2">{c.description}</p>}
-                    {c.expiresAt && (
-                      <p className="text-xs text-white/30 mt-1">Expires {new Date(c.expiresAt).toLocaleDateString()}</p>
-                    )}
+                <div key={c.id} className="px-4 py-4 rounded-xl bg-[#0B0F0E] border border-[#1e2820]">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl leading-none mt-0.5">{CHALLENGE_ICONS[c.type] ?? "⭐"}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-[#FFF7E8]">{c.title}</p>
+                      {c.description && <p className="text-xs text-white/40 mt-0.5 line-clamp-2">{c.description}</p>}
+                      {c.expiresAt && (
+                        <p className="text-xs text-white/30 mt-1">Expires {new Date(c.expiresAt).toLocaleDateString()}</p>
+                      )}
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <span className="text-sm font-black" style={{ color: brand }}>+{c.pointsReward}</span>
+                      <p className="text-xs text-white/30">pts</p>
+                    </div>
                   </div>
-                  <div className="shrink-0 text-right">
-                    <span className="text-sm font-black" style={{ color: brand }}>+{c.pointsReward}</span>
-                    <p className="text-xs text-white/30">pts</p>
-                  </div>
+                  <SubmitChallengeButton
+                    slug={slug}
+                    challengeId={c.id}
+                    pointsReward={c.pointsReward}
+                    brandColor={brand}
+                  />
                 </div>
               ))}
             </div>
