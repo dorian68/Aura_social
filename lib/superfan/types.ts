@@ -22,6 +22,8 @@ export type TxSource =
   | "instagram_signal"
   | "tiktok_signal"
   | "youtube_signal"
+  | "twitch_signal"
+  | "discord_signal"
   | "other";
 export type ChallengeType = "post" | "visit" | "share" | "signup" | "purchase" | "referral" | "custom";
 export type VerificationMethod = "auto" | "manual" | "qr" | "coupon" | "honor";

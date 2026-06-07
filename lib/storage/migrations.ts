@@ -334,4 +334,48 @@ export const databaseMigrations: DatabaseMigration[] = [
       CREATE INDEX IF NOT EXISTS idx_sf_fan_platform_platform ON sf_fan_platform_accounts(platform);
     `,
   },
+  {
+    version: 6,
+    name: "signal_detection",
+    sql: `
+      CREATE TABLE IF NOT EXISTS sf_signal_rules (
+        id TEXT PRIMARY KEY,
+        community_id TEXT NOT NULL REFERENCES sf_communities(id) ON DELETE CASCADE,
+        challenge_id TEXT REFERENCES sf_challenges(id) ON DELETE SET NULL,
+        platform TEXT NOT NULL,
+        signal_type TEXT NOT NULL,
+        keywords TEXT NOT NULL DEFAULT '[]',
+        points_reward INTEGER NOT NULL DEFAULT 100,
+        max_per_fan INTEGER,
+        max_per_day INTEGER,
+        is_active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS sf_platform_signals (
+        id TEXT PRIMARY KEY,
+        fan_id TEXT NOT NULL REFERENCES sf_fans(id) ON DELETE CASCADE,
+        community_id TEXT NOT NULL REFERENCES sf_communities(id) ON DELETE CASCADE,
+        platform TEXT NOT NULL,
+        signal_type TEXT NOT NULL,
+        content_id TEXT NOT NULL,
+        content_url TEXT,
+        content_text TEXT,
+        matched_rule_id TEXT REFERENCES sf_signal_rules(id) ON DELETE SET NULL,
+        rewarded INTEGER NOT NULL DEFAULT 0,
+        points_awarded INTEGER NOT NULL DEFAULT 0,
+        detected_at TEXT NOT NULL,
+        rewarded_at TEXT,
+        UNIQUE(fan_id, platform, content_id)
+      );
+
+      ALTER TABLE sf_fan_platform_accounts ADD COLUMN last_scanned_at TEXT;
+
+      CREATE INDEX IF NOT EXISTS idx_sf_signals_fan ON sf_platform_signals(fan_id);
+      CREATE INDEX IF NOT EXISTS idx_sf_signals_community ON sf_platform_signals(community_id);
+      CREATE INDEX IF NOT EXISTS idx_sf_signals_platform ON sf_platform_signals(platform);
+      CREATE INDEX IF NOT EXISTS idx_sf_signal_rules_community ON sf_signal_rules(community_id);
+    `,
+  },
 ];

@@ -741,6 +741,111 @@ export function getCommunityAnalytics(communityId: string) {
   };
 }
 
+// ─── Signal Rules ────────────────────────────────────────────────────────────
+
+export interface SignalRuleRow {
+  id: string; communityId: string; challengeId?: string;
+  platform: string; signalType: string; keywords: string[];
+  pointsReward: number; maxPerFan?: number; maxPerDay?: number;
+  isActive: boolean; createdAt: string; updatedAt: string;
+}
+
+export function createSignalRule(data: Omit<SignalRuleRow, "id"|"createdAt"|"updatedAt">): SignalRuleRow {
+  const db = getAuraDatabase();
+  const id = uid(); const ts = now();
+  db.prepare(`INSERT INTO sf_signal_rules
+    (id,community_id,challenge_id,platform,signal_type,keywords,points_reward,max_per_fan,max_per_day,is_active,created_at,updated_at)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`).run(
+    id, data.communityId, data.challengeId ?? null, data.platform, data.signalType,
+    JSON.stringify(data.keywords), data.pointsReward,
+    data.maxPerFan ?? null, data.maxPerDay ?? null, data.isActive ? 1 : 0, ts, ts);
+  return getSignalRule(id)!;
+}
+
+export function getSignalRule(id: string): SignalRuleRow | null {
+  const db = getAuraDatabase();
+  const row = db.prepare("SELECT * FROM sf_signal_rules WHERE id=?").get(id) as Record<string, unknown> | undefined;
+  return row ? mapSignalRule(row) : null;
+}
+
+export function getSignalRulesForCommunity(communityId: string): SignalRuleRow[] {
+  const db = getAuraDatabase();
+  const rows = db.prepare("SELECT * FROM sf_signal_rules WHERE community_id=? ORDER BY created_at DESC").all(communityId) as Record<string, unknown>[];
+  return rows.map(mapSignalRule);
+}
+
+export function updateSignalRule(id: string, data: Partial<Pick<SignalRuleRow, "keywords"|"pointsReward"|"maxPerFan"|"maxPerDay"|"isActive"|"challengeId">>): SignalRuleRow {
+  const db = getAuraDatabase();
+  const sets: string[] = []; const vals: unknown[] = [];
+  if (data.keywords !== undefined) { sets.push("keywords=?"); vals.push(JSON.stringify(data.keywords)); }
+  if (data.pointsReward !== undefined) { sets.push("points_reward=?"); vals.push(data.pointsReward); }
+  if (data.maxPerFan !== undefined) { sets.push("max_per_fan=?"); vals.push(data.maxPerFan ?? null); }
+  if (data.maxPerDay !== undefined) { sets.push("max_per_day=?"); vals.push(data.maxPerDay ?? null); }
+  if (data.isActive !== undefined) { sets.push("is_active=?"); vals.push(data.isActive ? 1 : 0); }
+  if (data.challengeId !== undefined) { sets.push("challenge_id=?"); vals.push(data.challengeId ?? null); }
+  sets.push("updated_at=?"); vals.push(now()); vals.push(id);
+  db.prepare(`UPDATE sf_signal_rules SET ${sets.join(",")} WHERE id=?`).run(...vals);
+  return getSignalRule(id)!;
+}
+
+export function deleteSignalRule(id: string): void {
+  const db = getAuraDatabase();
+  db.prepare("DELETE FROM sf_signal_rules WHERE id=?").run(id);
+}
+
+function mapSignalRule(r: Record<string, unknown>): SignalRuleRow {
+  return {
+    id: String(r.id), communityId: String(r.community_id),
+    challengeId: (r.challenge_id as string) || undefined,
+    platform: String(r.platform), signalType: String(r.signal_type),
+    keywords: JSON.parse(String(r.keywords || "[]")) as string[],
+    pointsReward: Number(r.points_reward),
+    maxPerFan: r.max_per_fan != null ? Number(r.max_per_fan) : undefined,
+    maxPerDay: r.max_per_day != null ? Number(r.max_per_day) : undefined,
+    isActive: Boolean(r.is_active),
+    createdAt: String(r.created_at), updatedAt: String(r.updated_at),
+  };
+}
+
+// ─── Platform Signals ─────────────────────────────────────────────────────────
+
+export interface PlatformSignalRow {
+  id: string; fanId: string; communityId: string; platform: string;
+  signalType: string; contentId: string; contentUrl?: string; contentText?: string;
+  matchedRuleId?: string; rewarded: boolean; pointsAwarded: number;
+  detectedAt: string; rewardedAt?: string;
+}
+
+export function getSignalsForCommunity(communityId: string, limit = 50, offset = 0): PlatformSignalRow[] {
+  const db = getAuraDatabase();
+  const rows = db.prepare(`
+    SELECT * FROM sf_platform_signals WHERE community_id=?
+    ORDER BY detected_at DESC LIMIT ? OFFSET ?
+  `).all(communityId, limit, offset) as Record<string, unknown>[];
+  return rows.map(mapPlatformSignal);
+}
+
+export function getSignalStats(communityId: string) {
+  const db = getAuraDatabase();
+  const total = (db.prepare("SELECT COUNT(*) as c FROM sf_platform_signals WHERE community_id=?").get(communityId) as { c: number }).c;
+  const rewarded = (db.prepare("SELECT COUNT(*) as c FROM sf_platform_signals WHERE community_id=? AND rewarded=1").get(communityId) as { c: number }).c;
+  const totalPoints = (db.prepare("SELECT COALESCE(SUM(points_awarded),0) as s FROM sf_platform_signals WHERE community_id=?").get(communityId) as { s: number }).s;
+  const byPlatform = db.prepare("SELECT platform, COUNT(*) as c FROM sf_platform_signals WHERE community_id=? GROUP BY platform").all(communityId) as { platform: string; c: number }[];
+  return { total, rewarded, totalPoints, byPlatform };
+}
+
+function mapPlatformSignal(r: Record<string, unknown>): PlatformSignalRow {
+  return {
+    id: String(r.id), fanId: String(r.fan_id), communityId: String(r.community_id),
+    platform: String(r.platform), signalType: String(r.signal_type),
+    contentId: String(r.content_id), contentUrl: (r.content_url as string) || undefined,
+    contentText: (r.content_text as string) || undefined,
+    matchedRuleId: (r.matched_rule_id as string) || undefined,
+    rewarded: Boolean(r.rewarded), pointsAwarded: Number(r.points_awarded),
+    detectedAt: String(r.detected_at), rewardedAt: (r.rewarded_at as string) || undefined,
+  };
+}
+
 // ─── Global Superfan Stats (for health endpoint) ──────────────────────────────
 
 export function getSuperfanGlobalStats() {
@@ -753,5 +858,8 @@ export function getSuperfanGlobalStats() {
   const challenges  = (db.prepare("SELECT COUNT(*) as c FROM sf_challenges WHERE status='active'").get() as { c: number }).c;
   const rewards     = (db.prepare("SELECT COUNT(*) as c FROM sf_rewards WHERE status='active'").get() as { c: number }).c;
   const fanPlatformAccounts = (db.prepare("SELECT COUNT(*) as c FROM sf_fan_platform_accounts WHERE connected_status='connected'").get() as { c: number }).c;
-  return { creators, communities, fans, memberships, pointsAwarded, activeChallenges: challenges, activeRewards: rewards, fanPlatformAccounts };
+  const signalRules = (db.prepare("SELECT COUNT(*) as c FROM sf_signal_rules WHERE is_active=1").get() as { c: number }).c;
+  const signalsDetected = (db.prepare("SELECT COUNT(*) as c FROM sf_platform_signals").get() as { c: number }).c;
+  const signalsRewarded = (db.prepare("SELECT COUNT(*) as c FROM sf_platform_signals WHERE rewarded=1").get() as { c: number }).c;
+  return { creators, communities, fans, memberships, pointsAwarded, activeChallenges: challenges, activeRewards: rewards, fanPlatformAccounts, signalRules, signalsDetected, signalsRewarded };
 }
