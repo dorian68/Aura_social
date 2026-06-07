@@ -37,6 +37,8 @@
     "smoke:superfan": "node scripts/smoke-superfan.mjs",
     "smoke:signals": "node scripts/smoke-superfan.mjs",
     "smoke:business": "node scripts/business-smoke.mjs --report",
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "demo:urls": "node scripts/get-demo-urls.mjs",
     "audit:commercial": "node scripts/business-smoke.mjs --audit",
     "production:check": "node scripts/production-check.mjs",
     "contracts:compile": "hardhat compile",
