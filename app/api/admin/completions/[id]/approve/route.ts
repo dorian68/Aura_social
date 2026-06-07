@@ -1,0 +1,16 @@
+import { ok, fail, handleApiError } from "@/lib/apiResponse";
+import { getCompletionById, updateCompletionStatus, getChallengeById, awardPoints } from "@/lib/superfan/db";
+
+export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const completion = getCompletionById(id);
+    if (!completion) return fail("COMPLETION_NOT_FOUND", "Completion not found.", 404);
+    if (completion.status !== "pending") return fail("ALREADY_PROCESSED", `Completion is already ${completion.status}.`, 400);
+    const challenge = getChallengeById(completion.challengeId);
+    if (!challenge) return fail("CHALLENGE_NOT_FOUND", "Challenge not found.", 404);
+    updateCompletionStatus(id, "approved", "creator");
+    awardPoints(completion.fanId, completion.communityId, challenge.pointsReward, "challenge_completion", completion.id, challenge.title);
+    return ok({ approved: true, pointsAwarded: challenge.pointsReward });
+  } catch (e) { return handleApiError(e, "APPROVE_ERROR"); }
+}
