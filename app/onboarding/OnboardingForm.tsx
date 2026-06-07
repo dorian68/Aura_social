@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const NICHES = [
   { value: "music",   label: "🎵 Music" },
@@ -30,14 +31,20 @@ interface Result {
 }
 
 export default function OnboardingForm() {
+  const searchParams = useSearchParams();
+  const skipCreator = searchParams.get("skipCreator") === "1";
+
   const [step, setStep] = useState<Step>("creator");
   const [loading, setLoading] = useState(false);
+  const [bootstrapping, setBootstrapping] = useState(skipCreator);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
 
-  // Step 1 — creator
+  // Step 1 — creator + auth
   const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [niche, setNiche] = useState("music");
   const [city, setCity] = useState("");
 
@@ -54,6 +61,25 @@ export default function OnboardingForm() {
   const [creatorId, setCreatorId] = useState("");
   const [communityId, setCommunityId] = useState("");
 
+  // If skipCreator=1, the user already signed up via /auth — fetch their session
+  useEffect(() => {
+    if (!skipCreator) return;
+    fetch("/api/auth/me")
+      .then(r => r.json())
+      .then(d => {
+        if (d.success) {
+          setCreatorId(d.data.creator.id);
+          setDisplayName(d.data.creator.displayName ?? "");
+          setStep("community");
+        } else {
+          // Session expired or missing — fall back to creator step
+          setStep("creator");
+        }
+      })
+      .catch(() => setStep("creator"))
+      .finally(() => setBootstrapping(false));
+  }, [skipCreator]);
+
   function slugSuggestion(name: string) {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/, "").slice(0, 40);
   }
@@ -62,13 +88,19 @@ export default function OnboardingForm() {
     e.preventDefault();
     setLoading(true); setError("");
     try {
-      const r = await fetch("/api/creators", {
+      const r = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ displayName: displayName.trim(), niche, city: city.trim() || undefined }),
+        body: JSON.stringify({
+          displayName: displayName.trim(),
+          email: email.trim(),
+          password,
+          niche,
+          city: city.trim() || undefined,
+        }),
       });
       const d = await r.json();
-      if (!d.success) throw new Error(d.error?.message ?? "Creator creation failed");
+      if (!d.success) throw new Error(d.error?.message ?? "Account creation failed");
       setCreatorId(d.data.creator.id);
       setStep("community");
     } catch (err) { setError((err as Error).message); }
@@ -97,11 +129,6 @@ export default function OnboardingForm() {
       setCommunityId(cid);
       const dashUrl = `${window.location.origin}/dashboard/${cid}`;
       const clubUrl = `${window.location.origin}/club/${cslug}`;
-      // Persist to localStorage for recovery
-      localStorage.setItem("aura_dashboard", JSON.stringify({
-        communityId: cid, creatorId, clubName: clubName.trim(),
-        slug: cslug, dashboardUrl: dashUrl, createdAt: new Date().toISOString(),
-      }));
       setResult({ creatorId, communityId: cid, slug: cslug, clubName: clubName.trim(), brandColor, dashboardUrl: dashUrl, clubUrl });
       setStep("challenge");
     } catch (err) { setError((err as Error).message); }
@@ -138,10 +165,20 @@ export default function OnboardingForm() {
   }
 
   const STEP_LABELS: Record<Step, string> = {
-    creator: "About you", community: "Your Club", challenge: "First Challenge", success: "You're live",
+    creator: "Your account", community: "Your Club", challenge: "First Challenge", success: "You're live",
   };
   const STEPS: Step[] = ["creator", "community", "challenge", "success"];
   const stepIdx = STEPS.indexOf(step);
+
+  const inputCls = "w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40]";
+
+  if (bootstrapping) {
+    return (
+      <div className="min-h-screen bg-[#060A08] flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-[#B8FF4D] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#060A08] text-[#FFF7E8] flex flex-col items-center justify-center px-4 py-16">
@@ -151,33 +188,38 @@ export default function OnboardingForm() {
         {step !== "success" && (
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              {STEPS.slice(0, 3).map((s, i) => (
-                <div key={s} className="flex items-center gap-2">
-                  <div
-                    className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
-                      i < stepIdx ? "bg-[#B8FF4D] text-[#060A08]"
-                      : i === stepIdx ? "border-2 border-[#B8FF4D] text-[#B8FF4D]"
-                      : "border border-white/20 text-white/20"
-                    }`}
-                  >
-                    {i < stepIdx ? "✓" : i + 1}
+              {(skipCreator ? STEPS.slice(1, 3) : STEPS.slice(0, 3)).map((s, i) => {
+                const realIdx = skipCreator ? i + 1 : i;
+                const isActive = s === step;
+                const isPast = STEPS.indexOf(s) < stepIdx;
+                return (
+                  <div key={s} className="flex items-center gap-2">
+                    <div
+                      className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center transition-all ${
+                        isPast ? "bg-[#B8FF4D] text-[#060A08]"
+                        : isActive ? "border-2 border-[#B8FF4D] text-[#B8FF4D]"
+                        : "border border-white/20 text-white/20"
+                      }`}
+                    >
+                      {isPast ? "✓" : realIdx + 1}
+                    </div>
+                    <span className={`text-xs hidden sm:inline ${isActive ? "text-white/60" : "text-white/20"}`}>
+                      {STEP_LABELS[s]}
+                    </span>
+                    {i < (skipCreator ? 1 : 2) && <div className={`w-8 h-px mx-1 ${isPast ? "bg-[#B8FF4D]" : "bg-white/10"}`} />}
                   </div>
-                  <span className={`text-xs hidden sm:inline ${i === stepIdx ? "text-white/60" : "text-white/20"}`}>
-                    {STEP_LABELS[s]}
-                  </span>
-                  {i < 2 && <div className={`w-8 h-px mx-1 ${i < stepIdx ? "bg-[#B8FF4D]" : "bg-white/10"}`} />}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* Step 1: Creator */}
+        {/* Step 1: Creator + Account */}
         {step === "creator" && (
           <form onSubmit={submitCreator} className="space-y-6">
             <div className="space-y-1">
-              <h1 className="text-2xl font-black">Who are you?</h1>
-              <p className="text-sm text-white/40">Your fans will see this on your club page.</p>
+              <h1 className="text-2xl font-black">Create your account</h1>
+              <p className="text-sm text-white/40">Your fans will see your name. Your email stays private.</p>
             </div>
             <div className="space-y-3">
               <div>
@@ -186,7 +228,25 @@ export default function OnboardingForm() {
                   type="text" required autoFocus
                   value={displayName} onChange={e => setDisplayName(e.target.value)}
                   placeholder="Nour, DJ Kilo, @yourname..."
-                  className="w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40]"
+                  className={inputCls}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-white/40 mb-1 block">Email address *</label>
+                <input
+                  type="email" required
+                  value={email} onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className={inputCls}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-white/40 mb-1 block">Password *</label>
+                <input
+                  type="password" required minLength={8}
+                  value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  className={inputCls}
                 />
               </div>
               <div>
@@ -213,17 +273,23 @@ export default function OnboardingForm() {
                   type="text"
                   value={city} onChange={e => setCity(e.target.value)}
                   placeholder="Paris, London, NYC…"
-                  className="w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40]"
+                  className={inputCls}
                 />
               </div>
             </div>
             {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button
-              type="submit" disabled={loading || !displayName.trim()}
-              className="w-full py-3.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 disabled:opacity-40 transition-all"
-            >
-              {loading ? "Creating…" : "Continue →"}
-            </button>
+            <div className="space-y-3">
+              <button
+                type="submit" disabled={loading || !displayName.trim() || !email.trim() || password.length < 8}
+                className="w-full py-3.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 disabled:opacity-40 transition-all"
+              >
+                {loading ? "Creating account…" : "Continue →"}
+              </button>
+              <p className="text-xs text-white/30 text-center">
+                Already have an account?{" "}
+                <a href="/auth" className="text-white/50 underline hover:text-white/70">Log in</a>
+              </p>
+            </div>
           </form>
         )}
 
@@ -241,7 +307,7 @@ export default function OnboardingForm() {
                   type="text" required autoFocus
                   value={clubName} onChange={e => setClubName(e.target.value)}
                   placeholder="Nour Inner Circle, Team Kilo…"
-                  className="w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40]"
+                  className={inputCls}
                 />
                 {clubName && (
                   <p className="text-xs text-white/20 mt-1">
@@ -274,10 +340,12 @@ export default function OnboardingForm() {
             </div>
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <div className="flex gap-3">
-              <button type="button" onClick={() => setStep("creator")}
-                className="flex-none px-4 py-3 rounded-xl text-sm text-white/40 border border-[#1e2820] hover:text-white/70 transition-colors">
-                ←
-              </button>
+              {!skipCreator && (
+                <button type="button" onClick={() => setStep("creator")}
+                  className="flex-none px-4 py-3 rounded-xl text-sm text-white/40 border border-[#1e2820] hover:text-white/70 transition-colors">
+                  ←
+                </button>
+              )}
               <button
                 type="submit" disabled={loading || !clubName.trim()}
                 className="flex-1 py-3.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 disabled:opacity-40 transition-all"
@@ -302,7 +370,7 @@ export default function OnboardingForm() {
                   type="text" autoFocus
                   value={challengeTitle} onChange={e => setChallengeTitle(e.target.value)}
                   placeholder="Share a story on Instagram, Visit our partner…"
-                  className="w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40]"
+                  className={inputCls}
                 />
               </div>
               <div>
@@ -343,29 +411,7 @@ export default function OnboardingForm() {
             </div>
             <div className="space-y-1">
               <h1 className="text-2xl font-black text-[#B8FF4D]">{result.clubName} is live!</h1>
-              <p className="text-sm text-white/40">Share your club URL with your audience. Save your dashboard link.</p>
-            </div>
-
-            {/* Dashboard URL — critical recovery */}
-            <div className="rounded-2xl bg-[#0B0F0E] border border-[#1e2820] p-5 space-y-3 text-left">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#B8FF4D]" />
-                <p className="text-xs font-bold text-[#B8FF4D] uppercase tracking-wider">Your Creator Dashboard</p>
-              </div>
-              <p className="text-xs text-white/40 leading-relaxed">
-                Bookmark this link. You'll use it to manage your club, approve challenges, and view your fans.
-              </p>
-              <div className="flex items-center gap-2">
-                <p className="flex-1 text-xs text-white/50 truncate font-mono bg-[#060A08] px-3 py-2 rounded-lg">
-                  {result.dashboardUrl}
-                </p>
-                <button
-                  onClick={copyDashboardUrl}
-                  className="shrink-0 px-3 py-2 rounded-lg text-xs font-bold text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all"
-                >
-                  {copied ? "✓ Copied" : "Copy"}
-                </button>
-              </div>
+              <p className="text-sm text-white/40">Share your club URL with your audience.</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">

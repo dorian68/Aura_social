@@ -378,4 +378,31 @@ export const databaseMigrations: DatabaseMigration[] = [
       CREATE INDEX IF NOT EXISTS idx_sf_signal_rules_community ON sf_signal_rules(community_id);
     `,
   },
+  {
+    version: 7,
+    name: "creator_auth",
+    sql: `
+      CREATE TABLE IF NOT EXISTS sf_creator_credentials (
+        id TEXT PRIMARY KEY,
+        creator_id TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+        password_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY (creator_id) REFERENCES sf_creators(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS sf_sessions (
+        id TEXT PRIMARY KEY,
+        creator_id TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL,
+        FOREIGN KEY (creator_id) REFERENCES sf_creators(id) ON DELETE CASCADE
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_sf_creds_email ON sf_creator_credentials(email);
+      CREATE INDEX IF NOT EXISTS idx_sf_sessions_creator ON sf_sessions(creator_id);
+      CREATE INDEX IF NOT EXISTS idx_sf_sessions_expires ON sf_sessions(expires_at);
+    `,
+  },
 ];

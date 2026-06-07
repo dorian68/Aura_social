@@ -1,6 +1,6 @@
 import { getAuraDatabase } from "@/lib/storage/sqliteStore";
 import Link from "next/link";
-import DashboardRecovery from "./DashboardRecovery";
+import AuthNav from "./AuthNav";
 
 function getPublicCommunities() {
   try {
@@ -44,13 +44,7 @@ export default function HomePage() {
           <a href="#clubs" className="text-white/50 hover:text-white/80 transition-colors hidden sm:inline">
             Explore Clubs
           </a>
-          <DashboardRecovery />
-          <a
-            href="/onboarding"
-            className="px-4 py-2 rounded-xl font-bold text-xs text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all"
-          >
-            Launch Club
-          </a>
+          <AuthNav />
         </div>
       </nav>
 
