@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: #060A08; }
+  ::-webkit-scrollbar-thumb { background: #1e2820; border-radius: 2px; }
+
+  input, textarea, select {
+    background: #0B0F0E;
+    border: 1px solid #1e2820;
+    color: #FFF7E8;
+    border-radius: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+    font-size: 0.9375rem;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #B8FF4D; }
+  input::placeholder, textarea::placeholder { color: #ffffff40; }
+}
