@@ -2,26 +2,71 @@
 
 ## 1. Product Overview
 
-Aura is a creator monetization platform that combines Instagram analysis, loyalty programs, rewards, fan passes, agentic recommendations, B2B partner campaign simulation, workspace readiness and blockchain contract infrastructure.
+Aura is a **Creator Superfan OS** — a cross-platform loyalty and rewards operating system that helps creators identify their most engaged fans, activate them through challenges and rewards, and turn their community into measurable revenue through partner campaigns.
+
+**Primary product:** Superfan Club — a branded fan club page with points, challenges, leaderboard, rewards and fan signup that any creator can launch for free in 5 minutes.
+
+**Secondary product:** Partner campaign engine — QR/coupon attribution connecting fan activity to local business traffic.
+
+**Infrastructure:** Instagram analysis, B2B agent, blockchain loyalty layer, operator workspace, AG-UI chat agent.
+
+**Platform strategy:** MVP = Instagram-first. Architecture = cross-platform (Instagram, TikTok, YouTube, Twitch, Discord, newsletter, offline). The product must never hardcode Instagram — all platform references use the `PlatformAccount` abstraction.
 
 The MVP is backend-first and mock-safe. Real external side effects must remain disabled unless explicitly configured and tested.
 
 ## 2. Target Users
 
-- Creator using an Instagram Business or Creator account.
-- Creator operator or agency managing monetization workflows.
-- Local business buyer participating in sponsored reward campaigns.
+- Creator on any platform (Instagram, TikTok, YouTube, Twitch, Discord, newsletter, events) who wants to identify and activate their real fans.
+- Creator using an Instagram Business or Creator account who wants to monetize beyond ad revenue.
+- Creator operator or agency managing monetization workflows for multiple creators.
+- Fan who wants to earn status and rewards for engaging with their favorite creator.
+- Local business buyer participating in fan-activated sponsored campaigns with QR attribution.
 - Platform operator validating integrations, safety and campaign economics.
 
 ## 3. User Roles
 
-- Creator: connects Instagram, reviews analytics, approves campaigns and rewards.
+- Creator: launches Superfan Club, creates challenges and rewards, reviews fan dashboard, approves campaigns.
+- Fan: signs up to club, earns points, completes challenges, redeems rewards, refers friends.
 - Operator: manages workspace, integrations, loyalty state and agent actions.
-- Fan: earns points, redeems rewards and may hold a fan pass.
-- Local business: funds partner campaigns and sponsored rewards.
+- Local business: funds partner campaigns, receives QR/coupon attribution reports.
 - Developer/admin: configures providers, runs CLI diagnostics and production checks.
 
 ## 4. Core User Journeys
+
+### Journey G - Launch a Superfan Club (P0)
+
+1. Creator visits Aura dashboard and clicks "Launch my Superfan Club".
+2. Creator sets club name, description, brand color and cover image.
+3. Creator configures initial challenges (e.g. "Follow on Instagram", "Share a story", "Visit our partner").
+4. Creator sets initial rewards (e.g. DM session, early merch access, partner offer).
+5. Aura generates a public club page at `/club/:slug`.
+6. Creator shares the club URL with their audience.
+7. Fans visit the page, see the leaderboard and sign up with their email.
+8. Fans earn welcome points (50 pts) automatically on signup.
+9. Creator sees fan activity in real-time dashboard.
+
+### Journey H - Fan earns points and redeems a reward (P0)
+
+1. Fan signs up to a Superfan Club via club page or referral link.
+2. Fan sees available challenges and picks one (e.g. "Visit our partner store and scan the QR code").
+3. Fan completes the challenge and submits proof (scan, screenshot, or honor).
+4. Points are awarded (auto for QR/coupon, after creator approval for manual).
+5. Fan sees their rank on the leaderboard update.
+6. Fan browses reward catalog and redeems a reward with their points.
+7. Creator is notified and marks the reward as fulfilled.
+
+### Journey I - Creator runs a partner campaign (P0)
+
+1. Creator navigates to "Partner Campaigns" in dashboard.
+2. Creator enters partner business name, city, campaign budget, challenge and reward.
+3. Aura generates a unique QR code for the partner business.
+4. Creator sends QR code to partner; partner prints/displays it in-store.
+5. Creator announces challenge to Superfan Club.
+6. Fans visit the partner, scan the QR code, earn points.
+7. Creator sees real-time scan count on dashboard.
+8. After campaign ends, creator generates sponsor-ready report with QR scan count, unique fans, estimated value.
+9. Creator shares report with partner; partner pays campaign fee.
+10. Aura records commission.
 
 ### Journey A - Analyze a creator account
 
@@ -68,16 +113,33 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 
 ## 5. Functional Modules
 
+### P0 — Superfan Club (build priority)
+
+- Public Creator Club Page (fan-facing, public URL).
+- Fan Signup (email, optional WhatsApp, referral tracking).
+- Points Ledger (balance, transactions, audit trail).
+- Challenges (creator-set actions, auto/manual/QR verification).
+- Rewards (points-backed catalog, redemption, fulfillment).
+- Leaderboard (ranked fan list, period filter, tier badges).
+- Creator Dashboard (community stats, fan list, challenge/reward activity).
+- QR / Coupon Tracking (partner visit attribution).
+- Referral Links (fan-to-fan growth, auto-points on successful referral).
+- Sponsor-Ready Report (partner pitch document, one-click generate).
+
+### P1 — Platform and analytics
+
 - Instagram Analyzer and private insights.
 - Meta OAuth and runtime configuration.
+- Cross-platform PlatformAccount abstraction (Instagram, TikTok, YouTube, Twitch, Discord, newsletter, offline).
 - Workspace control plane and audit trail.
-- Loyalty engine, rules, fans, ledger and tiers.
-- Rewards catalog and redemption.
+
+### P2 — Monetization infrastructure
+
 - Fan-pass builder and simulation.
 - Token economy simulator.
 - Agentic recommendation and campaign draft engine.
-- B2B expansion agent.
-- Operator chat and tool registry.
+- B2B expansion agent (Google Places discovery, outreach, Stripe Checkout).
+- Operator chat and tool registry (AG-UI streaming).
 - Blockchain contract status, ABI export and local contract tests.
 - Production health and security gate.
 
@@ -201,16 +263,33 @@ Legacy JSON files are imported once when a SQLite state document does not exist.
 
 Core domain entities:
 
+**Superfan Club (new, P0):**
+- Creator
+- PlatformAccount (platform enum: instagram | tiktok | youtube | twitch | discord | newsletter | whatsapp | offline | other)
+- Fan
+- CreatorCommunity
+- Membership
+- PointsLedger
+- PointsTransaction
+- Challenge
+- ChallengeCompletion
+- Reward (extended from existing)
+- RewardRedemption
+- Referral
+- Partner
+- Campaign (extended from existing)
+- QRCode
+- CouponCode
+
+**Existing (P1/P2):**
 - CreatorProfile
 - LoyaltyProgram
 - LoyaltyRule
 - FanProfile
 - LoyaltyTransaction
-- Reward
 - FanPass
 - TokenEconomy
 - AgentRecommendation
-- Campaign
 - LocalBusiness
 - BusinessFitScore
 - PartnershipOpportunity
@@ -228,6 +307,35 @@ Meta access tokens are prototype session memory only and must not be persisted t
 
 Representative routes:
 
+**Superfan Club (P0, new):**
+- `GET /api/club/:slug` — public club page data
+- `POST /api/club/:slug/join` — fan signup with optional referral code
+- `GET /api/club/:slug/leaderboard?period=alltime|monthly|weekly`
+- `GET /api/club/:slug/challenges` — active challenges
+- `GET /api/club/:slug/rewards` — active rewards
+- `POST /api/challenge/:id/complete` — fan submits completion
+- `POST /api/reward/:id/redeem` — fan redeems reward
+- `GET /api/fan/:fanId/points?communityId=xxx`
+- `GET /api/fan/:fanId/transactions?communityId=xxx`
+- `GET /api/fan/:fanId/referral-link?communityId=xxx`
+- `GET /api/qr/:code` — QR redirect + scan logging
+- `POST /api/coupon/redeem` — coupon redemption
+- `GET /api/admin/dashboard/:communityId`
+- `GET /api/admin/fans/:communityId`
+- `POST /api/admin/challenges` — creator creates challenge
+- `PATCH /api/admin/challenges/:id`
+- `POST /api/admin/completions/:id/approve`
+- `POST /api/admin/rewards` — creator creates reward
+- `PATCH /api/admin/rewards/:id`
+- `POST /api/admin/redemptions/:id/fulfill`
+- `POST /api/admin/qr` — generate QR code for campaign
+- `GET /api/admin/qr/:campaignId/stats`
+- `GET /api/admin/report/:communityId?format=json|pdf`
+- `POST /api/admin/report/:communityId/share`
+- `POST /api/admin/points/award` — manual points award
+- `POST /api/admin/points/deduct` — manual points deduction
+
+**Existing:**
 - `GET /api/system/health`
 - `GET /api/workspace/state`
 - `POST /api/workspace/audit`
