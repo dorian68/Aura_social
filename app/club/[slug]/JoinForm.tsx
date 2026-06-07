@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 interface JoinResult {
+  fanId: string;
   displayName: string;
   balance: number;
   justEarned: number;
@@ -41,11 +42,11 @@ export default function JoinForm({
       }
       const d = json.data;
       if (d.alreadyMember) {
-        setResult({ displayName: d.fan.displayName, balance: d.points, justEarned: 0, referralLink: "" });
+        setResult({ fanId: d.fan.id, displayName: d.fan.displayName, balance: d.points, justEarned: 0, referralLink: "" });
         setStatus("already");
       } else {
         const refLink = `${window.location.origin}/club/${d.membership.referralLink}`;
-        setResult({ displayName: d.fan.displayName, balance: d.points.balance, justEarned: d.points.justEarned, referralLink: refLink });
+        setResult({ fanId: d.fan.id, displayName: d.fan.displayName, balance: d.points.balance, justEarned: d.points.justEarned, referralLink: refLink });
         setStatus("success");
       }
     } catch (err) {
@@ -93,16 +94,30 @@ export default function JoinForm({
             </button>
           </div>
         )}
+        <a
+          href={`/fan/${result.fanId}`}
+          className="block w-full text-center py-3 rounded-xl border text-sm font-semibold transition-colors hover:border-white/30 text-white/60 hover:text-white/90"
+          style={{ borderColor: brandColor + "40" }}
+        >
+          Mon profil &amp; connecter mes réseaux →
+        </a>
       </div>
     );
   }
 
   if (status === "already" && result) {
     return (
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-4">
         <div className="text-4xl">👋</div>
         <p className="text-lg font-bold">Welcome back, {result.displayName}!</p>
         <p className="text-sm text-white/50">You have {result.balance} points in this club.</p>
+        <a
+          href={`/fan/${result.fanId}`}
+          className="block w-full text-center py-3 rounded-xl border text-sm font-semibold text-white/60 hover:text-white/90 hover:border-white/30 transition-colors"
+          style={{ borderColor: brandColor + "40" }}
+        >
+          Mon profil &amp; réseaux connectés →
+        </a>
       </div>
     );
   }

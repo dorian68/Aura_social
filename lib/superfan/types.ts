@@ -68,6 +68,20 @@ export interface Fan {
   createdAt: string;
 }
 
+export interface FanPlatformAccount {
+  id: string;
+  fanId: string;
+  platform: Platform;
+  handle: string;
+  url?: string;
+  followersCount?: number;
+  connectedStatus: ConnectedStatus;
+  tokenExpiresAt?: string;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreatorCommunity {
   id: string;
   creatorId: string;

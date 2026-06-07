@@ -14,6 +14,8 @@ import { buildIntegrationReadiness } from "@/lib/workspace/status";
 import { getWorkspaceState } from "@/lib/workspace/store";
 import { getOutreachReadiness } from "@/lib/outreach/service";
 import { getStripeReadiness } from "@/lib/payments/stripeService";
+import { getSuperfanGlobalStats } from "@/lib/superfan/db";
+import { listConfiguredPlatforms } from "@/lib/platforms/oauth";
 
 export const runtime = "nodejs";
 
@@ -78,6 +80,10 @@ export async function GET() {
         AuraFanPass: loadAbi("AuraFanPass").length,
         AuraRewardRegistry: loadAbi("AuraRewardRegistry").length,
       },
+    },
+    superfan: {
+      ...getSuperfanGlobalStats(),
+      configuredOAuthPlatforms: listConfiguredPlatforms(),
     },
   });
 }

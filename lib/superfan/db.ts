@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { getAuraDatabase } from "@/lib/storage/sqliteStore";
 import type {
-  Creator, PlatformAccount, Fan, CreatorCommunity, Membership,
+  Creator, PlatformAccount, FanPlatformAccount, Fan, CreatorCommunity, Membership,
   PointsLedger, PointsTransaction, Challenge, ChallengeCompletion,
   Reward, RewardRedemption, Referral, Partner, Campaign, QRCode,
   TxType, TxSource, CompletionStatus, Platform, ConnectedStatus,
@@ -623,4 +623,135 @@ export function getCommunityStats(communityId: string) {
   tierCounts.forEach(t => { tiers[t.tier] = t.c; });
   const totalCampaignCommission = (db.prepare("SELECT COALESCE(SUM(commission_amount),0) as s FROM sf_campaigns WHERE community_id=? AND status IN ('active','ended','paid')").get(communityId) as {s:number}).s;
   return { totalFans, activeThisWeek, totalPointsAwarded, pendingCompletions, pendingRedemptions, tiers, totalCampaignCommission };
+}
+
+// ─── Fan Platform Accounts ───────────────────────────────────────────────────
+
+export function upsertFanPlatformAccount(data: {
+  fanId: string; platform: Platform; handle: string; url?: string;
+  followersCount?: number; connectedStatus?: ConnectedStatus;
+  accessToken?: string; refreshToken?: string; tokenExpiresAt?: string;
+  metadata?: Record<string, unknown>;
+}): FanPlatformAccount {
+  const db = getAuraDatabase();
+  const ts = now();
+  const existing = db.prepare("SELECT id FROM sf_fan_platform_accounts WHERE fan_id=? AND platform=?")
+    .get(data.fanId, data.platform) as { id: string } | undefined;
+  const id = existing?.id ?? uid();
+  const metaJson = data.metadata ? JSON.stringify(data.metadata) : null;
+  if (existing) {
+    db.prepare(`UPDATE sf_fan_platform_accounts SET handle=?,url=?,followers_count=?,connected_status=?,
+      access_token=?,refresh_token=?,token_expires_at=?,metadata=?,updated_at=? WHERE id=?`)
+      .run(data.handle, data.url ?? null, data.followersCount ?? null,
+        data.connectedStatus ?? "connected", data.accessToken ?? null, data.refreshToken ?? null,
+        data.tokenExpiresAt ?? null, metaJson, ts, id);
+  } else {
+    db.prepare(`INSERT INTO sf_fan_platform_accounts (id,fan_id,platform,handle,url,followers_count,
+      connected_status,access_token,refresh_token,token_expires_at,metadata,created_at,updated_at)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+      .run(id, data.fanId, data.platform, data.handle, data.url ?? null, data.followersCount ?? null,
+        data.connectedStatus ?? "connected", data.accessToken ?? null, data.refreshToken ?? null,
+        data.tokenExpiresAt ?? null, metaJson, ts, ts);
+  }
+  return getFanPlatformAccount(data.fanId, data.platform)!;
+}
+
+export function getFanPlatformAccounts(fanId: string): FanPlatformAccount[] {
+  const db = getAuraDatabase();
+  const rows = db.prepare("SELECT * FROM sf_fan_platform_accounts WHERE fan_id=? ORDER BY created_at").all(fanId) as Record<string, unknown>[];
+  return rows.map(mapFanPlatformAccount);
+}
+
+export function getFanPlatformAccount(fanId: string, platform: Platform): FanPlatformAccount | null {
+  const db = getAuraDatabase();
+  const row = db.prepare("SELECT * FROM sf_fan_platform_accounts WHERE fan_id=? AND platform=?").get(fanId, platform) as Record<string, unknown> | undefined;
+  return row ? mapFanPlatformAccount(row) : null;
+}
+
+export function disconnectFanPlatform(fanId: string, platform: Platform): void {
+  const db = getAuraDatabase();
+  db.prepare("UPDATE sf_fan_platform_accounts SET connected_status='disconnected', updated_at=? WHERE fan_id=? AND platform=?")
+    .run(now(), fanId, platform);
+}
+
+function mapFanPlatformAccount(r: Record<string, unknown>): FanPlatformAccount {
+  return {
+    id: String(r.id), fanId: String(r.fan_id), platform: r.platform as Platform,
+    handle: String(r.handle), url: (r.url as string) || undefined,
+    followersCount: r.followers_count != null ? Number(r.followers_count) : undefined,
+    connectedStatus: r.connected_status as ConnectedStatus,
+    tokenExpiresAt: (r.token_expires_at as string) || undefined,
+    metadata: r.metadata ? JSON.parse(r.metadata as string) as Record<string, unknown> : undefined,
+    createdAt: String(r.created_at), updatedAt: String(r.updated_at),
+  };
+}
+
+// ─── Community Analytics ─────────────────────────────────────────────────────
+
+export function getCommunityAnalytics(communityId: string) {
+  const db = getAuraDatabase();
+
+  // Fan platform distribution + reach
+  const platformRows = db.prepare(`
+    SELECT fpa.platform,
+      COUNT(DISTINCT fpa.fan_id) as fan_count,
+      COALESCE(SUM(fpa.followers_count), 0) as total_followers
+    FROM sf_fan_platform_accounts fpa
+    JOIN sf_memberships m ON m.fan_id = fpa.fan_id AND m.community_id = ?
+    WHERE fpa.connected_status = 'connected'
+    GROUP BY fpa.platform
+    ORDER BY fan_count DESC
+  `).all(communityId) as { platform: string; fan_count: number; total_followers: number }[];
+
+  // Points earned by source
+  const sourceRows = db.prepare(`
+    SELECT source, COALESCE(SUM(amount), 0) as total
+    FROM sf_points_transactions
+    WHERE community_id = ? AND type = 'earn'
+    GROUP BY source
+    ORDER BY total DESC
+  `).all(communityId) as { source: string; total: number }[];
+
+  // New fans by week (last 8 weeks)
+  const weekRows = db.prepare(`
+    SELECT strftime('%Y-W%W', joined_at) as week, COUNT(*) as count
+    FROM sf_memberships
+    WHERE community_id = ?
+    GROUP BY week
+    ORDER BY week DESC
+    LIMIT 8
+  `).all(communityId) as { week: string; count: number }[];
+
+  // Total fans with at least one connected platform
+  const connectedFans = (db.prepare(`
+    SELECT COUNT(DISTINCT fpa.fan_id) as c
+    FROM sf_fan_platform_accounts fpa
+    JOIN sf_memberships m ON m.fan_id = fpa.fan_id AND m.community_id = ?
+    WHERE fpa.connected_status = 'connected'
+  `).get(communityId) as { c: number }).c;
+
+  const totalReach = platformRows.reduce((s, r) => s + r.total_followers, 0);
+
+  return {
+    platformDistribution: platformRows,
+    pointsBySource: sourceRows,
+    newFansByWeek: weekRows.reverse(),
+    connectedFans,
+    totalReach,
+  };
+}
+
+// ─── Global Superfan Stats (for health endpoint) ──────────────────────────────
+
+export function getSuperfanGlobalStats() {
+  const db = getAuraDatabase();
+  const creators    = (db.prepare("SELECT COUNT(*) as c FROM sf_creators").get() as { c: number }).c;
+  const communities = (db.prepare("SELECT COUNT(*) as c FROM sf_communities").get() as { c: number }).c;
+  const fans        = (db.prepare("SELECT COUNT(*) as c FROM sf_fans").get() as { c: number }).c;
+  const memberships = (db.prepare("SELECT COUNT(*) as c FROM sf_memberships").get() as { c: number }).c;
+  const pointsAwarded = (db.prepare("SELECT COALESCE(SUM(amount),0) as s FROM sf_points_transactions WHERE type='earn'").get() as { s: number }).s;
+  const challenges  = (db.prepare("SELECT COUNT(*) as c FROM sf_challenges WHERE status='active'").get() as { c: number }).c;
+  const rewards     = (db.prepare("SELECT COUNT(*) as c FROM sf_rewards WHERE status='active'").get() as { c: number }).c;
+  const fanPlatformAccounts = (db.prepare("SELECT COUNT(*) as c FROM sf_fan_platform_accounts WHERE connected_status='connected'").get() as { c: number }).c;
+  return { creators, communities, fans, memberships, pointsAwarded, activeChallenges: challenges, activeRewards: rewards, fanPlatformAccounts };
 }

@@ -19,8 +19,15 @@ interface Reward { id: string; title: string; description?: string; status: stri
 interface Completion { id: string; challengeId: string; fanId: string; communityId: string; status: string; proofUrl?: string; createdAt: string; }
 interface Redemption { id: string; rewardId: string; fanId: string; communityId: string; status: string; pointsSpent: number; createdAt: string; }
 interface Platform { platform: string; handle: string; followersCount?: number; connectedStatus: string; }
+interface Analytics {
+  totalCreatorFollowers: number;
+  fanStats: { total: number; connectedToAnyPlatform: number; connectionRate: number };
+  reach: { totalFanFollowers: number; byPlatform: { platform: string; fan_count: number; total_followers: number }[] };
+  engagement: { totalPointsAwarded: number; bySource: { source: string; total: number }[] };
+  growth: { newFansByWeek: { week: string; count: number }[] };
+}
 
-type Tab = "overview" | "members" | "challenges" | "rewards" | "approvals" | "platforms";
+type Tab = "overview" | "members" | "challenges" | "rewards" | "approvals" | "analytics" | "platforms";
 
 const TIER_STYLE: Record<string, { color: string; bg: string }> = {
   vip:      { color: "#f59e0b", bg: "#f59e0b18" },
@@ -42,6 +49,7 @@ export default function DashboardPage() {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [redemptions, setRedemptions] = useState<Redemption[]>([]);
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [platforms, setPlatforms] = useState<Platform[]>([]);
   const [configuredPlatforms, setConfiguredPlatforms] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,6 +127,7 @@ export default function DashboardPage() {
     if (tab === "challenges") loadChallenges();
     if (tab === "rewards") loadRewards();
     if (tab === "approvals") loadApprovals();
+    if (tab === "analytics") { fetch(`/api/admin/analytics/${communityId}`).then(r => r.json()).then(j => { if (j.success) setAnalytics(j.data); }); }
     if (tab === "platforms") loadPlatforms();
   }, [tab, loadFans, loadChallenges, loadRewards, loadApprovals, loadPlatforms]);
 
@@ -166,6 +175,7 @@ export default function DashboardPage() {
     { id: "challenges", label: "Challenges" },
     { id: "rewards",    label: "Rewards" },
     { id: "approvals",  label: "Approvals", badge: (stats?.pendingCompletions ?? 0) + (stats?.pendingRedemptions ?? 0) || undefined },
+    { id: "analytics",  label: "Analytics" },
     { id: "platforms",  label: "Platforms" },
   ];
 
@@ -225,6 +235,7 @@ export default function DashboardPage() {
         {tab === "challenges" && <ChallengesTab challenges={challenges} communityId={communityId} brand={brand} onRefresh={loadChallenges} onPause={pauseChallenge} notify={notify} />}
         {tab === "rewards"    && <RewardsTab rewards={rewards} communityId={communityId} brand={brand} onRefresh={loadRewards} onPause={pauseReward} notify={notify} />}
         {tab === "approvals"  && <ApprovalsTab completions={completions} redemptions={redemptions} onApprove={approveCompletion} onReject={rejectCompletion} onFulfill={fulfillRedemption} brand={brand} onRefresh={loadApprovals} />}
+        {tab === "analytics"  && <AnalyticsTab analytics={analytics} brand={brand} />}
         {tab === "platforms"  && <PlatformsTab accounts={platforms} configured={configuredPlatforms} community={community} brand={brand} />}
       </main>
     </div>
@@ -495,6 +506,84 @@ function ApprovalsTab({ completions, redemptions, onApprove, onReject, onFulfill
                 <p className="text-xs text-white/30 mt-0.5">{new Date(r.createdAt).toLocaleString()}</p>
               </div>
               <button onClick={() => onFulfill(r.id)} className="text-xs px-3 py-1.5 rounded-lg font-semibold text-[#060A08] shrink-0" style={{ background: brand }}>Mark fulfilled</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AnalyticsTab({ analytics, brand }: { analytics: Analytics | null; brand: string }) {
+  if (!analytics) return (
+    <div className="py-16 text-center"><div className="w-6 h-6 rounded-full border-2 border-current border-t-transparent animate-spin mx-auto" style={{ color: brand }} /></div>
+  );
+  const SOURCE_LABELS: Record<string, string> = {
+    join_welcome: "Inscription", referral: "Parrainage", challenge_completion: "Défi complété",
+    qr_scan: "QR scan", coupon: "Coupon", instagram_signal: "Signal Instagram",
+    tiktok_signal: "Signal TikTok", youtube_signal: "Signal YouTube", manual: "Manuel", other: "Autre",
+  };
+  const PLATFORM_ICONS: Record<string, string> = { instagram: "📸", tiktok: "🎵", youtube: "▶️", twitch: "🟣", discord: "💬" };
+  return (
+    <div className="space-y-8">
+      {/* Creator reach */}
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard label="Reach créateur" value={analytics.totalCreatorFollowers.toLocaleString()} sub="abonnés cumulés" brand={brand} />
+        <StatCard label="Reach fans" value={analytics.reach.totalFanFollowers.toLocaleString()} sub="abonnés des fans connectés" brand={brand} />
+        <StatCard label="Fans connectés" value={`${analytics.fanStats.connectedToAnyPlatform} / ${analytics.fanStats.total}`} sub={`${analytics.fanStats.connectionRate}% de connexion`} brand={brand} />
+        <StatCard label="Points distribués" value={analytics.engagement.totalPointsAwarded.toLocaleString()} brand={brand} />
+      </div>
+
+      {/* Fan platform distribution */}
+      {analytics.reach.byPlatform.length > 0 ? (
+        <div className="space-y-3">
+          <h3 className="text-xs font-semibold text-white/40 uppercase tracking-wider">Réseaux des fans</h3>
+          {analytics.reach.byPlatform.map(p => (
+            <div key={p.platform} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820]">
+              <span className="text-xl">{PLATFORM_ICONS[p.platform] ?? "🔗"}</span>
+              <div className="flex-1">
+                <p className="text-sm font-medium capitalize">{p.platform}</p>
+                <p className="text-xs text-white/40">{p.fan_count} fans connectés</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold" style={{ color: brand }}>{p.total_followers.toLocaleString()}</p>
+                <p className="text-xs text-white/30">abonnés</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="py-8 text-center space-y-2">
+          <p className="text-3xl">📊</p>
+          <p className="text-sm text-white/40">Aucun fan n&apos;a encore connecté ses réseaux.</p>
+          <p className="text-xs text-white/25">Les fans peuvent le faire depuis leur profil après inscription.</p>
+        </div>
+      )}
+
+      {/* Points by source */}
+      {analytics.engagement.bySource.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-xs font-semibold text-white/40 uppercase tracking-wider">Points par source</h3>
+          {analytics.engagement.bySource.map(s => (
+            <div key={s.source} className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#0B0F0E] border border-[#1e2820]">
+              <span className="text-sm text-white/70">{SOURCE_LABELS[s.source] ?? s.source}</span>
+              <span className="text-sm font-bold tabular-nums" style={{ color: brand }}>{s.total.toLocaleString()} pts</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Growth by week */}
+      {analytics.growth.newFansByWeek.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-xs font-semibold text-white/40 uppercase tracking-wider">Nouveaux fans par semaine</h3>
+          {analytics.growth.newFansByWeek.map(w => (
+            <div key={w.week} className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#0B0F0E] border border-[#1e2820]">
+              <span className="text-xs text-white/40 w-24 shrink-0">{w.week}</span>
+              <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${Math.min(100, (w.count / Math.max(...analytics.growth.newFansByWeek.map(x => x.count))) * 100)}%`, background: brand }} />
+              </div>
+              <span className="text-sm font-bold tabular-nums text-right w-8" style={{ color: brand }}>{w.count}</span>
             </div>
           ))}
         </div>

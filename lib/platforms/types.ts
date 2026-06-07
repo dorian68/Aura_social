@@ -28,7 +28,9 @@ export interface PlatformProfile {
 }
 
 export interface OAuthState {
-  creatorId: string;
+  type: "creator" | "fan";
+  creatorId?: string;
+  fanId?: string;
   platform: Platform;
   redirectAfter?: string;
   nonce: string;

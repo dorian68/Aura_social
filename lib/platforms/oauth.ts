@@ -41,7 +41,15 @@ export function isPlatformConfigured(platform: Platform): boolean {
 export function buildAuthUrl(platform: Platform, creatorId: string, redirectAfter?: string): { url: string; state: string } {
   const adapter = getAdapter(platform);
   if (!adapter.isConfigured()) throw new Error(`PLATFORM_NOT_CONFIGURED:${platform}`);
-  const stateObj: OAuthState = { creatorId, platform, redirectAfter, nonce: randomUUID().slice(0,8) };
+  const stateObj: OAuthState = { type: "creator", creatorId, platform, redirectAfter, nonce: randomUUID().slice(0,8) };
+  const stateStr = Buffer.from(JSON.stringify(stateObj)).toString("base64url");
+  return { url: adapter.buildAuthUrl(stateStr), state: stateStr };
+}
+
+export function buildFanAuthUrl(platform: Platform, fanId: string, redirectAfter?: string): { url: string; state: string } {
+  const adapter = getAdapter(platform);
+  if (!adapter.isConfigured()) throw new Error(`PLATFORM_NOT_CONFIGURED:${platform}`);
+  const stateObj: OAuthState = { type: "fan", fanId, platform, redirectAfter, nonce: randomUUID().slice(0,8) };
   const stateStr = Buffer.from(JSON.stringify(stateObj)).toString("base64url");
   return { url: adapter.buildAuthUrl(stateStr), state: stateStr };
 }

@@ -309,4 +309,29 @@ export const databaseMigrations: DatabaseMigration[] = [
       CREATE INDEX IF NOT EXISTS idx_sf_platform_accounts_creator ON sf_platform_accounts(creator_id);
     `,
   },
+  {
+    version: 5,
+    name: "fan_platform_accounts",
+    sql: `
+      CREATE TABLE IF NOT EXISTS sf_fan_platform_accounts (
+        id TEXT PRIMARY KEY,
+        fan_id TEXT NOT NULL REFERENCES sf_fans(id) ON DELETE CASCADE,
+        platform TEXT NOT NULL,
+        handle TEXT NOT NULL,
+        url TEXT,
+        followers_count INTEGER,
+        connected_status TEXT NOT NULL DEFAULT 'connected',
+        access_token TEXT,
+        refresh_token TEXT,
+        token_expires_at TEXT,
+        metadata TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        UNIQUE(fan_id, platform)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_sf_fan_platform_fan ON sf_fan_platform_accounts(fan_id);
+      CREATE INDEX IF NOT EXISTS idx_sf_fan_platform_platform ON sf_fan_platform_accounts(platform);
+    `,
+  },
 ];
