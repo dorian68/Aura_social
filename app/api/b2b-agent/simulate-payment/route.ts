@@ -1,7 +1,12 @@
 import { fail, handleApiError, ok, readJsonBody } from "@/lib/apiResponse";
 import { discoverBusinesses } from "@/lib/b2b-agent/orchestrator";
 import { simulateSmePayment } from "@/lib/b2b-agent/paymentSimulator";
-import { getB2BAgentState, setB2BAgentState } from "@/lib/b2b-agent/store";
+import {
+  calculateB2BPlatformRevenue,
+  getB2BAgentState,
+  hasB2BRevenueCampaignForOpportunity,
+  setB2BAgentState,
+} from "@/lib/b2b-agent/store";
 import { GuardrailError, validateAmount, validateIdentifier } from "@/lib/agentGuardrails";
 
 export async function POST(request: Request) {
@@ -31,10 +36,13 @@ export async function POST(request: Request) {
       return fail("B2B_OPPORTUNITY_NOT_FOUND", "Run the B2B agent before simulating payment.", 404);
     }
 
-    // Idempotency: a paid opportunity must not be re-charged (would double-count
-    // platformRevenue now, and double-charge once a real Stripe adapter lands).
+    // Idempotency: a paid opportunity must not create duplicate campaign
+    // commissions now, or duplicate Stripe charges once a real adapter lands.
     if (opportunity.status === "simulated_paid") {
       return fail("B2B_PAYMENT_ALREADY_SIMULATED", "Payment was already simulated for this opportunity.", 409);
+    }
+    if (hasB2BRevenueCampaignForOpportunity(state.campaigns, opportunity.id)) {
+      return fail("B2B_PAYMENT_ALREADY_SIMULATED", "A monetized campaign already exists for this opportunity.", 409);
     }
 
     const business =
@@ -51,13 +59,14 @@ export async function POST(request: Request) {
       status: "simulated_paid" as const,
     };
 
+    const campaigns = mergeById(state.campaigns, [result.campaign]);
     setB2BAgentState({
       ...state,
       opportunities: state.opportunities.map((item) =>
         item.id === opportunity.id ? updatedOpportunity : item,
       ),
-      campaigns: mergeById(state.campaigns, [result.campaign]),
-      platformRevenue: state.platformRevenue + result.payment.platformCommission,
+      campaigns,
+      platformRevenue: calculateB2BPlatformRevenue(campaigns),
     });
 
     return ok(result, {

@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { DomainError } from "../domainError";
 import { calculatePointsForAction } from "./loyaltyRules";
 import type {
   AwardPointsInput,
@@ -65,12 +66,17 @@ export function awardPoints(state: LoyaltyState, input: AwardPointsInput) {
 
 export function redeemPoints(state: LoyaltyState, input: RedeemPointsInput) {
   if (input.points <= 0) {
-    throw new Error("Redeemed points must be greater than zero.");
+    throw new DomainError("LOYALTY_POINTS_INVALID", "Redeemed points must be greater than zero.", 400);
   }
 
   const fan = getRequiredFan(state, input.programId, input.fanId);
   if (fan.pointsBalance < input.points) {
-    throw new Error(`Insufficient points. Missing ${input.points - fan.pointsBalance} points.`);
+    throw new DomainError(
+      "LOYALTY_INSUFFICIENT_POINTS",
+      `Insufficient points. Missing ${input.points - fan.pointsBalance} points.`,
+      409,
+      { missingPoints: input.points - fan.pointsBalance },
+    );
   }
 
   const transaction = createTransaction({
@@ -196,7 +202,12 @@ function createTransaction(input: Omit<LoyaltyTransaction, "id" | "createdAt">):
 function getRequiredFan(state: LoyaltyState, programId: string, fanId: string) {
   const fan = state.fans.find((item) => item.id === fanId && item.programId === programId);
   if (!fan) {
-    throw new Error("Fan does not exist in this loyalty program.");
+    throw new DomainError(
+      "LOYALTY_FAN_NOT_FOUND",
+      "Fan does not exist in this loyalty program.",
+      404,
+      { programId, fanId },
+    );
   }
   return fan;
 }

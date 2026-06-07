@@ -1,4 +1,5 @@
 const baseUrl = process.env.SMOKE_BASE_URL || "http://localhost:3170";
+const webBaseUrl = process.env.WEB_BASE_URL || baseUrl;
 
 const results = [];
 let previousMockMeta = null;
@@ -15,13 +16,13 @@ await run("GET /api/system/health", async () => {
 });
 
 await run("GET /", async () => {
-  const response = await fetch(`${baseUrl}/`);
+  const response = await fetch(`${webBaseUrl}/`);
   assert(response.status === 200, `expected 200, got ${response.status}`);
   return { status: response.status };
 });
 
-await run("GET /dashboard", async () => {
-  const response = await fetch(`${baseUrl}/dashboard`);
+await run("GET /product/dashboard.html", async () => {
+  const response = await fetch(`${webBaseUrl}/product/dashboard.html`);
   assert(response.status === 200, `expected 200, got ${response.status}`);
   return { status: response.status };
 });
@@ -134,7 +135,7 @@ await run("POST /api/meta/runtime-config restore mock", async () => {
 });
 
 const success = results.every((result) => result.status === "success");
-console.log(JSON.stringify({ script: "smoke-platform", baseUrl, success, results }, null, 2));
+console.log(JSON.stringify({ script: "smoke-platform", baseUrl, webBaseUrl, success, results }, null, 2));
 if (!success) process.exitCode = 1;
 
 async function run(label, fn) {

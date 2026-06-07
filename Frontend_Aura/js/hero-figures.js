@@ -410,6 +410,10 @@
       if (window.__auraFig) window.__auraFig.destroy();
       window.__auraFig = new HeroFigure(canvas, mode || this.randomMode());
       return window.__auraFig;
+    },
+    /* Creates an independent figure — does NOT destroy the singleton __auraFig */
+    mountNew(canvas, mode) {
+      return new HeroFigure(canvas, mode || this.randomMode());
     }
   };
 })();

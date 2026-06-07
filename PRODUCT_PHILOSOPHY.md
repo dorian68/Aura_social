@@ -91,7 +91,7 @@ A new user reaches activation when they can see a trustworthy monetization loop 
 creator signal -> loyalty state mutation -> reward or fan-pass economics -> partner campaign economics -> readiness/audit proof
 ```
 
-For the current MVP, this activation moment is demo-ready only if mock and simulation states are visible. For paid production, the same journey must use real authorized Instagram data, real persistence and provider-backed campaign/payment state.
+For the current MVP, this activation moment is demo-ready only if mock and simulation states are visible. For paid production, the same journey must use real authorized Instagram data, isolated durable workspace state and provider-backed campaign/payment state.
 
 ## Retention moment
 
@@ -126,4 +126,4 @@ A paying user must be able to tell, without reading source code:
 
 ## Current product truth
 
-Aura is currently a technically meaningful MVP with local persistence, mock-safe integrations and CLI diagnostics. It is not yet a production-paid product for real customers because several value claims still depend on simulations: B2B discovery, outreach, payments, and live on-chain writes.
+Aura is currently a technically meaningful MVP with SQLite persistence, mock-safe defaults, guarded Google Places/Stripe/Resend adapters and CLI diagnostics. Signed Stripe webhook state and outreach approval/dry-run are testable locally. It is not yet a production-paid product because real provider credentials and end-to-end account validation are missing, workspace business data is not fully isolated, attribution remains incomplete and live on-chain writes stay disabled.

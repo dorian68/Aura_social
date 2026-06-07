@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const baseUrl = process.env.SMOKE_BASE_URL || `http://localhost:${process.env.PORT || "3000"}`;
+const webBaseUrl = process.env.WEB_BASE_URL || baseUrl;
 const apiToken = process.env.AURA_API_TOKEN || "";
 const minScore = Number(process.env.BUSINESS_SMOKE_MIN_SCORE || "75");
 const writeReport = process.argv.includes("--audit") || process.argv.includes("--report");
@@ -86,10 +87,12 @@ async function collectServerEvidence() {
 
   try {
     const root = await fetchReadWithRetry(`${baseUrl}/`);
-    output.pages.root = root.status;
-    const dashboard = await fetchReadWithRetry(`${baseUrl}/dashboard`);
+    const webRoot = await fetchReadWithRetry(`${webBaseUrl}/`);
+    output.pages.apiRoot = root.status;
+    output.pages.root = webRoot.status;
+    const dashboard = await fetchReadWithRetry(`${webBaseUrl}/product/dashboard.html`);
     output.pages.dashboard = dashboard.status;
-    output.reachable = root.ok || dashboard.ok;
+    output.reachable = webRoot.ok || dashboard.ok;
     evidence.push({ area: "ux", signal: "root_and_dashboard_routes", value: output.pages });
   } catch (error) {
     blockers.push({ priority: "P0", area: "server", message: `Application server is not reachable at ${baseUrl}.` });
@@ -200,19 +203,25 @@ function scoreExperience(docs, server) {
     promiseAlignment += 7;
   }
   if (server.b2b?.meta?.externalCalls === 0 && server.b2b?.data?.campaignEconomics?.paymentStatus === "simulated_paid") {
+    const stripe = integrationByKey(server, "stripe_payments");
     trust += 6;
     commercialReadiness -= 5;
     blockers.push({
       priority: "P0",
       area: "payments",
-      message: "The B2B paid campaign outcome is still simulated; a paying customer would not trust it as a real transaction.",
+      message: stripe?.mode === "real"
+        ? `The tested B2B journey is still simulated; the Stripe adapter is ${stripe.status} and has not completed a real test-account Checkout.`
+        : "The B2B paid campaign outcome is still simulated; a paying customer would not trust it as a real transaction.",
     });
   }
   if (server.health?.data?.b2b?.externalCallsEnabled === false) {
+    const googlePlaces = integrationByKey(server, "google_places");
+    const outreach = integrationByKey(server, "crm_outreach");
     blockers.push({
       priority: "P0",
       area: "b2b_real_world",
-      message: "Local business discovery and outreach are not real external workflows yet.",
+      message:
+        `Real-world B2B is not active in the tested profile: Google Places is ${googlePlaces?.status || "unavailable"} and outreach is ${outreach?.status || "unavailable"}.`,
     });
   }
   if (server.agent?.data?.recommendations?.length > 0) {
@@ -350,6 +359,10 @@ async function parseJsonResponse(response, pathname) {
 
 function clamp(value) {
   return Math.max(0, Math.min(100, value));
+}
+
+function integrationByKey(server, key) {
+  return server.workspace?.data?.integrations?.find((item) => item.key === key);
 }
 
 function isRetryableReadError(error) {

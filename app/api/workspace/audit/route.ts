@@ -1,4 +1,5 @@
 import { fail, ok, readJsonBody } from "@/lib/apiResponse";
+import { getAccessContext } from "@/lib/auth/access";
 import { getDefaultWorkspaceId, recordAuditEvent } from "@/lib/workspace/store";
 import type { AuditSeverity } from "@/lib/workspace/types";
 import type { NextRequest } from "next/server";
@@ -8,6 +9,7 @@ export const runtime = "nodejs";
 const allowedSeverities = new Set<AuditSeverity>(["info", "warn", "error"]);
 
 export async function POST(request: NextRequest) {
+  const access = getAccessContext(request);
   const body = (await readJsonBody(request)) as Record<string, unknown>;
   const action = cleanString(body.action);
   const message = cleanString(body.message);
@@ -20,14 +22,19 @@ export async function POST(request: NextRequest) {
   }
 
   const event = recordAuditEvent({
-    workspaceId: cleanString(body.workspaceId) || getDefaultWorkspaceId(),
-    actorType: body.actorType === "creator" || body.actorType === "agent" || body.actorType === "developer" ? body.actorType : "system",
+    workspaceId: access.workspaceId || getDefaultWorkspaceId(),
+    actorType: access.role === "creator" ? "creator" : "developer",
     action,
     targetType: cleanString(body.targetType) || "workspace",
     targetId: cleanString(body.targetId),
     severity,
     message,
-    metadata: sanitizeMetadata(body.metadata),
+    metadata: {
+      ...sanitizeMetadata(body.metadata),
+      authSubject: access.subject,
+      authRole: access.role,
+      authMode: access.authMode,
+    },
   });
 
   return ok(event);

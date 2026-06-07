@@ -1,23 +1,48 @@
 import crypto from "node:crypto";
-import { readLocalJson, writeLocalJson } from "@/lib/storage/localJsonStore";
+import {
+  getPersistenceMode,
+  readPersistedState,
+  resetPersistedState,
+  writePersistedState,
+} from "@/lib/storage/localJsonStore";
 import { createDefaultWorkspaceState } from "./mockWorkspaceData";
 import type { AuditEvent, ConnectedAccount, WorkspaceState } from "./types";
 
 const WORKSPACE_STATE_FILE = "workspace-state.json";
 
-// Pinned on globalThis so every route bundle (next dev) and module reload shares
-// ONE workspace state. Without this, audit/connection writes made through one
-// route are invisible to others and get clobbered by a stale in-memory copy.
-const globalForWorkspace = globalThis as typeof globalThis & { __auraWorkspaceState?: WorkspaceState };
-globalForWorkspace.__auraWorkspaceState ??= readLocalJson(WORKSPACE_STATE_FILE, createDefaultWorkspaceState);
+const globalForWorkspace = globalThis as typeof globalThis & {
+  __auraWorkspaceState?: WorkspaceState;
+  __auraWorkspaceRevision?: number;
+};
 
 export function getWorkspaceState(): WorkspaceState {
-  return globalForWorkspace.__auraWorkspaceState as WorkspaceState;
+  if (!globalForWorkspace.__auraWorkspaceState || getPersistenceMode() === "sqlite") {
+    const persisted = readPersistedState(WORKSPACE_STATE_FILE, createDefaultWorkspaceState);
+    globalForWorkspace.__auraWorkspaceState = persisted.value;
+    globalForWorkspace.__auraWorkspaceRevision = persisted.revision;
+  }
+  return globalForWorkspace.__auraWorkspaceState;
 }
 
 export function setWorkspaceState(nextState: WorkspaceState) {
+  getWorkspaceState();
+  const nextRevision = writePersistedState(
+    WORKSPACE_STATE_FILE,
+    nextState,
+    globalForWorkspace.__auraWorkspaceRevision || 0,
+  );
   globalForWorkspace.__auraWorkspaceState = nextState;
-  writeLocalJson(WORKSPACE_STATE_FILE, nextState);
+  globalForWorkspace.__auraWorkspaceRevision = nextRevision;
+}
+
+export function resetWorkspaceState() {
+  const persisted = resetPersistedState(
+    WORKSPACE_STATE_FILE,
+    createDefaultWorkspaceState,
+  );
+  globalForWorkspace.__auraWorkspaceState = persisted.value;
+  globalForWorkspace.__auraWorkspaceRevision = persisted.revision;
+  return globalForWorkspace.__auraWorkspaceState;
 }
 
 export function getDefaultWorkspaceId() {

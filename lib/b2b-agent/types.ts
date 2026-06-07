@@ -14,10 +14,28 @@ export type BusinessCategory =
   | "culture";
 
 export type BusinessDiscoveryStatus = "mock_discovered" | "qualified" | "rejected";
-export type B2BSource = "mock_google_places" | "google_places_future";
-export type OpportunityStatus = "draft" | "approved" | "simulated_paid" | "archived";
-export type CampaignStatus = "draft" | "payment_simulated" | "approved_mock" | "completed";
-export type OutreachStatus = "draft" | "approved_mock" | "sent_disabled";
+export type B2BSource = "mock_google_places" | "google_places";
+export type OpportunityStatus =
+  | "draft"
+  | "approved"
+  | "payment_pending"
+  | "paid"
+  | "simulated_paid"
+  | "archived";
+export type CampaignStatus =
+  | "draft"
+  | "payment_pending"
+  | "paid"
+  | "payment_simulated"
+  | "approved_mock"
+  | "completed";
+export type OutreachStatus =
+  | "draft"
+  | "approved"
+  | "approved_mock"
+  | "sent"
+  | "sent_disabled"
+  | "failed";
 export type AgentRunStatus = "started" | "completed" | "failed";
 export type AgentLogLevel = "info" | "warn" | "error";
 
@@ -91,6 +109,15 @@ export interface SponsoredRewardCampaign {
   startDate: string;
   endDate: string;
   status: CampaignStatus;
+  payment?: {
+    provider: "stripe";
+    status: "pending" | "paid" | "failed" | "refunded";
+    checkoutSessionId?: string;
+    paymentIntentId?: string;
+    amount: number;
+    currency: string;
+    paidAt?: string;
+  };
   performance: {
     estimatedReach: number;
     estimatedRedemptions: number;
@@ -110,6 +137,15 @@ export interface OutreachDraft {
   callToAction: string;
   status: OutreachStatus;
   approvalRequired: boolean;
+  approvedBy?: string;
+  approvedAt?: string;
+  delivery?: {
+    provider: "dry_run" | "resend";
+    recipient: string;
+    status: "dry_run" | "sent" | "failed";
+    providerMessageId?: string;
+    attemptedAt: string;
+  };
   createdAt: string;
 }
 
@@ -166,6 +202,7 @@ export interface B2BAgentState {
   outreachDrafts: OutreachDraft[];
   campaigns: SponsoredRewardCampaign[];
   runs: AgentRun[];
+  /** Derived from persisted campaign commissions; normalized by the B2B store. */
   platformRevenue: number;
 }
 
@@ -177,4 +214,8 @@ export interface B2BAgentRunResult {
   pitch: OutreachDraft;
   campaignEconomics: PaymentSimulation;
   sponsoredCampaign: SponsoredRewardCampaign;
+  discovery: {
+    source: B2BSource;
+    externalCalls: number;
+  };
 }

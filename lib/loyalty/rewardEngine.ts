@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { DomainError } from "../domainError";
 import { redeemPoints } from "./loyaltyEngine";
 import type { LoyaltyState, Reward, RewardEligibility, RewardType } from "./types";
 
@@ -124,12 +125,20 @@ export function redeemReward(
 ) {
   const eligibility = checkRewardEligibility(state, programId, fanId, rewardId);
   if (!eligibility.eligible) {
-    throw new Error(eligibility.reason);
+    throw new DomainError(
+      rewardErrorCode(eligibility.reason),
+      eligibility.reason,
+      eligibility.reason.includes("does not exist") ? 404 : 409,
+      { rewardId, fanId, missingPoints: eligibility.missingPoints },
+    );
   }
 
   const reward = state.rewards.find((item) => item.id === rewardId && item.programId === programId);
   if (!reward) {
-    throw new Error("Reward does not exist in this program.");
+    throw new DomainError("REWARD_NOT_FOUND", "Reward does not exist in this program.", 404, {
+      programId,
+      rewardId,
+    });
   }
 
   const stateAfterPoints = redeemPoints(state, {
@@ -161,4 +170,13 @@ export function redeemReward(
 
 function randomId() {
   return crypto.randomUUID();
+}
+
+function rewardErrorCode(reason: string) {
+  if (reason === "Insufficient points") return "REWARD_INSUFFICIENT_POINTS";
+  if (reason === "Reward is out of stock") return "REWARD_OUT_OF_STOCK";
+  if (reason === "Reward is not active") return "REWARD_NOT_ACTIVE";
+  if (reason.startsWith("Fan does not exist")) return "LOYALTY_FAN_NOT_FOUND";
+  if (reason.startsWith("Reward does not exist")) return "REWARD_NOT_FOUND";
+  return "REWARD_REDEEM_REJECTED";
 }

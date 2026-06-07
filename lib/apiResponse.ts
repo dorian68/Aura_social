@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { DomainError } from "./domainError";
 
 export function ok<T>(data: T, meta: Record<string, unknown> = {}) {
   return NextResponse.json({
@@ -28,6 +29,9 @@ export function fail(
 }
 
 export function handleApiError(error: unknown, fallbackCode = "AURA_API_ERROR") {
+  if (error instanceof DomainError) {
+    return fail(error.code, error.message, error.status, error.details);
+  }
   // Log the real error server-side; return a generic message so internal
   // exception strings / stack-adjacent details are not leaked to clients.
   console.error(`[${fallbackCode}]`, error instanceof Error ? error.stack || error.message : error);
@@ -38,6 +42,6 @@ export async function readJsonBody(request: Request) {
   try {
     return await request.json();
   } catch {
-    throw new Error("Invalid JSON request body.");
+    throw new DomainError("INVALID_JSON", "Invalid JSON request body.", 400);
   }
 }

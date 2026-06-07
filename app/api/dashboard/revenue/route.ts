@@ -3,7 +3,11 @@ import { calculateRevenuePotential } from "@/lib/analytics/calculateRevenuePoten
 import { calculateProgramStats } from "@/lib/loyalty/loyaltyEngine";
 import { getDemoProgramId, getLoyaltyState } from "@/lib/loyalty/store";
 import { calculateTokenReadinessFromLoyalty } from "@/lib/loyalty/tokenEconomyEngine";
-import { getB2BAgentState } from "@/lib/b2b-agent/store";
+import {
+  calculateB2BPlatformRevenue,
+  calculateProviderBackedPlatformRevenue,
+  getB2BAgentState,
+} from "@/lib/b2b-agent/store";
 import { getWorkspaceState } from "@/lib/workspace/store";
 import type { CreatorNiche } from "@/lib/analytics/types";
 
@@ -23,7 +27,8 @@ export async function GET() {
     (sum, p) => sum + p.price * p.holders,
     0,
   );
-  const b2bPlatformRevenue = b2b.platformRevenue || 0;
+  const b2bPlatformRevenue = calculateB2BPlatformRevenue(b2b.campaigns);
+  const b2bProviderBackedRevenue = calculateProviderBackedPlatformRevenue(b2b.campaigns);
   const actualMonthlyRevenue = fanPassActualRevenue + b2bPlatformRevenue;
 
   // ── Followers estimate ───────────────────────────────────────────────
@@ -77,6 +82,9 @@ export async function GET() {
       monthlyRevenue: Math.round(actualMonthlyRevenue),
       fanPassRevenue: Math.round(fanPassActualRevenue),
       b2bRevenue: Math.round(b2bPlatformRevenue),
+      b2bRevenueSource: "campaign_commissions",
+      b2bProviderBackedRevenue: Math.round(b2bProviderBackedRevenue),
+      b2bProviderBackedRevenueSource: "stripe_paid_campaign_commissions",
       currency: "EUR",
     },
     potential: {

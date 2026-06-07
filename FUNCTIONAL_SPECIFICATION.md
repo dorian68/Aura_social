@@ -35,7 +35,7 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 1. User opens the dashboard or loyalty page.
 2. User inspects active program, rules, fans, tiers and ledger.
 3. User awards or redeems points through API/CLI.
-4. State persists locally unless memory mode is selected.
+4. State persists transactionally in SQLite unless memory mode is selected.
 5. Rewards and balances update coherently.
 
 ### Journey C - Launch fan-pass economics
@@ -48,7 +48,7 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 ### Journey D - Run B2B expansion agent
 
 1. User starts the B2B agent for a location and campaign budget.
-2. Backend discovers mock local businesses.
+2. Backend discovers mock local businesses by default or Google Places businesses when the real provider is explicitly enabled.
 3. Backend scores fit against creator and loyalty context.
 4. Backend creates opportunity, pitch draft, sponsored campaign and simulated payment split.
 5. User can inspect platform commission and fan reward budget.
@@ -104,10 +104,12 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 
 ### B2B agent
 
-- Discover mock local businesses.
+- Discover mock local businesses or provider-backed Google Places businesses.
 - Score partner fit.
 - Generate opportunity and pitch draft.
-- Simulate sponsored campaign payment economics.
+- Simulate sponsored campaign economics or create a guarded Stripe Checkout.
+- Verify signed Stripe webhooks and persist provider-backed payment state.
+- Approve outreach drafts before dry-run or provider delivery.
 - Persist B2B runs, opportunities and campaigns.
 
 ### Agent and operator
@@ -179,19 +181,23 @@ Failure:
 - Fan pass: draft -> active -> paused -> sold_out.
 - Agent recommendation: pending -> approved | rejected | executed.
 - B2B business: mock_discovered -> qualified | rejected.
-- B2B opportunity: draft -> approved -> simulated_paid -> archived.
-- Sponsored campaign: draft -> payment_simulated -> approved_mock -> completed.
-- Outreach draft: draft -> approved_mock -> sent_disabled.
+- B2B opportunity: draft -> approved -> payment_pending -> paid | simulated_paid -> archived.
+- Sponsored campaign: draft -> payment_pending -> paid | payment_simulated -> approved_mock -> completed.
+- Outreach draft: draft -> approved -> sent | failed. Dry-run delivery does not mark the draft as externally sent.
 - Agent run: started -> completed | failed.
 
 State changes must be represented in backend state first. UI state alone is not sufficient.
 
 ## 9. Data Model
 
-Core local state is stored in:
+Core state is stored in SQLite by default:
 
-- `data/aura-state/loyalty-state.json`
-- `data/aura-state/b2b-agent-state.json`
+- `data/aura-state/aura.sqlite`
+- versioned migrations in `lib/storage/migrations.ts`
+- state documents use optimistic revisions to reject stale concurrent writes
+- provider events, payments and outreach deliveries use dedicated relational tables
+
+Legacy JSON files are imported once when a SQLite state document does not exist. `AURA_PERSISTENCE=local_json` is compatibility-only and is not the production default.
 
 Core domain entities:
 
@@ -243,6 +249,11 @@ Representative routes:
 - `POST /api/agent/recommendations`
 - `POST /api/agent/recommendations/action`
 - `POST /api/b2b-agent/run`
+- `POST /api/b2b-agent/outreach/{id}/approve`
+- `POST /api/b2b-agent/outreach/{id}/send`
+- `POST /api/payments/stripe/checkout`
+- `POST /api/payments/stripe/webhook`
+- `GET /api/payments/stripe/status`
 - `GET /api/b2b-agent/runs`
 - `GET /api/blockchain/status`
 - `POST /api/operator/chat`
@@ -255,9 +266,9 @@ All non-public sensitive routes must pass through the API auth gate outside expl
 - Mock/demo data must be labeled and must not be presented as real.
 - No scraping or credential collection is allowed for Instagram.
 - Private insights require an authorized Meta/Instagram account.
-- B2B discovery is mock-only until a real Google Places adapter exists.
-- Outreach drafts require approval and must not be sent in the current MVP.
-- Payments are simulated unless `AURA_ALLOW_REAL_PAYMENTS=true` and a tested provider exists.
+- B2B discovery is mock by default. Google Places requires `B2B_DISCOVERY_PROVIDER=google_places`, a key and `AURA_ALLOW_REAL_DISCOVERY=true`; configuration failures never fall back silently.
+- Outreach drafts require explicit approval. Delivery defaults to dry-run; Resend delivery requires credentials and `OUTREACH_SENDING_ENABLED=true`.
+- Payments are simulated in the demo journey. Stripe Checkout requires an explicit payment gate and test credentials; webhook state changes require a valid Stripe signature.
 - On-chain writes are disabled unless `AURA_ALLOW_ONCHAIN_WRITES=true`, configured contract addresses exist and smoke tests pass.
 - Loyalty points are not financial instruments.
 - Fan passes represent access or membership, not speculative assets.
@@ -305,7 +316,9 @@ Empty states must say what is missing and what the next safe action is.
 
 - Sensitive API prefixes are protected by `middleware.ts`.
 - `DEMO_MODE=true` is an explicit bypass.
-- With `AURA_API_TOKEN` configured, protected routes require bearer token, `x-aura-api-token` or cookie token.
+- `AURA_API_KEYS_JSON` maps API identities to roles and allowed workspaces.
+- Roles are `viewer`, `creator`, `operator` and `admin`; route and method policies enforce minimum roles.
+- `AURA_API_TOKEN` remains a legacy admin-token fallback.
 - In production with no configured token, protected routes must fail closed.
 - Public exact routes are limited to health and public Meta config.
 - OAuth routes remain public because the browser redirect flow cannot provide the API token.
@@ -318,6 +331,11 @@ Required command categories:
 
 - `npm run smoke:platform`
 - `npm run smoke:security`
+- `npm run smoke:authz`
+- `npm run smoke:negative`
+- `npm run smoke:persistence`
+- `npm run smoke:integrations`
+- `npm run smoke:browser`
 - `npm run docker:smoke`
 - `npm run debug:workspace`
 - `npm run debug:meta-flow`
@@ -366,7 +384,7 @@ These commands are part of the product contract. `smoke:business`, `audit:commer
 - Awarding points changes fan balance and ledger.
 - Redeeming points decreases balance and records transaction.
 - Unknown fan/program and insufficient points return structured errors.
-- State persists in local mode.
+- State persists in SQLite mode and stale concurrent writes are rejected.
 
 ### Rewards and fan passes
 
@@ -385,6 +403,20 @@ These commands are part of the product contract. `smoke:business`, `audit:commer
 - B2B run returns mock businesses, scores, best opportunity, pitch, campaign and payment split.
 - `meta.externalCalls` remains `0` in MVP mode.
 - Platform commission and fan reward budget are calculated from campaign budget.
+- B2B `platformRevenue` is derived from persisted sponsored campaign commissions, not from an increment-only counter.
+- Dashboard and health revenue responses identify the platform revenue source as `campaign_commissions`.
+- Provider-backed revenue is reported separately from simulated campaign commission revenue.
+- Google Places failures are explicit and never silently replaced by mock businesses.
+- Outreach delivery requires prior approval and dry-run performs zero external calls.
+
+### Payments
+
+- Stripe Checkout refuses to run unless the explicit payment gate and provider configuration are present.
+- Live Stripe keys are rejected unless live mode is separately enabled.
+- Stripe webhooks verify the signature against the raw request body.
+- Paid webhook amount and currency must match the referenced B2B opportunity.
+- Replayed webhook events are idempotent.
+- A paid webhook persists the payment and marks the related opportunity and campaign paid.
 
 ### Main customer activation
 
@@ -402,6 +434,8 @@ These commands are part of the product contract. `smoke:business`, `audit:commer
 
 - Workspace state lists integration readiness entries.
 - Audit route persists a sanitized audit event.
+- Audit actor, role and workspace are derived from authenticated server context.
+- Role and workspace denial paths return structured 403 errors.
 - Sensitive workspace route is blocked without auth when token gate is active.
 
 ### Blockchain contracts
@@ -418,7 +452,8 @@ Aura can be production-ready only when:
 - all required environment variables are documented;
 - secrets are redacted from logs and responses;
 - no silent mock fallback exists in real mode;
-- state persistence is durable enough for target usage;
+- SQLite migrations, WAL mode, stale-write rejection and backups are validated for the target deployment;
+- workspace data is isolated at the domain-storage level before multi-tenant paid production;
 - real payment, outreach and provider integrations have CLI smoke tests;
 - production build passes;
 - security smoke passes with `AURA_API_TOKEN`;

@@ -1,21 +1,25 @@
-/* AURA — shared API base URL
-   Détecte automatiquement si le backend Next.js tourne sur 3000 ou 3170.
-   Override : définir window.AURA_API_BASE avant de charger ce script. */
+/* AURA - shared runtime endpoints.
+   Override with window.AURA_API_BASE / window.AURA_OAUTH_BASE before loading,
+   or localStorage keys aura_api_base / aura_oauth_base. */
 (function () {
   if (!window.AURA_API_BASE) {
-    // On essaie 3000 en premier (Next.js default), sinon 3170
-    window.AURA_API_BASE = 'http://localhost:3000';
+    var apiOverride = null;
+    try {
+      apiOverride = localStorage.getItem('aura_api_base');
+      // Evict stale localhost:3000 entries — server moved to :3009.
+      if (apiOverride && apiOverride.includes('localhost:3000')) {
+        localStorage.removeItem('aura_api_base');
+        apiOverride = null;
+      }
+    } catch (e) {}
+    window.AURA_API_BASE = apiOverride || (window.location.hostname === 'localhost'
+      ? 'http://localhost:3009'
+      : window.location.origin);
   }
 
-  /* Origine PUBLIQUE pour l'OAuth Instagram (doit matcher le redirect_uri
-     enregistré côté Meta). La popup OAuth s'ouvre ici, pas sur l'API locale.
-     Priorité : window.AURA_OAUTH_BASE déjà défini > override localStorage
-     ('aura_oauth_base') > tunnel actif ci-dessous.
-     ⚠️ URL ngrok ci-dessous = tunnel courant (éphémère). Pour la remplacer sans
-     ré-éditer ce fichier : localStorage.setItem('aura_oauth_base', 'https://...'). */
   if (!window.AURA_OAUTH_BASE) {
     var override = null;
     try { override = localStorage.getItem('aura_oauth_base'); } catch (e) {}
-    window.AURA_OAUTH_BASE = override || 'https://overreach-pagan-sliceable.ngrok-free.dev';
+    window.AURA_OAUTH_BASE = override || window.AURA_API_BASE;
   }
 })();

@@ -18,6 +18,7 @@ export async function GET() {
     runs: state.runs,
     opportunities: state.opportunities,
     platformRevenue: state.platformRevenue,
+    platformRevenueSource: "campaign_commissions",
     mockMode: true,
   });
 }

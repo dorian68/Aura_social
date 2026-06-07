@@ -6,5 +6,6 @@ export async function GET() {
   return ok({
     runs: state.runs,
     platformRevenue: state.platformRevenue,
+    platformRevenueSource: "campaign_commissions",
   });
 }

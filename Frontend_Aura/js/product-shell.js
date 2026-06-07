@@ -86,12 +86,23 @@ function auraMountShell(active) {
   const host = document.getElementById('shell');
   host.insertAdjacentHTML('afterbegin', auraSidebar(active));
 
-  // Inject Aura Operator widget after DOM is ready
+  // Inject the AG-UI chatbot (agent.css + AG-UI client + chatbot) after DOM ready.
+  // Supersedes the legacy operator-widget.js with a streaming, UIBlock-rich UX.
   function mountOperator() {
-    if (document.getElementById('aura-op-root')) return;
-    const s = document.createElement('script');
-    s.src = '../js/operator-widget.js';
-    document.body.appendChild(s);
+    if (document.getElementById('aui-launcher') || window.AuraAgentChat) return;
+    if (!document.querySelector('link[data-aui-css]')) {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet'; css.href = '../css/agent.css'; css.setAttribute('data-aui-css', '1');
+      document.head.appendChild(css);
+    }
+    const client = document.createElement('script');
+    client.src = '../js/ag-ui-client.js';
+    client.onload = function () {
+      const chat = document.createElement('script');
+      chat.src = '../js/agent-chat.js';
+      document.body.appendChild(chat);
+    };
+    document.body.appendChild(client);
   }
   // Inject Instagram connect widget
   function mountIGConnect() {

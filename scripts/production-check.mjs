@@ -15,6 +15,11 @@ const requiredScripts = [
   "smoke:platform",
   "smoke:security",
   "smoke:journey",
+  "smoke:negative",
+  "smoke:persistence",
+  "smoke:authz",
+  "smoke:integrations",
+  "smoke:browser",
   "smoke:business",
   "audit:commercial",
   "production:check",
@@ -39,25 +44,29 @@ if (packageJson) {
 const nodeEnv = process.env.NODE_ENV || "development";
 const demoMode = process.env.DEMO_MODE === "true";
 const apiToken = process.env.AURA_API_TOKEN || "";
+const apiPrincipals = readApiPrincipals();
 const frontendUrl = process.env.FRONTEND_URL || "";
-const persistence = process.env.AURA_PERSISTENCE || "local";
+const persistence = process.env.AURA_PERSISTENCE || "sqlite";
 const mockMeta = process.env.MOCK_META === "true" || !process.env.MOCK_META;
+const allowDiscovery = process.env.AURA_ALLOW_REAL_DISCOVERY === "true";
 const allowPayments = process.env.AURA_ALLOW_REAL_PAYMENTS === "true";
 const allowOutreach = process.env.OUTREACH_SENDING_ENABLED === "true";
 const allowOnchainWrites = process.env.AURA_ALLOW_ONCHAIN_WRITES === "true";
 
 check("production NODE_ENV is set", nodeEnv === "production", { nodeEnv });
 check("DEMO_MODE is disabled", !demoMode, { demoMode });
-check("AURA_API_TOKEN is configured and strong enough", apiToken.length >= 24, {
-  configured: Boolean(apiToken),
-  length: apiToken.length,
+check("production authentication identities are configured", apiToken.length >= 24 || apiPrincipals.valid, {
+  legacyTokenConfigured: Boolean(apiToken),
+  legacyTokenLength: apiToken.length,
+  apiPrincipalCount: apiPrincipals.count,
+  invalidPrincipalCount: apiPrincipals.invalidCount,
 });
 check("FRONTEND_URL is configured", Boolean(frontendUrl), { frontendUrl: redactUrl(frontendUrl) });
 check("production FRONTEND_URL is not localhost", Boolean(frontendUrl) && !/localhost|127\.0\.0\.1/i.test(frontendUrl), {
   frontendUrl: redactUrl(frontendUrl),
 });
-check("durable database configured", Boolean(process.env.DATABASE_URL) && persistence !== "memory" && persistence !== "local", {
-  databaseUrlConfigured: Boolean(process.env.DATABASE_URL),
+check("durable SQLite database configured", persistence === "sqlite" && Boolean(process.env.AURA_DATABASE_PATH || process.env.DATABASE_URL), {
+  databasePathConfigured: Boolean(process.env.AURA_DATABASE_PATH || process.env.DATABASE_URL),
   persistence,
 });
 check("Meta real mode configured for paid production", !mockMeta && Boolean(process.env.APP_ID) && Boolean(process.env.APP_SECRET), {
@@ -65,14 +74,19 @@ check("Meta real mode configured for paid production", !mockMeta && Boolean(proc
   hasAppId: Boolean(process.env.APP_ID),
   hasAppSecret: Boolean(process.env.APP_SECRET),
 });
+check("Google Places real discovery configured", allowDiscovery && Boolean(process.env.GOOGLE_PLACES_API_KEY), {
+  allowDiscovery,
+  hasGooglePlacesApiKey: Boolean(process.env.GOOGLE_PLACES_API_KEY),
+});
 check("real payments are provider-backed or explicitly blocked", allowPayments && Boolean(process.env.STRIPE_SECRET_KEY) && Boolean(process.env.STRIPE_WEBHOOK_SECRET), {
   allowPayments,
   hasStripeSecret: Boolean(process.env.STRIPE_SECRET_KEY),
   hasWebhookSecret: Boolean(process.env.STRIPE_WEBHOOK_SECRET),
 });
-check("real outreach is provider-backed or explicitly blocked", allowOutreach && Boolean(process.env.CRM_API_KEY || process.env.EMAIL_PROVIDER_API_KEY), {
+check("real outreach is provider-backed or explicitly blocked", allowOutreach && Boolean(process.env.EMAIL_PROVIDER_API_KEY) && Boolean(process.env.EMAIL_PROVIDER_FROM), {
   allowOutreach,
-  hasOutreachProvider: Boolean(process.env.CRM_API_KEY || process.env.EMAIL_PROVIDER_API_KEY),
+  hasOutreachProvider: Boolean(process.env.EMAIL_PROVIDER_API_KEY),
+  hasOutreachFromAddress: Boolean(process.env.EMAIL_PROVIDER_FROM),
 });
 check("on-chain writes are configured before enabling", !allowOnchainWrites || allOnchainConfigPresent(), {
   allowOnchainWrites,
@@ -122,7 +136,11 @@ function allOnchainConfigPresent() {
 function docsMentionProductionBlockers() {
   try {
     const readiness = fs.readFileSync("PRODUCTION_READINESS.md", "utf8");
-    return /P0 Blockers/i.test(readiness) && /Payments\s*\|\s*NO/i.test(readiness);
+    return (
+      /P0 Blockers/i.test(readiness) &&
+      /NO for paid production launch/i.test(readiness) &&
+      /Payments\s*\|\s*PARTIAL/i.test(readiness)
+    );
   } catch {
     return false;
   }
@@ -135,5 +153,31 @@ function redactUrl(value) {
     return `${url.protocol}//${url.host}`;
   } catch {
     return value.replace(/\/\/.*@/, "//***@");
+  }
+}
+
+function readApiPrincipals() {
+  if (!process.env.AURA_API_KEYS_JSON) {
+    return { valid: false, count: 0, invalidCount: 0 };
+  }
+  try {
+    const entries = JSON.parse(process.env.AURA_API_KEYS_JSON);
+    if (!Array.isArray(entries)) return { valid: false, count: 0, invalidCount: 1 };
+    const validEntries = entries.filter(
+      (entry) =>
+        entry &&
+        typeof entry.token === "string" &&
+        entry.token.length >= 24 &&
+        ["viewer", "creator", "operator", "admin"].includes(entry.role) &&
+        Array.isArray(entry.workspaceIds) &&
+        entry.workspaceIds.length > 0,
+    );
+    return {
+      valid: validEntries.length > 0 && validEntries.length === entries.length,
+      count: validEntries.length,
+      invalidCount: entries.length - validEntries.length,
+    };
+  } catch {
+    return { valid: false, count: 0, invalidCount: 1 };
   }
 }

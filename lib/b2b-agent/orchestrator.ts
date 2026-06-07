@@ -1,9 +1,10 @@
 import { scoreBusinesses, scoreBusinessFit } from "./fitScoringEngine";
 import { defaultB2BCategories, discoverMockPlaces } from "./mockGooglePlacesProvider";
+import { discoverGooglePlaces } from "./googlePlacesProvider";
 import { generateOpportunities, generatePartnershipOpportunity } from "./opportunityEngine";
 import { simulateSmePayment } from "./paymentSimulator";
 import { generateB2BPitch } from "./pitchGenerator";
-import { getB2BAgentState, setB2BAgentState } from "./store";
+import { calculateB2BPlatformRevenue, getB2BAgentState, setB2BAgentState } from "./store";
 import type {
   AgentLog,
   AgentRun,
@@ -44,6 +45,28 @@ export function discoverBusinesses(input: Partial<B2BDiscoveryInput> = {}) {
   });
 }
 
+export async function discoverBusinessesWithProvider(
+  input: Partial<B2BDiscoveryInput> = {},
+) {
+  const normalized = {
+    location: input.location || "Fort-de-France",
+    categories: input.categories?.length ? input.categories : defaultB2BCategories,
+    limit: input.limit || 8,
+  };
+  if (String(process.env.B2B_DISCOVERY_PROVIDER || "mock").toLowerCase() === "google_places") {
+    return {
+      businesses: await discoverGooglePlaces(normalized),
+      source: "google_places" as const,
+      externalCalls: 1,
+    };
+  }
+  return {
+    businesses: discoverMockPlaces(normalized),
+    source: "mock_google_places" as const,
+    externalCalls: 0,
+  };
+}
+
 export function scoreDiscoveredBusinesses(
   businesses: LocalBusiness[],
   location = "Fort-de-France",
@@ -66,7 +89,7 @@ export function createOpportunityForBusiness(
   });
 }
 
-export function runB2BExpansionAgent({
+export async function runB2BExpansionAgent({
   location = "Fort-de-France",
   categories = defaultB2BCategories,
   campaignBudget = 200,
@@ -74,7 +97,7 @@ export function runB2BExpansionAgent({
   location?: string;
   categories?: BusinessCategory[];
   campaignBudget?: number;
-} = {}): B2BAgentRunResult {
+} = {}): Promise<B2BAgentRunResult> {
   const logs: AgentLog[] = [];
   const run: AgentRun = {
     id: `b2b_run_${Date.now()}`,
@@ -97,10 +120,12 @@ export function runB2BExpansionAgent({
     totalPointsIssued: context.loyaltyStats.totalPointsIssued,
   });
 
-  const businesses = discoverBusinesses({ location, categories });
-  addLog(logs, "info", "Mock Google Places discovery completed", {
+  const discovery = await discoverBusinessesWithProvider({ location, categories });
+  const businesses = discovery.businesses;
+  addLog(logs, "info", "Business discovery completed", {
     businessesDiscovered: businesses.length,
-    source: "mock_google_places",
+    source: discovery.source,
+    externalCalls: discovery.externalCalls,
   });
 
   const scores = scoreBusinesses(businesses, context, location);
@@ -110,7 +135,7 @@ export function runB2BExpansionAgent({
   });
 
   const opportunities = generateOpportunities(businesses, scores, context, campaignBudget);
-  const bestOpportunity = opportunities[0];
+  let bestOpportunity = opportunities[0];
   if (!bestOpportunity) {
     throw new Error("No B2B opportunity could be generated from mock discovery.");
   }
@@ -136,6 +161,13 @@ export function runB2BExpansionAgent({
   });
 
   const { payment, campaign } = simulateSmePayment(bestOpportunity, bestBusiness, campaignBudget);
+  bestOpportunity = {
+    ...bestOpportunity,
+    status: "simulated_paid",
+  };
+  const storedOpportunities = opportunities.map((opportunity) =>
+    opportunity.id === bestOpportunity.id ? bestOpportunity : opportunity,
+  );
   addLog(logs, "info", "SME payment simulated", {
     campaignBudget: payment.campaignBudget,
     fanRewardBudget: payment.fanRewardBudget,
@@ -152,14 +184,15 @@ export function runB2BExpansionAgent({
   run.completedAt = new Date().toISOString();
 
   const current = getB2BAgentState();
+  const campaigns = mergeById(current.campaigns, [campaign]);
   setB2BAgentState({
     businesses: mergeById(current.businesses, businesses),
     fitScores: mergeByBusinessId(current.fitScores, scores),
-    opportunities: mergeById(current.opportunities, opportunities),
+    opportunities: mergeById(current.opportunities, storedOpportunities),
     outreachDrafts: mergeById(current.outreachDrafts, [pitch]),
-    campaigns: mergeById(current.campaigns, [campaign]),
+    campaigns,
     runs: [run, ...current.runs].slice(0, 20),
-    platformRevenue: current.platformRevenue + payment.platformCommission,
+    platformRevenue: calculateB2BPlatformRevenue(campaigns),
   });
 
   return {
@@ -170,6 +203,10 @@ export function runB2BExpansionAgent({
     pitch,
     campaignEconomics: payment,
     sponsoredCampaign: campaign,
+    discovery: {
+      source: discovery.source,
+      externalCalls: discovery.externalCalls,
+    },
   };
 }
 

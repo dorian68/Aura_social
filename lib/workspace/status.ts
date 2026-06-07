@@ -1,18 +1,28 @@
 import { getB2BAgentState } from "@/lib/b2b-agent/store";
+import { getGooglePlacesReadiness } from "@/lib/b2b-agent/googlePlacesProvider";
 import { getContractStatus, loadAbi } from "@/lib/blockchain/blockchainService";
 import { getLoyaltyState } from "@/lib/loyalty/store";
 import { getMetaSetupStatus } from "@/lib/meta/configStore";
+import { getOutreachReadiness } from "@/lib/outreach/service";
+import { getStripeReadiness } from "@/lib/payments/stripeService";
 import { getLocalPersistenceStatus } from "@/lib/storage/localJsonStore";
 import { getWorkspaceState } from "./store";
 import type { IntegrationReadiness } from "./types";
 
-export function buildWorkspaceSnapshot() {
+export function buildWorkspaceSnapshot(workspaceId?: string) {
   const state = getWorkspaceState();
+  const workspace = workspaceId
+    ? state.workspaces.find((item) => item.id === workspaceId)
+    : state.workspaces[0];
   return {
-    workspace: state.workspaces[0],
-    connectedAccounts: state.connectedAccounts,
+    workspace,
+    connectedAccounts: state.connectedAccounts.filter(
+      (account) => !workspaceId || account.workspaceId === workspaceId,
+    ),
     integrations: buildIntegrationReadiness(),
-    recentAuditEvents: state.auditEvents.slice(0, 20),
+    recentAuditEvents: state.auditEvents
+      .filter((event) => !workspaceId || event.workspaceId === workspaceId)
+      .slice(0, 20),
   };
 }
 
@@ -22,6 +32,9 @@ export function buildIntegrationReadiness(): IntegrationReadiness[] {
   const persistence = getLocalPersistenceStatus();
   const loyalty = getLoyaltyState();
   const b2b = getB2BAgentState();
+  const googlePlaces = getGooglePlacesReadiness();
+  const stripe = getStripeReadiness();
+  const outreach = getOutreachReadiness();
   const blockchain = getContractStatus();
   const abiCounts = {
     AuraLoyaltyPoints: loadAbi("AuraLoyaltyPoints").length,
@@ -99,37 +112,76 @@ export function buildIntegrationReadiness(): IntegrationReadiness[] {
     {
       key: "google_places",
       label: "Google Places",
-      status: process.env.GOOGLE_PLACES_API_KEY ? "disabled" : "missing_config",
-      mode: "future",
-      configured: Boolean(process.env.GOOGLE_PLACES_API_KEY),
+      status: googlePlaces.configured && googlePlaces.enabled
+        ? "ready"
+        : googlePlaces.configured
+          ? "disabled"
+          : "missing_config",
+      mode: "real",
+      configured: googlePlaces.configured,
       safeMode: true,
-      requiredConfig: ["GOOGLE_PLACES_API_KEY", "real provider adapter"],
-      missingConfig: process.env.GOOGLE_PLACES_API_KEY ? ["real provider adapter"] : ["GOOGLE_PLACES_API_KEY", "real provider adapter"],
-      notes: ["No real Google Places call is made in this MVP."],
+      requiredConfig: ["GOOGLE_PLACES_API_KEY", "AURA_ALLOW_REAL_DISCOVERY=true"],
+      missingConfig: [
+        ...(!googlePlaces.configured ? ["GOOGLE_PLACES_API_KEY"] : []),
+        ...(!googlePlaces.enabled ? ["AURA_ALLOW_REAL_DISCOVERY=true"] : []),
+      ],
+      notes: [
+        googlePlaces.enabled
+          ? "Google Places Text Search adapter is enabled."
+          : "Real discovery is disabled; mock discovery remains explicit.",
+      ],
       checkedAt,
     },
     {
       key: "stripe_payments",
       label: "Stripe Payments",
-      status: process.env.STRIPE_SECRET_KEY ? "disabled" : "missing_config",
-      mode: "future",
-      configured: Boolean(process.env.STRIPE_SECRET_KEY),
+      status: stripe.configured && stripe.paymentsEnabled
+        ? "ready"
+        : stripe.hasSecretKey || stripe.hasWebhookSecret
+          ? "disabled"
+          : "missing_config",
+      mode: "real",
+      configured: stripe.configured,
       safeMode: true,
-      requiredConfig: ["STRIPE_SECRET_KEY", "webhook signing secret", "test-mode checkout adapter"],
-      missingConfig: process.env.STRIPE_SECRET_KEY ? ["webhook signing secret", "test-mode checkout adapter"] : ["STRIPE_SECRET_KEY", "webhook signing secret", "test-mode checkout adapter"],
-      notes: ["Current PME payments are simulated only."],
+      requiredConfig: [
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "AURA_ALLOW_REAL_PAYMENTS=true",
+      ],
+      missingConfig: [
+        ...(!stripe.hasSecretKey ? ["STRIPE_SECRET_KEY"] : []),
+        ...(!stripe.hasWebhookSecret ? ["STRIPE_WEBHOOK_SECRET"] : []),
+        ...(!stripe.paymentsEnabled ? ["AURA_ALLOW_REAL_PAYMENTS=true"] : []),
+      ],
+      notes: [
+        stripe.testMode
+          ? "Stripe test-mode checkout and signed webhooks are available."
+          : "Stripe live mode is rejected unless explicitly enabled.",
+      ],
       checkedAt,
     },
     {
       key: "crm_outreach",
       label: "CRM / Outreach",
-      status: process.env.OUTREACH_SENDING_ENABLED === "true" ? "disabled" : "mock_ready",
-      mode: "simulation",
-      configured: process.env.OUTREACH_SENDING_ENABLED === "true",
+      status: outreach.enabled && outreach.hasApiKey && outreach.hasFromAddress
+        ? "ready"
+        : outreach.hasApiKey || outreach.hasFromAddress
+          ? "disabled"
+          : "mock_ready",
+      mode: outreach.enabled ? "real" : "simulation",
+      configured: outreach.hasApiKey && outreach.hasFromAddress,
       safeMode: true,
-      requiredConfig: ["CRM_API_KEY or EMAIL_PROVIDER_API_KEY", "approval workflow", "sending adapter"],
-      missingConfig: process.env.OUTREACH_SENDING_ENABLED === "true" ? ["sending adapter"] : [],
-      notes: ["Outreach drafts require approval. Real sending remains disabled."],
+      requiredConfig: [
+        "EMAIL_PROVIDER_API_KEY",
+        "EMAIL_PROVIDER_FROM",
+        "OUTREACH_SENDING_ENABLED=true",
+      ],
+      missingConfig: [
+        ...(!outreach.hasApiKey ? ["EMAIL_PROVIDER_API_KEY"] : []),
+        ...(!outreach.hasFromAddress ? ["EMAIL_PROVIDER_FROM"] : []),
+        ...(!outreach.enabled ? ["OUTREACH_SENDING_ENABLED=true"] : []),
+      ],
+      notes: ["Outreach requires explicit approval. Delivery defaults to dry-run."],
       checkedAt,
     },
     {
@@ -149,14 +201,18 @@ export function buildIntegrationReadiness(): IntegrationReadiness[] {
     },
     {
       key: "local_persistence",
-      label: "Local Persistence",
+      label: "Durable Persistence",
       status: persistence.enabled ? "ready" : "disabled",
       mode: persistence.enabled ? "local" : "simulation",
       configured: persistence.enabled,
       safeMode: true,
       requiredConfig: [],
       missingConfig: [],
-      notes: [`Mode: ${persistence.mode}. State directory: ${persistence.directory}.`],
+      notes: [
+        `Mode: ${persistence.mode}. Storage: ${
+          "databasePath" in persistence ? persistence.databasePath : persistence.directory
+        }.`,
+      ],
       checkedAt,
     },
   ];

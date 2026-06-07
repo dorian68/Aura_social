@@ -10,5 +10,6 @@ export async function GET() {
     outreachDrafts: state.outreachDrafts,
     campaigns: state.campaigns,
     platformRevenue: state.platformRevenue,
+    platformRevenueSource: "campaign_commissions",
   });
 }

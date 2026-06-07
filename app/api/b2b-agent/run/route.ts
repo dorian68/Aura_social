@@ -22,11 +22,12 @@ export async function POST(request: Request) {
     const categories = body.categories == null ? undefined : assertAllowedValues(body.categories, B2B_CATEGORIES, "categories");
     const campaignBudget = validateAmount(body.campaignBudget, "campaignBudget", { fallback: 200, min: 1, max: 1_000_000 });
 
-    const result = runB2BExpansionAgent({ location, categories, campaignBudget });
+    const result = await runB2BExpansionAgent({ location, categories, campaignBudget });
 
     return ok(result, {
-      mockMode: true,
-      externalCalls: 0,
+      mockMode: result.discovery.source === "mock_google_places",
+      discoverySource: result.discovery.source,
+      externalCalls: result.discovery.externalCalls,
       externalMessagesSent: 0,
     });
   } catch (error) {

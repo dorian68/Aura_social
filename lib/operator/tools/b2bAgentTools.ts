@@ -36,7 +36,7 @@ registerTool({
     const categories = input.category ? [input.category as never] : defaultB2BCategories;
     const campaignBudget = input.campaignBudget || 200;
 
-    const result = runB2BExpansionAgent({ location, categories, campaignBudget });
+    const result = await runB2BExpansionAgent({ location, categories, campaignBudget });
 
     recordAuditEvent({
       workspaceId: context.workspaceId || "workspace_aura_demo",
@@ -51,8 +51,8 @@ registerTool({
         businessesDiscovered: result.run.businessesDiscovered,
         opportunitiesGenerated: result.run.opportunitiesGenerated,
         revenuePotential: result.run.revenuePotential,
-        simulated: true,
-        externalCalls: 0,
+        simulated: result.discovery.source === "mock_google_places",
+        externalCalls: result.discovery.externalCalls,
       },
     });
 

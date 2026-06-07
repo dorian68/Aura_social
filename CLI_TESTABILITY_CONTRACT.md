@@ -36,13 +36,20 @@ Some existing scripts default to `http://localhost:3170`; set `SMOKE_BASE_URL` e
 | --- | --- | --- |
 | `npm run smoke:platform` | End-to-end mock-safe platform smoke through health, UI routes, workspace, Meta mock, Instagram mock, B2B, agent and blockchain status. | Exists |
 | `npm run smoke:security` | Verifies sensitive routes are gated when `AURA_API_TOKEN` is configured. | Exists |
+| `npm run smoke:authz` | Verifies role minimums, identity propagation and workspace scope. | Exists |
+| `npm run smoke:negative` | Verifies invalid JSON, unknown IDs and insufficient-balance errors against resettable fixtures. | Exists |
+| `npm run smoke:persistence` | Verifies SQLite migrations, WAL mode, persistence and stale-write rejection. | Exists |
+| `npm run smoke:integrations` | Verifies outreach approval/dry-run, Stripe signatures, amount/currency matching and webhook idempotence. | Exists |
+| `npm run smoke:browser` | Verifies the dashboard in Chromium and visible simulation labels. | Exists |
 | `npm run docker:smoke` | Verifies containerized app health and key mock-safe routes. | Exists |
 | `npm run debug:workspace` | Checks workspace, connected-account metadata, integration readiness and audit trail. | Exists |
 | `npm run debug:meta-flow` | Diagnoses Meta/Instagram auth and data flow backend-first. | Exists |
 | `npm run debug:loyalty` | Exercises loyalty state and point logic. | Exists |
 | `npm run debug:token-economy` | Exercises token economy simulation. | Exists |
 | `npm run debug:agent` | Exercises deterministic agent recommendations and drafts. | Exists |
-| `npm run debug:b2b-agent` | Exercises mock local partner discovery, scoring, pitch and simulated payment. | Exists |
+| `npm run debug:b2b-agent` | Exercises local partner discovery, scoring, pitch and simulated payment. | Exists |
+| `npm run debug:google-places` | Calls Google Places when credentials and the real-discovery gate are present; otherwise reports an explicit skip. | Exists |
+| `npm run db:migrate` | Applies and reports SQLite schema migrations. | Exists |
 | `npm run debug:operator` | Exercises operator chat/tool orchestration. | Exists |
 | `npm run debug:tools` | Exercises operator tool registry. | Exists |
 | `npm run debug:contracts` | Checks contract/ABI infrastructure. | Exists |
@@ -93,7 +100,9 @@ Required assertions:
 Command coverage:
 
 - Existing: `npm run debug:loyalty`
-- Gap: HTTP journey smoke using `/api/loyalty/*` and `/api/rewards/*`.
+- Existing: `npm run smoke:journey` covers `/api/loyalty/award`, `/api/loyalty/redeem` and `/api/rewards/redeem` in the main monetization path.
+- Existing: `npm run smoke:negative` covers invalid JSON, unknown IDs and insufficient points.
+- Gap: deterministic reward stock exhaustion fixture.
 
 ### Fan Pass
 
@@ -105,9 +114,10 @@ Required assertions:
 
 Command coverage:
 
+- Existing partial: `npm run smoke:journey` covers `/api/fan-pass/simulate`.
 - Existing partial: `npm run debug:token-economy`
 - Existing partial: `npm run debug:contracts`
-- Gap: dedicated fan-pass journey smoke.
+- Gap: dedicated fan-pass command and live mint/write smoke once on-chain writes are explicitly enabled.
 
 ### B2B Expansion Agent
 
@@ -116,13 +126,19 @@ Required assertions:
 - Run creates mock businesses, score, opportunity, pitch, campaign and payment simulation.
 - `externalCalls` remains `0` while in MVP mode.
 - Payment split matches commission and fan reward budget rules.
+- Platform revenue equals the derived sum of persisted campaign commissions.
 - Outreach status remains draft or mock-approved, never sent.
 
 Command coverage:
 
 - Existing: `npm run debug:b2b-agent`
 - Existing partial: `npm run smoke:platform`
-- Gap: commercial-readiness smoke.
+- Existing: `npm run smoke:journey`
+- Existing: `npm run smoke:business`
+- Existing: `npm run audit:commercial`
+- Existing partial: `npm run smoke:integrations` covers signed Stripe webhook state and outreach approval/dry-run.
+- Existing conditional: `npm run debug:google-places` covers the real provider when user credentials are available.
+- Gap: live provider validation with user Google Places, Stripe Checkout and email-provider credentials.
 
 ### Agent Recommendations and Operator
 
@@ -153,6 +169,7 @@ Required assertions:
 Command coverage:
 
 - Existing: `npm run smoke:security`
+- Existing: `npm run smoke:authz`
 - Existing: `npm run debug:workspace`
 - Existing partial: `npm run smoke:platform`
 
@@ -195,4 +212,4 @@ It should fail when:
 
 PARTIAL.
 
-The repository now has meaningful backend-first scripts, platform/security smoke tests, a full journey smoke command, a business smoke/audit command and a production readiness check. The remaining gap is not command availability; it is production truth: payments, outreach, real B2B discovery, durable persistence and some provider flows are still simulated or incomplete for paid production.
+The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke and Chromium browser checks. Remaining gaps are external validation and production architecture: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.

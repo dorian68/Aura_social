@@ -19,3 +19,9 @@ Frontend_Aura/screenshots/
 artifacts/
 reports/
 prospecting/
+
+# Local runtime config (contains secrets — appSecret, tokens)
+data/meta/runtime-config.local.json
+
+# SQLite database (runtime state, not source)
+data/aura-state/

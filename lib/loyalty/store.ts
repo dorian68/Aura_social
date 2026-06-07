@@ -1,30 +1,44 @@
 import { createDemoLoyaltyState } from "./mockLoyaltyData";
 import type { LoyaltyState } from "./types";
-import { deleteLocalJson, readLocalJson, writeLocalJson } from "../storage/localJsonStore";
+import {
+  getPersistenceMode,
+  readPersistedState,
+  resetPersistedState,
+  writePersistedState,
+} from "../storage/localJsonStore";
 
 declare global {
   // eslint-disable-next-line no-var
   var __auraLoyaltyState: LoyaltyState | undefined;
+  // eslint-disable-next-line no-var
+  var __auraLoyaltyRevision: number | undefined;
 }
 
 export function getLoyaltyState() {
-  if (!globalThis.__auraLoyaltyState) {
-    globalThis.__auraLoyaltyState = readLocalJson("loyalty-state.json", createDemoLoyaltyState);
+  if (!globalThis.__auraLoyaltyState || getPersistenceMode() === "sqlite") {
+    const persisted = readPersistedState("loyalty-state.json", createDemoLoyaltyState);
+    globalThis.__auraLoyaltyState = persisted.value;
+    globalThis.__auraLoyaltyRevision = persisted.revision;
   }
   return globalThis.__auraLoyaltyState;
 }
 
 export function setLoyaltyState(nextState: LoyaltyState) {
-  // MVP local JSON persistence. Replace this adapter with database storage
-  // keyed by the authenticated creator before multi-user production.
+  getLoyaltyState();
+  const nextRevision = writePersistedState(
+    "loyalty-state.json",
+    nextState,
+    globalThis.__auraLoyaltyRevision || 0,
+  );
   globalThis.__auraLoyaltyState = nextState;
-  writeLocalJson("loyalty-state.json", nextState);
+  globalThis.__auraLoyaltyRevision = nextRevision;
   return nextState;
 }
 
 export function resetLoyaltyState() {
-  globalThis.__auraLoyaltyState = createDemoLoyaltyState();
-  deleteLocalJson("loyalty-state.json");
+  const persisted = resetPersistedState("loyalty-state.json", createDemoLoyaltyState);
+  globalThis.__auraLoyaltyState = persisted.value;
+  globalThis.__auraLoyaltyRevision = persisted.revision;
   return globalThis.__auraLoyaltyState;
 }
 
