@@ -38,20 +38,25 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     const membership = createMembership(community.id, fan.id);
 
     // Welcome points
-    const ledger = awardPoints(fan.id, community.id, DEFAULT_POINTS.join_welcome, "join_welcome", membership.id, "Welcome to the club!");
+    awardPoints(fan.id, community.id, DEFAULT_POINTS.join_welcome, "join_welcome", membership.id, "Welcome to the club!");
 
     // Referral reward
+    let referralBonus = 0;
     if (referrerMembership && referrerMembership.communityId === community.id && referrerMembership.fanId !== fan.id) {
       createReferral(referrerMembership.fanId, fan.id, community.id, DEFAULT_POINTS.referral_referrer);
       awardPoints(referrerMembership.fanId, community.id, DEFAULT_POINTS.referral_referrer, "referral", fan.id, `Referral: ${fan.email}`);
       awardPoints(fan.id, community.id, DEFAULT_POINTS.referral_new_fan, "referral", referrerMembership.fanId, "Joined via referral");
+      referralBonus = DEFAULT_POINTS.referral_new_fan;
     }
+
+    // Re-read final ledger so balance includes all awarded points
+    const finalLedger = getLedger(fan.id, community.id);
 
     return ok({
       alreadyMember: false,
       fan: { id: fan.id, displayName: fan.displayName ?? email.split("@")[0] },
       membership: { ...membership, referralLink: `${community.slug}/join?ref=${membership.referralCode}` },
-      points: { balance: ledger.balance, justEarned: DEFAULT_POINTS.join_welcome },
+      points: { balance: finalLedger?.balance ?? DEFAULT_POINTS.join_welcome, justEarned: DEFAULT_POINTS.join_welcome + referralBonus },
     }, { clubName: community.name });
   } catch (e) { return handleApiError(e, "JOIN_ERROR"); }
 }

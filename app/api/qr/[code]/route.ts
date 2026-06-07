@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
-import { getQRByCode, recordQRScan, getChallengeById, getCompletion, createCompletion, awardPoints, updateCompletionStatus, getMembership } from "@/lib/superfan/db";
+import { getQRByCode, recordQRScan, getChallengeById, getCompletion, createCompletion, awardPoints, updateCompletionStatus } from "@/lib/superfan/db";
 import { DEFAULT_POINTS } from "@/lib/superfan/types";
+import { fail } from "@/lib/apiResponse";
+
+function absoluteUrl(path: string, req: Request): string {
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  const base = process.env.NEXT_PUBLIC_BASE_URL ?? new URL(req.url).origin;
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 export async function GET(req: Request, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
   const qr = getQRByCode(code);
-  if (!qr) return NextResponse.json({ error: "QR_NOT_FOUND" }, { status: 404 });
+  if (!qr) return fail("QR_NOT_FOUND", "QR code not found.", 404);
 
   const url = new URL(req.url);
   const fanToken = url.searchParams.get("f"); // fan identification token (JWT or fan ID for MVP)
@@ -28,15 +35,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ code: st
           awardPoints(fanToken, challenge.communityId, DEFAULT_POINTS.qr_scan, "qr_scan", qr.id, "Partner visit bonus");
         }
         // Redirect to confirmation page
-        const base = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3009";
-        return NextResponse.redirect(`${base}/club/qr-confirm?points=${challenge.pointsReward}&challenge=${encodeURIComponent(challenge.title)}`);
+        return NextResponse.redirect(absoluteUrl(`/club/qr-confirm?points=${challenge.pointsReward}&challenge=${encodeURIComponent(challenge.title)}`, req));
       }
     }
   }
 
   // Redirect to the destination URL
   if (qr.redirectUrl) {
-    return NextResponse.redirect(qr.redirectUrl);
+    return NextResponse.redirect(absoluteUrl(qr.redirectUrl, req));
   }
 
   return NextResponse.json({ scanned: true, qrId: qr.id });

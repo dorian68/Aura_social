@@ -5,6 +5,7 @@ import {
   getLeaderboard, getCommunityStats,
 } from "@/lib/superfan/db";
 import JoinForm from "./JoinForm";
+import RedeemButton from "./RedeemButton";
 
 const TIER_STYLES: Record<string, { label: string; color: string; bg: string }> = {
   vip:      { label: "VIP",      color: "#f59e0b", bg: "#f59e0b18" },
@@ -159,19 +160,24 @@ export default async function ClubPage({
               {rewards.map(r => {
                 const available = r.stock == null ? true : (r.stock - r.redeemed) > 0;
                 return (
-                  <div key={r.id} className={`flex items-start gap-4 px-4 py-4 rounded-xl border transition-opacity ${available ? "bg-[#0B0F0E] border-[#1e2820]" : "bg-[#0B0F0E]/50 border-[#1e2820]/50 opacity-60"}`}>
-                    <span className="text-2xl leading-none mt-0.5">{REWARD_ICONS[r.type] ?? "🎁"}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-[#FFF7E8]">{r.title}</p>
-                      {r.description && <p className="text-xs text-white/40 mt-0.5 line-clamp-2">{r.description}</p>}
-                      {r.stock != null && (
-                        <p className="text-xs text-white/30 mt-1">{r.stock - r.redeemed} left</p>
-                      )}
+                  <div key={r.id} className={`px-4 py-4 rounded-xl border transition-opacity ${available ? "bg-[#0B0F0E] border-[#1e2820]" : "bg-[#0B0F0E]/50 border-[#1e2820]/50 opacity-60"}`}>
+                    <div className="flex items-start gap-4">
+                      <span className="text-2xl leading-none mt-0.5">{REWARD_ICONS[r.type] ?? "🎁"}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm text-[#FFF7E8]">{r.title}</p>
+                        {r.description && <p className="text-xs text-white/40 mt-0.5 line-clamp-2">{r.description}</p>}
+                        {r.stock != null && (
+                          <p className="text-xs text-white/30 mt-1">{r.stock - r.redeemed} left</p>
+                        )}
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <span className="text-sm font-black text-[#FFF7E8]">{r.pointsCost}</span>
+                        <p className="text-xs text-white/30">pts</p>
+                      </div>
                     </div>
-                    <div className="shrink-0 text-right">
-                      <span className="text-sm font-black text-[#FFF7E8]">{r.pointsCost}</span>
-                      <p className="text-xs text-white/30">pts</p>
-                    </div>
+                    {available && (
+                      <RedeemButton slug={slug} rewardId={r.id} pointsCost={r.pointsCost} brandColor={brand} />
+                    )}
                   </div>
                 );
               })}

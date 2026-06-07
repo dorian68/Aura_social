@@ -199,6 +199,12 @@ export function getMembership(communityId: string, fanId: string): Membership | 
   return row ? mapMembership(row) : null;
 }
 
+export function getMembershipsByFan(fanId: string): Membership[] {
+  const db = getAuraDatabase();
+  const rows = db.prepare("SELECT * FROM sf_memberships WHERE fan_id=? ORDER BY joined_at ASC").all(fanId) as Record<string, unknown>[];
+  return rows.map(mapMembership);
+}
+
 export function getMembershipByReferralCode(code: string): Membership | null {
   const db = getAuraDatabase();
   const row = db.prepare("SELECT * FROM sf_memberships WHERE referral_code=?").get(code) as Record<string, unknown> | undefined;
@@ -524,6 +530,13 @@ export function getLeaderboard(communityId: string, period: "alltime"|"monthly"|
     rank: i + 1, fanId: String(r.fan_id), displayName: String(r.display_name),
     tier: String(r.tier), points: Number(r.points), joinedAt: String(r.joined_at),
   }));
+}
+
+export function getLeaderEntry(fanId: string, communityId: string): { rank: number; points: number; tier: string } | null {
+  const board = getLeaderboard(communityId, "alltime", 9999);
+  const entry = board.find(r => r.fanId === fanId);
+  if (!entry) return null;
+  return { rank: entry.rank, points: entry.points, tier: entry.tier };
 }
 
 export function getFanRank(communityId: string, fanId: string): { rank: number; total: number } {

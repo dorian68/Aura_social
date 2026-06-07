@@ -7,7 +7,7 @@ interface Membership { communityId: string; tier: string; joinedAt: string; last
 interface Ledger { balance: number; totalEarned: number; totalSpent: number; }
 interface Transaction { id: string; type: string; amount: number; source: string; note?: string; createdAt: string; }
 interface FanPlatformAccount { platform: string; handle: string; followersCount?: number; connectedStatus: string; }
-interface CommunityInfo { id: string; name: string; slug: string; brandColor: string; membership: Membership; ledger: Ledger; rank: number; total: number; }
+interface CommunityInfo { id: string; name: string; slug: string; brandColor: string; membership: Membership; ledger: { balance: number; totalEarned: number; totalSpent: number; tier: string; rank: number | null } | null; }
 
 const PLATFORM_META: Record<string, { icon: string; label: string }> = {
   instagram: { icon: "📸", label: "Instagram" },
@@ -41,63 +41,44 @@ export default function FanProfilePage() {
   const defaultCommunity = communities[0];
   const brand = defaultCommunity?.brandColor ?? "#B8FF4D";
 
-  const load = useCallback(async () => {
-    try {
-      // Fan profile
-      const [fanRes, platformRes] = await Promise.all([
-        fetch(`/api/fan/${fanId}/points`),
-        fetch(`/api/fan/${fanId}/platforms`),
-      ]);
-
-      if (!fanRes.ok) throw new Error("Fan not found");
-      const fanData = await fanRes.json();
-      // /api/fan/[fanId]/points returns ledger for ONE community — we need a different endpoint
-      // Let's use the platforms endpoint to get fan info
-      if (platformRes.ok) {
-        const pd = await platformRes.json();
-        if (pd.success) {
-          setPlatforms(pd.data.accounts);
-          setConfigured(pd.data.configured);
-        }
-      }
-
-      // Fetch fan info from points (any community)
-      if (fanData.success) {
-        // We have ledger data but need full fan + communities list
-        // Use a simplified approach: display what we can
-      }
-
-      // Fetch fan's points and transactions from the first available community
-      // We'll discover which communities they're in via the leaderboard or a dedicated endpoint
-      // For now we show platform data + any community info from URL context
-      setFan({ id: fanId, email: "", displayName: fanData.data?.fanId ? "Fan" : "Fan" });
-
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, [fanId]);
-
-  // Better: use a comprehensive fan profile endpoint
   const loadFull = useCallback(async () => {
     try {
-      const [platformRes, txRes] = await Promise.all([
+      const [profileRes, platformRes] = await Promise.all([
+        fetch(`/api/fan/${fanId}/profile`),
         fetch(`/api/fan/${fanId}/platforms`),
-        fetch(`/api/fan/${fanId}/transactions?limit=20`),
       ]);
+
+      if (!profileRes.ok) throw new Error("Fan not found");
+      const profileData = await profileRes.json();
+      if (!profileData.success) throw new Error(profileData.error?.message ?? "Fan not found");
+
+      setFan({
+        id: profileData.data.fan.id,
+        email: profileData.data.fan.email ?? "",
+        displayName: profileData.data.fan.displayName ?? profileData.data.fan.email?.split("@")[0] ?? "Fan",
+      });
+
+      setCommunities(
+        (profileData.data.communities ?? []).map((c: Record<string, unknown>) => ({
+          id: (c.community as Record<string, unknown>)?.id ?? (c.membership as Record<string, unknown>)?.communityId,
+          name: (c.community as Record<string, unknown>)?.name ?? "Club",
+          slug: (c.community as Record<string, unknown>)?.slug ?? "",
+          brandColor: (c.community as Record<string, unknown>)?.brandColor ?? "#B8FF4D",
+          membership: c.membership,
+          ledger: c.ledger,
+        }))
+      );
+
+      // Collect transactions from all communities
+      const allTx = (profileData.data.communities ?? [])
+        .flatMap((c: Record<string, unknown>) => (c.recentTransactions as Transaction[]) ?? []);
+      setTransactions(allTx.sort((a: Transaction, b: Transaction) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 20));
 
       if (platformRes.ok) {
         const pd = await platformRes.json();
         if (pd.success) { setPlatforms(pd.data.accounts ?? []); setConfigured(pd.data.configured ?? []); }
       }
 
-      if (txRes.ok) {
-        const td = await txRes.json();
-        if (td.success) setTransactions(td.data.transactions ?? []);
-      }
-
-      setFan({ id: fanId, email: "", displayName: "Fan" });
       setLoading(false);
     } catch (e) {
       setError((e as Error).message);

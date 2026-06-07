@@ -268,6 +268,80 @@ await run("GET /api/admin/report/[communityId] (creator report)", async () => {
   };
 });
 
+// ── 20. Fan profile endpoint ──────────────────────────────────────────────────
+
+await run("GET /api/fan/[fanId]/profile (fan profile)", async () => {
+  const r = await getJson(`/api/fan/${state.fanId}/profile`);
+  assert(r.success, "profile success");
+  const fan = r.data.fan;
+  assert(fan.id === state.fanId, "fan id matches");
+  const comm = r.data.communities.find((c) => c.community?.id === state.communityId);
+  assert(comm, "community found in profile");
+  assert(comm.ledger.balance === state.welcomePoints + 100, `balance ${comm.ledger.balance} = welcome ${state.welcomePoints} + 100 bonus`);
+  assert(comm.ledger.totalEarned >= state.welcomePoints + 100, "totalEarned tracked");
+  return { balance: comm.ledger.balance, totalEarned: comm.ledger.totalEarned, rank: comm.ledger.rank };
+});
+
+// ── 21. Create reward ─────────────────────────────────────────────────────────
+
+await run("POST /api/admin/rewards/[communityId] (create reward)", async () => {
+  const r = await postJson(`/api/admin/rewards/${state.communityId}`, {
+    title: "Smoke Reward",
+    description: "Test reward from smoke suite.",
+    pointsCost: 100,
+    type: "digital",
+  });
+  assert(r.success, "reward created");
+  assert(r.data.reward.id, "reward has id");
+  state.rewardId = r.data.reward.id;
+  return { rewardId: state.rewardId.slice(0, 8), pointsCost: r.data.reward.pointsCost };
+});
+
+// ── 22. Fan redeems reward ────────────────────────────────────────────────────
+
+await run("POST /api/club/[slug]/redeem (fan redeems reward)", async () => {
+  // Resolve the fan's email (join used a dynamic timestamp-based email)
+  const fans = await getJson(`/api/admin/fans/${state.communityId}`);
+  const fan = fans.data.fans.find((f) => f.id === state.fanId);
+  assert(fan, "fan found in admin list");
+  state.fanEmail = fan.email;
+
+  const r = await postJson(`/api/club/${state.slug}/redeem`, {
+    email: state.fanEmail,
+    rewardId: state.rewardId,
+  });
+  assert(r.success, "redemption success");
+  assert(r.data.redemption.status === "pending", "redemption is pending");
+  state.redemptionId = r.data.redemption.id;
+  return { redemptionId: state.redemptionId.slice(0, 8), status: r.data.redemption.status };
+});
+
+// ── 23. Admin sees pending redemption ─────────────────────────────────────────
+
+await run("GET /api/admin/redemptions/[communityId] (pending redemptions)", async () => {
+  const r = await getJson(`/api/admin/redemptions/${state.communityId}`);
+  assert(r.success, "redemptions list success");
+  const found = r.data.redemptions.find((x) => x.id === state.redemptionId);
+  assert(found, "redemption appears in admin list");
+  assert(found.status === "pending", "status is pending");
+  return { count: r.data.redemptions.length };
+});
+
+// ── 24. Admin fulfills redemption ─────────────────────────────────────────────
+
+await run("POST /api/admin/redemptions/[id]/fulfill (fulfill redemption)", async () => {
+  const r = await postJson(`/api/admin/redemptions/${state.redemptionId}/fulfill`, { note: "smoke test fulfilled" });
+  assert(r.success, "fulfill success");
+  assert(r.data.fulfilled === true, "fulfilled: true");
+
+  // Verify balance deducted
+  const profile = await getJson(`/api/fan/${state.fanId}/profile`);
+  const comm = profile.data.communities.find((c) => c.community?.id === state.communityId);
+  const expectedBalance = state.welcomePoints + 100 - 100;
+  assert(comm.ledger.balance === expectedBalance, `balance ${comm.ledger.balance} = ${expectedBalance} after spend`);
+  return { fulfilled: true, newBalance: comm.ledger.balance };
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const passed = results.filter((r) => r.status === "success").length;
