@@ -35,17 +35,18 @@ The MVP is backend-first and mock-safe. Real external side effects must remain d
 
 ### Journey G - Launch a Superfan Club (P0) ✅ COMPLETE
 
-1. Creator visits `/onboarding` and completes the 3-step self-service form (creator profile → community settings → first challenge).
+1. Creator visits `/onboarding` and completes the 3-step self-service form (creator profile + email + password → community settings → first challenge).
 2. Creator sets club name, description, brand color (preset or custom) and niche.
 3. Creator configures an initial challenge (type, description, points reward, verification method).
-4. Aura generates a public club page at `/club/:slug` and saves dashboard URL to localStorage.
-5. Creator returns to their dashboard via the "My Dashboard" recovery link in the nav.
-6. Creator shares the club URL with their audience.
-7. Fans visit the page, see the leaderboard and sign up with their email.
-8. Fans earn welcome points (50 pts) automatically on signup.
-9. Creator sees fan activity in admin dashboard at `/api/admin/dashboard/:communityId`.
+4. Aura creates a creator account via `POST /api/auth/signup` (returns httpOnly session cookie), then creates community, challenge and reward.
+5. Aura generates a public club page at `/club/:slug`. Success screen shows "Go to Dashboard →" link with clean club URL preview.
+6. Creator returns to their dashboard by logging in at `/auth` (protected via server-side session check; unauthenticated access redirects to `/auth?next=...`).
+7. Creator shares the club URL with their audience.
+8. Fans visit the page, see the leaderboard and sign up with their email.
+9. Fans earn welcome points (50 pts) automatically on signup.
+10. Creator sees fan activity in admin dashboard at `/api/admin/dashboard/:communityId`.
 
-**Implementation status:** `POST /api/creators`, `POST /api/admin/communities`, `POST /api/admin/challenges/[communityId]`, `POST /api/admin/rewards/[communityId]` all implemented. `/onboarding` multi-step form live. DashboardRecovery localStorage nav link live. Smoke-tested in `smoke:superfan` (assertions 26–30) and `smoke:business` (`onboardingComplete` signal).
+**Implementation status:** `POST /api/creators`, `POST /api/admin/communities`, `POST /api/admin/challenges/[communityId]`, `POST /api/admin/rewards/[communityId]` all implemented. `/onboarding` multi-step form live. Auth flow: `/api/auth/signup` in step 1, `/auth` login page for returning creators. Dashboard server-protected. Smoke-tested in `smoke:superfan` (assertions 26–30) and `smoke:business` (`onboardingComplete` signal).
 
 ### Journey H - Fan earns points and redeems a reward (P0) ✅ COMPLETE
 
@@ -427,6 +428,8 @@ Empty states must say what is missing and what the next safe action is.
 
 ## 15. Authentication and Permissions
 
+### 15.1 API-Key Auth (Operator/Platform Routes)
+
 - Sensitive API prefixes are protected by `middleware.ts`.
 - `DEMO_MODE=true` is an explicit bypass.
 - `AURA_API_KEYS_JSON` maps API identities to roles and allowed workspaces.
@@ -435,6 +438,28 @@ Empty states must say what is missing and what the next safe action is.
 - In production with no configured token, protected routes must fail closed.
 - Public exact routes are limited to health and public Meta config.
 - OAuth routes remain public because the browser redirect flow cannot provide the API token.
+
+### 15.2 Creator Session Auth
+
+Creator accounts use email/password with session cookies.
+
+**Signup:** `POST /api/auth/signup { displayName, email, password }` — creates a record in `sf_creators` + `sf_creator_credentials` (bcrypt-12 hash), generates a session in `sf_sessions`, returns httpOnly cookie `aura_session` (30-day, SameSite=Lax).
+
+**Login:** `POST /api/auth/login { email, password }` — timing-safe (unknown email runs a dummy bcrypt to prevent timing attacks). Returns session cookie + creator profile.
+
+**Me:** `GET /api/auth/me` — reads `aura_session` cookie, joins `sf_sessions` + `sf_creators` + `sf_creator_credentials`, returns `{ creator: { id, displayName, email }, communities: [...] }`. Returns 401 `NOT_AUTHENTICATED` without a valid session.
+
+**Logout:** `POST /api/auth/logout` — deletes session row, clears cookie.
+
+**Forgot password:** `POST /api/auth/forgot-password { email }` — always returns success (no email enumeration). Generates a 32-byte single-use token stored in `sf_password_resets` (1-hour expiry). Dev mode returns token in response body for CLI testability. Production: token must be emailed via Resend (P1, not yet configured).
+
+**Reset password:** `POST /api/auth/reset-password { token, password }` — validates token (must exist, not used, not expired), updates `sf_creator_credentials.password_hash`, marks token `used=1`, deletes all sessions for the creator (forces re-login). Returns `TOKEN_USED`, `TOKEN_EXPIRED` or `TOKEN_NOT_FOUND` on failure.
+
+**Dashboard protection:** `app/dashboard/[communityId]/page.tsx` is a server component that calls `getSessionFromCookies()`. If no valid session, it redirects to `/auth?next=/dashboard/:id`. The client shell (`DashboardShell`) receives `communityId`, `creatorEmail` and `creatorName` as props.
+
+**Migrations:**
+- v7 — `sf_creators`, `sf_creator_credentials`, `sf_sessions` tables.
+- v8 — `sf_password_resets` table with indexes on `token` and `creator_id`.
 
 ## 16. CLI-Testability Requirements
 
@@ -465,6 +490,8 @@ Required command categories:
 Protocol commands now available in `package.json`:
 
 - `npm run smoke:journey`
+- `npm run smoke:superfan`
+- `npm run smoke:auth`
 - `npm run smoke:business`
 - `npm run audit:commercial`
 - `npm run production:check`

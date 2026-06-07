@@ -405,4 +405,21 @@ export const databaseMigrations: DatabaseMigration[] = [
       CREATE INDEX IF NOT EXISTS idx_sf_sessions_expires ON sf_sessions(expires_at);
     `,
   },
+  {
+    version: 8,
+    name: "password_resets",
+    sql: `
+      CREATE TABLE IF NOT EXISTS sf_password_resets (
+        id TEXT PRIMARY KEY,
+        creator_id TEXT NOT NULL,
+        token TEXT NOT NULL UNIQUE,
+        expires_at TEXT NOT NULL,
+        used INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (creator_id) REFERENCES sf_creators(id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS idx_sf_resets_token ON sf_password_resets(token);
+      CREATE INDEX IF NOT EXISTS idx_sf_resets_creator ON sf_password_resets(creator_id);
+    `,
+  },
 ];

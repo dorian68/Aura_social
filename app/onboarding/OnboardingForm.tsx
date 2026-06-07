@@ -409,31 +409,28 @@ export default function OnboardingForm() {
             <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl bg-[#B8FF4D18] border border-[#B8FF4D40]">
               🚀
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <h1 className="text-2xl font-black text-[#B8FF4D]">{result.clubName} is live!</h1>
-              <p className="text-sm text-white/40">Share your club URL with your audience.</p>
+              <p className="text-sm text-white/40">Your fan club is ready. Share the link and start growing.</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <a
-                href={result.dashboardUrl}
-                className="py-3 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all text-center"
-              >
-                Go to Dashboard →
-              </a>
-              <a
-                href={result.clubUrl}
-                target="_blank" rel="noopener noreferrer"
-                className="py-3 rounded-xl font-bold text-sm border border-[#1e2820] text-white/60 hover:border-[#B8FF4D40] hover:text-white/80 transition-all text-center"
-              >
-                View Club ↗
-              </a>
-            </div>
+            <a
+              href={result.dashboardUrl}
+              className="block w-full py-3.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 transition-all text-center"
+            >
+              Go to Dashboard →
+            </a>
 
             <div className="rounded-xl bg-[#0B0F0E] border border-[#1e2820] p-4 text-left space-y-2">
               <p className="text-xs font-bold text-white/40 uppercase tracking-wider">Your fan club URL</p>
               <p className="text-sm font-mono text-[#B8FF4D] break-all">{result.clubUrl}</p>
-              <p className="text-xs text-white/30">Share this with your audience to start growing.</p>
+              <div className="flex items-center justify-between pt-1">
+                <p className="text-xs text-white/30">Share with your audience to start growing.</p>
+                <a href={result.clubUrl} target="_blank" rel="noopener noreferrer"
+                  className="text-xs text-white/40 hover:text-white/70 underline shrink-0 ml-2">
+                  Preview ↗
+                </a>
+              </div>
             </div>
           </div>
         )}

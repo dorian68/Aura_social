@@ -1,0 +1,292 @@
+# Prompt for Claude/Codex — Update Aura Into Cross-Platform Creator Superfan OS
+
+## Role
+
+You are a senior product engineer, UX strategist and business-aware builder.
+
+Your task is to update Aura’s product direction, functional specs and landing page so that Aura becomes:
+
+A cross-platform loyalty and rewards OS for creators who want to turn engagement into revenue.
+
+Core positioning:
+
+Aura helps creators turn their most engaged fans into a rewarded growth community.
+
+Business version:
+
+Aura is a loyalty and rewards OS for creators who want to turn engagement into revenue.
+
+Local version:
+
+Aura helps local creators transform their superfans into measurable traffic for partner businesses.
+
+Hero line:
+
+Your next 100 superfans are worth more than 100,000 passive followers.
+
+Immediate explanation:
+
+Aura gives those 100 superfans a reason to engage, share, show up, buy and bring others.
+
+## 1. Strategic update
+
+Aura must no longer be positioned as only an Instagram monetization platform.
+
+Aura must become cross-platform by design:
+
+- Instagram
+- TikTok
+- YouTube
+- Twitch
+- Discord
+- Newsletter
+- WhatsApp
+- Events
+- Offline rewards
+
+However:
+
+MVP = Instagram-first  
+Architecture = cross-platform  
+Positioning = creator community ownership layer
+
+## 2. Product pivot
+
+The immediate product wedge is:
+
+Free Superfan Club for creators.
+
+Aura should let a creator launch:
+
+- a public fan club page;
+- a points system;
+- challenges;
+- rewards;
+- leaderboard;
+- fan signup;
+- fan referrals;
+- creator dashboard;
+- QR/coupon tracking.
+
+The first creator outcome:
+
+“I know who my real fans are, and I can activate them.”
+
+The first fan outcome:
+
+“My support counts, and I can earn status, points and rewards.”
+
+The first Aura outcome:
+
+Fans register on Aura and create a permissioned community graph.
+
+## 3. Documents to update or create
+
+Create or update:
+
+- PRODUCT_PHILOSOPHY.md
+- FUNCTIONAL_SPECIFICATION.md
+- AURA_STRATEGIC_POSITIONING.md
+- AURA_BUSINESS_MODEL.md
+- AURA_PRODUCT_SPEC_CREATOR_SUPERFAN_OS.md
+- AURA_LANDING_PAGE_COPY.md
+- AURA_CREATOR_PILOT_PLAYBOOK.md
+
+If these documents already exist, update them. Do not duplicate.
+
+## 4. Product philosophy requirements
+
+Update the philosophy to state:
+
+Aura exists to help creators own, activate and monetize their true fan communities.
+
+Key principles:
+
+- Creators first
+- Fans get real value
+- Points before tokens
+- Cross-platform ownership
+- Instagram-first but not Instagram-dependent
+- Businesses enter after fan activation is proven
+- Data is permissioned community intelligence, not raw data for sale
+
+## 5. Functional specification requirements
+
+Update the functional spec around these P0 modules:
+
+- Public Creator Club Page
+- Fan Signup
+- Points Ledger
+- Challenges
+- Rewards
+- Leaderboard
+- Creator Dashboard
+- QR/Coupon Tracking
+- Referral Links
+- Sponsor-Ready Report
+
+For each module, define:
+
+- purpose;
+- user story;
+- inputs;
+- outputs;
+- data model;
+- API routes;
+- UI requirements;
+- empty states;
+- error states;
+- acceptance criteria.
+
+## 6. Cross-platform data model
+
+Refactor or validate data model around:
+
+- Creator
+- PlatformAccount
+- Fan
+- CreatorCommunity
+- Membership
+- PointsLedger
+- Challenge
+- ChallengeCompletion
+- Reward
+- RewardRedemption
+- Referral
+- Partner
+- Campaign
+- QRCode
+- CouponCode
+
+Add PlatformAccount abstraction:
+
+- creator_id;
+- platform;
+- handle;
+- url;
+- followers_count optional;
+- connected_status;
+- metadata.
+
+Supported platform enum:
+
+- instagram;
+- tiktok;
+- youtube;
+- twitch;
+- discord;
+- newsletter;
+- whatsapp;
+- offline;
+- other.
+
+Do not hardcode Aura as Instagram-only.
+
+## 7. Landing page update
+
+Update the landing page to sell to creators.
+
+Do not lead with:
+
+- blockchain;
+- token;
+- NFT;
+- AI agent;
+- marketplace;
+- sponsor automation.
+
+Lead with:
+
+- Superfan Club;
+- points;
+- challenges;
+- rewards;
+- fan ownership;
+- creator growth.
+
+Hero:
+
+Your next 100 superfans are worth more than 100,000 passive followers.
+
+Subheadline:
+
+Aura helps creators turn their most engaged fans into a rewarded growth community — with points, challenges, rewards and fan data they own.
+
+CTA:
+
+Launch your free Superfan Club.
+
+How it works:
+
+1. Launch your Superfan Club.
+2. Activate your fans with challenges and rewards.
+3. Turn engagement into revenue with reports, events and partner campaigns.
+
+## 8. Creator pilot flow
+
+Add a pilot application flow:
+
+- creator name;
+- main platform;
+- handle;
+- email / WhatsApp;
+- city;
+- follower count;
+- type of community;
+- what rewards they could offer.
+
+## 9. Technical acceptance criteria
+
+The update is complete only if:
+
+- The page no longer feels Instagram-only.
+- The hero clearly sells Superfan Club value.
+- Blockchain/token language is secondary or removed from the first screen.
+- Creator can understand the value in under 10 seconds.
+- The product supports creator club pages.
+- Fan signup is possible.
+- Points ledger exists or is specified.
+- Challenges exist or are specified.
+- Rewards exist or are specified.
+- Creator dashboard exists or is specified.
+- QR/coupon tracking exists or is specified.
+- Cross-platform data model is present.
+- Pilot CTA exists.
+
+## 10. Business Client Mystère Review
+
+After updating, test the page as a creator.
+
+Answer:
+
+- Do I understand what Aura does in 10 seconds?
+- Do I know what I get for free?
+- Do I understand why my fans would join?
+- Do I understand how I can make money later?
+- Do I trust the product?
+- Would I apply for a pilot?
+
+Score:
+
+- Creator clarity: /100
+- Creator perceived value: /100
+- Fan value clarity: /100
+- Monetization clarity: /100
+- Cross-platform clarity: /100
+- Pilot conversion potential: /100
+
+## 11. Final output required
+
+At the end, provide:
+
+1. Files changed
+2. Landing page copy changed
+3. Product specs changed
+4. New data model elements
+5. Remaining gaps
+6. Smoke test / build result
+7. Business review score
+
+Do not ask for validation for safe copy/spec changes.
+
+Ask only if deleting existing product modules, changing database schema destructively, adding paid integrations, removing existing routes, or exposing sensitive data.

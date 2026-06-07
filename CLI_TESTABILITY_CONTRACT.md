@@ -66,6 +66,7 @@ Aura runs on port **3009** by default (`PORT=3009 npm run dev`). Port 3000 and 3
 | `npm run smoke:journey` | Main customer journey from analysis to loyalty/reward/B2B monetization outcome. |
 | `npm run smoke:superfan` | Full Superfan OS journey: creator → community → fan join → points → leaderboard → signal rules → admin dashboard (20 assertions). |
 | `npm run smoke:signals` | Alias for smoke:superfan; covers signal rule CRUD, admin scan endpoint, and no-token graceful fallback. |
+| `npm run smoke:auth` | Creator auth system: signup, session cookie, me endpoint, login, INVALID_CREDENTIALS, EMAIL_TAKEN, WEAK_PASSWORD, forgot-password (dev token), reset-password, TOKEN_USED guard, logout + session invalidation (12 assertions). |
 | `npm run smoke:business` | Client mystere checks for clarity, value, trust and payment likelihood — now includes Superfan OS journey. |
 | `npm run audit:commercial` | Structured commercial readiness audit and scoring. |
 | `npm run production:check` | Environment, build, auth, mock-mode, persistence, provider and safety-gate readiness. |
@@ -283,10 +284,41 @@ Command coverage:
 - **New**: `npm run smoke:signals` (alias for smoke:superfan) — covers rules CRUD and scan endpoint.
 - Gap: end-to-end signal detection test requires real OAuth tokens and platform API access (external validation).
 
+### Creator Auth System
+
+Required assertions:
+
+- `POST /api/auth/signup` with `{ displayName, email, password }` creates a creator, returns session cookie and creator profile.
+- `GET /api/auth/me` with valid session cookie returns `{ creator: { id, displayName, email }, communities: [...] }`.
+- `GET /api/auth/me` without cookie returns 401 `NOT_AUTHENTICATED`.
+- `POST /api/auth/login` with correct credentials returns session cookie.
+- `POST /api/auth/login` with wrong password returns `INVALID_CREDENTIALS` (not 500).
+- `POST /api/auth/login` with unknown email returns `INVALID_CREDENTIALS` (timing-safe, no enumeration).
+- `POST /api/auth/signup` with already-registered email returns `EMAIL_TAKEN`.
+- `POST /api/auth/signup` with password < 8 chars returns `WEAK_PASSWORD`.
+- `POST /api/auth/forgot-password` returns `{ devResetToken }` in dev mode for CLI testability.
+- `POST /api/auth/reset-password` with valid token updates password and invalidates all existing sessions.
+- `POST /api/auth/reset-password` with already-used token returns `TOKEN_USED`.
+- `POST /api/auth/logout` clears session; subsequent `GET /api/auth/me` returns 401.
+
+Command coverage:
+
+- **New**: `npm run smoke:auth` — **12 assertions** covering full creator auth lifecycle. **Status: PASS (12/12)**
+- **Dev mode**: `POST /api/auth/forgot-password` returns `resetToken` in response body when `NODE_ENV !== "production"` — no email provider required for CLI testing. In production, token is logged server-side (Resend integration pending).
+
+Notes:
+
+- Passwords hashed with bcrypt (12 rounds). Unknown-email login still calls `verifyPassword` with a dummy hash to prevent timing attacks.
+- Sessions stored in `sf_sessions` table (SQLite, migration v7). Cookie: httpOnly, SameSite=Lax, 30-day expiry.
+- Password reset tokens stored in `sf_password_resets` (migration v8): single-use, 1-hour expiry. Reset invalidates all existing sessions (forces re-login).
+- `/dashboard/[communityId]` is server-protected: unauthenticated requests redirect to `/auth?next=...`.
+
 ## Current Testability Verdict
 
 PASS for core Superfan OS journey (30/30 assertions).
 
+PASS for creator auth system (12/12 assertions).
+
 PARTIAL for production readiness.
 
-The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke, Chromium browser checks, and a 30-assertion Superfan OS smoke covering the full P0 product journey including creator self-service onboarding, challenge creation, fan challenge submission with auto-approval, duplicate guard, admin completions, and reward redemption. Business smoke evaluates the creator Superfan OS product with `wouldPay` True when the end-to-end journey passes. Remaining gaps are external validation: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery, backup/restore proof and domain-level multi-workspace data isolation.
+The repository now has backend-first scripts, resettable negative HTTP fixtures, SQLite migration/concurrency proof, role/workspace authorization smoke, signed Stripe webhook smoke, outreach approval/dry-run smoke, Chromium browser checks, a 30-assertion Superfan OS smoke covering the full P0 product journey (creator self-service onboarding, challenge creation, fan challenge submission with auto-approval, duplicate guard, admin completions, reward redemption), and a 12-assertion creator auth smoke covering email/password signup, login, session lifecycle, forgot-password dev token, password reset and logout. Business smoke evaluates the creator Superfan OS product with `wouldPay` True when the end-to-end journey passes. Remaining gaps are external validation: user-authorized Meta data, Google Places credentials, real Stripe Checkout completion, real email delivery (Resend integration for password reset), backup/restore proof and domain-level multi-workspace data isolation.

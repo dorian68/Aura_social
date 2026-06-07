@@ -248,7 +248,7 @@ async function collectSuperfanEvidence() {
     if (join?.success) {
       out.fanJoinOk = true;
       out.fanId = join.data.fan.id;
-      out.fanBalance = join.data.welcomePoints ?? 0;
+      out.fanBalance = join.data.points?.balance ?? join.data.points?.justEarned ?? 0;
     }
 
     // Fan submits challenge (auto-approved)
@@ -259,6 +259,12 @@ async function collectSuperfanEvidence() {
       });
       out.challengeSubmitOk = submit?.success === true;
       out.challengeAutoApproved = submit?.data?.autoApproved === true;
+      // Read actual balance after auto-approval (data.ledger.balance)
+      if (out.fanId && out.communityId) {
+        const balRes = await fetchSafe(`/api/fan/${out.fanId}/points?communityId=${out.communityId}`);
+        const actualBalance = balRes?.data?.ledger?.balance;
+        if (actualBalance != null) out.fanBalance = actualBalance;
+      }
     }
 
     // Leaderboard

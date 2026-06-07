@@ -3,14 +3,17 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type Tab = "login" | "signup";
+type LoginMode = "credentials" | "forgot" | "forgot_sent";
 
 export default function AuthForm() {
   const searchParams = useSearchParams();
   const nextUrl = searchParams.get("next") || "";
 
   const [tab, setTab] = useState<Tab>("login");
+  const [loginMode, setLoginMode] = useState<LoginMode>("credentials");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotSuccess, setForgotSuccess] = useState("");
 
   // Login fields
   const [loginEmail, setLoginEmail] = useState("");
@@ -20,6 +23,9 @@ export default function AuthForm() {
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupName, setSignupName] = useState("");
+
+  // Forgot password field
+  const [forgotEmail, setForgotEmail] = useState("");
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -55,6 +61,25 @@ export default function AuthForm() {
     setLoading(false);
   }
 
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true); setError("");
+    try {
+      const r = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: forgotEmail }),
+      });
+      const d = await r.json();
+      if (!d.success) throw new Error(d.error?.message ?? "Request failed");
+      setLoginMode("forgot_sent");
+      setForgotSuccess(forgotEmail);
+    } catch (err) { setError((err as Error).message); }
+    setLoading(false);
+  }
+
+  function switchTab(t: Tab) { setTab(t); setError(""); setLoginMode("credentials"); }
+
   const inputCls = "w-full px-4 py-3 rounded-xl bg-[#0B0F0E] border border-[#1e2820] text-sm placeholder-white/20 focus:outline-none focus:border-[#B8FF4D40] text-[#FFF7E8]";
 
   return (
@@ -74,7 +99,7 @@ export default function AuthForm() {
           {(["login", "signup"] as Tab[]).map(t => (
             <button
               key={t}
-              onClick={() => { setTab(t); setError(""); }}
+              onClick={() => switchTab(t)}
               className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
                 tab === t ? "bg-[#B8FF4D] text-[#060A08]" : "text-white/40 hover:text-white/70"
               }`}
@@ -85,7 +110,7 @@ export default function AuthForm() {
         </div>
 
         {/* Login form */}
-        {tab === "login" && (
+        {tab === "login" && loginMode === "credentials" && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="text-xs text-white/40 mb-1 block">Email</label>
@@ -97,7 +122,16 @@ export default function AuthForm() {
               />
             </div>
             <div>
-              <label className="text-xs text-white/40 mb-1 block">Password</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs text-white/40">Password</label>
+                <button
+                  type="button"
+                  onClick={() => { setLoginMode("forgot"); setForgotEmail(loginEmail); setError(""); }}
+                  className="text-xs text-white/30 hover:text-[#B8FF4D] transition-colors"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <input
                 type="password" required
                 value={loginPassword} onChange={e => setLoginPassword(e.target.value)}
@@ -113,6 +147,59 @@ export default function AuthForm() {
               {loading ? "Logging in…" : "Log in →"}
             </button>
           </form>
+        )}
+
+        {/* Forgot password form */}
+        {tab === "login" && loginMode === "forgot" && (
+          <form onSubmit={handleForgot} className="space-y-4">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold">Reset your password</p>
+              <p className="text-xs text-white/40">Enter your email and we'll send a reset link.</p>
+            </div>
+            <div>
+              <label className="text-xs text-white/40 mb-1 block">Email</label>
+              <input
+                type="email" required autoFocus
+                value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={inputCls}
+              />
+            </div>
+            {error && <p className="text-red-400 text-sm">{error}</p>}
+            <button
+              type="submit" disabled={loading}
+              className="w-full py-3.5 rounded-xl font-bold text-sm text-[#060A08] bg-[#B8FF4D] hover:brightness-110 disabled:opacity-40 transition-all"
+            >
+              {loading ? "Sending…" : "Send reset link →"}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setLoginMode("credentials"); setError(""); }}
+              className="w-full text-xs text-white/30 hover:text-white/60 transition-colors"
+            >
+              ← Back to log in
+            </button>
+          </form>
+        )}
+
+        {/* Forgot password sent confirmation */}
+        {tab === "login" && loginMode === "forgot_sent" && (
+          <div className="space-y-4 text-center">
+            <div className="py-4 space-y-3">
+              <div className="text-3xl">✉️</div>
+              <p className="text-sm font-semibold">Check your inbox</p>
+              <p className="text-xs text-white/40">
+                If <span className="text-white/60">{forgotSuccess}</span> is registered,
+                a reset link was sent. Check your server console in dev mode.
+              </p>
+            </div>
+            <button
+              onClick={() => { setLoginMode("credentials"); setError(""); }}
+              className="w-full py-3 rounded-xl font-bold text-sm border border-[#1e2820] text-white/50 hover:text-white/80 transition-colors"
+            >
+              Back to log in
+            </button>
+          </div>
         )}
 
         {/* Signup form */}
@@ -159,9 +246,11 @@ export default function AuthForm() {
         )}
 
         <p className="text-xs text-center text-white/20">
-          {tab === "login"
-            ? <>No account? <button onClick={() => setTab("signup")} className="text-[#B8FF4D] hover:underline">Create one →</button></>
-            : <>Already have one? <button onClick={() => setTab("login")} className="text-[#B8FF4D] hover:underline">Log in →</button></>
+          {tab === "login" && loginMode === "credentials"
+            ? <>No account? <button onClick={() => switchTab("signup")} className="text-[#B8FF4D] hover:underline">Create one →</button></>
+            : tab === "signup"
+            ? <>Already have one? <button onClick={() => switchTab("login")} className="text-[#B8FF4D] hover:underline">Log in →</button></>
+            : null
           }
         </p>
       </div>

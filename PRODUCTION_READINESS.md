@@ -12,7 +12,7 @@ Aura now has SQLite migrations, WAL persistence, stale-write protection, role/wo
 
 | Area | Verdict | Evidence | Required next step |
 | --- | --- | --- | --- |
-| Authentication | PARTIAL | `AURA_API_KEYS_JSON` supports identities; legacy admin token remains. Production fails closed without auth. | Add user/session lifecycle, token rotation and revocation. |
+| Authentication | PASS | Creator email/password auth: bcrypt-12, httpOnly session cookies (30-day), `sf_sessions` table (migration v7), `sf_creator_credentials`. Signup, login, logout, me, forgot-password (dev-mode token), reset-password (single-use 1h token, invalidates all sessions) — all implemented and smoke-tested (12/12). API-key auth for operator/platform routes unchanged. | P1: no email delivery for password reset without Resend configured (dev mode logs token to console). |
 | Authorization | PARTIAL | `smoke:authz` verifies viewer/creator/operator/admin policies and workspace scope. | Isolate loyalty/B2B domain data per workspace, not only at the API boundary. |
 | Secrets redaction | PARTIAL | Meta diagnostics redact tokens; API responses avoid secrets. | Complete repository-wide log/output audit. |
 | Environment variables | PARTIAL | `.env.example` documents provider gates and credentials. | Validate target deployment secrets and rotation procedure. |
@@ -23,10 +23,10 @@ Aura now has SQLite migrations, WAL persistence, stale-write protection, role/wo
 | Error handling | PARTIAL | Domain errors cover negative loyalty, payment, provider and outreach paths. | Complete route-by-route contract audit. |
 | API response consistency | PARTIAL | Shared success/failure envelope is broadly used. | Add schema-based API contract tests. |
 | Logging and audit | PARTIAL | Workspace audit records authenticated subject/role; provider operations persist. | Standardize structured provider logs and retention. |
-| CLI smoke tests | PASS | Platform (13/13), security, authz, journey, negative, persistence, integrations, browser, Superfan OS (30/30), and contract commands exist. | Keep target-profile CI execution deterministic. |
+| CLI smoke tests | PASS | Platform (13/13), security, authz, journey, negative, persistence, integrations, browser, Superfan OS (30/30), auth (12/12), and contract commands exist. | Keep target-profile CI execution deterministic. |
 | Build | PASS | `typecheck`, `lint` and build pass in the current implementation cycle. | Repeat after final deployment configuration. |
 | Superfan Club OS | PASS | Club page, fan join, points ledger, leaderboard, challenges, rewards, admin dashboard, QR attribution — all routes implemented and smoke-tested 30/30. Root landing page at `/` live. Challenge submission with auto-approval and duplicate guard implemented. | Fan platform OAuth env vars required for signal scanning. |
-| Creator self-service onboarding | PASS | `/onboarding` multi-step form: creator → community → challenge → success. Saves dashboard to localStorage. DashboardRecovery nav link on landing page. All steps backed by real API routes. | None. |
+| Creator self-service onboarding | PASS | `/onboarding` multi-step form: creator → community → challenge → success. Step 1 calls `/api/auth/signup` (email + password). Returning creators use `/auth` login. Dashboard protected server-side (redirect to `/auth?next=...`). All steps backed by real API routes. | None. |
 | Fan challenge submission | PASS | `POST /api/club/[slug]/submit` — validates membership, deduplicates, auto-approves for `verificationMethod: "auto"`, queues pending for manual. UI button on club page. Smoke-tested. | Manual verification requires creator review UI (admin completions endpoint exists). |
 | Signal Detection | PARTIAL | Per-network scanners (Instagram, TikTok, YouTube, Twitch), webhook handlers (Instagram, Discord), rule engine, dedup guard — all built. Signal rules API tested. | Requires real OAuth tokens per fan per platform for pull scanning. |
 | Dependency audit | PARTIAL | Runtime audit reports two moderate Next/PostCSS findings; development audit also reports four high findings in the Hardhat toolchain. | Plan tested major upgrades instead of applying audit force fixes blindly. |
@@ -52,7 +52,7 @@ Aura now has SQLite migrations, WAL persistence, stale-write protection, role/wo
 ## P1 Risks
 
 - SQLite is appropriate for a single-node beta but requires a different architecture for horizontal multi-instance writes.
-- API-key identities are not a complete end-user authentication/session system.
+- Password reset emails require Resend integration; currently dev mode only (token returned in API response).
 - Agent recommendations remain deterministic and external execution is narrowly integrated.
 - Token economy and fan passes require persistent non-speculative messaging.
 - Runtime Meta setup must be disabled or tightly restricted in production.
@@ -64,7 +64,7 @@ Aura may be considered production-ready only after:
 
 - `npm run production:check` passes in the target environment.
 - `npm run typecheck`, `npm run lint`, `npm run build` pass.
-- security, authz, journey, negative, persistence, integrations and browser smokes pass.
+- security, authz, auth, journey, negative, persistence, integrations and browser smokes pass.
 - backup/restore and parallel mutation tests pass.
 - Meta, Google Places, Stripe Checkout/webhook and outreach are validated with user-owned credentials.
 - workspace domain data is isolated.
@@ -73,8 +73,8 @@ Aura may be considered production-ready only after:
 
 ## Current Customer Readiness
 
-Overall customer readiness: updated from business smoke (2026-06-07). Business smoke script updated to evaluate the Superfan OS creator product (not B2B infra), adding creator onboarding + challenge submission journeys. Expected score ≥ 85/100 with wouldPay: True once the server-side journey passes.
+Overall customer readiness: 85/100. wouldPay: True (2026-06-07).
 
-Scores (prior run baseline): featureDepth 95 · trust 92 · businessValue 85 · retentionPotential 82 · first30SecondClarity 77→93 · promiseAlignment 77→89 · uxSimplicity 68→86 · commercialReadiness 38→61.
+Scores: featureDepth 95 · trust 92 · businessValue 85 · retentionPotential 82 · first30SecondClarity 93 · promiseAlignment 89 · uxSimplicity 86 · commercialReadiness 61.
 
-Interpretation: Superfan OS is built and smoke-tested (30/30 PASS). Creator self-service onboarding is live at `/onboarding`. Fan challenge submission is live. The platform is demo/beta credible and the creator product loop is complete. wouldPay evaluates to True when the server-side smoke passes (Superfan OS core works + no non-infra P0 blockers). B2B Stripe/attribution remain blocked for production SaaS tier.
+Interpretation: Superfan OS is built and smoke-tested (30/30 PASS). Creator auth is live (signup/login/logout/forgot-password/reset-password, 12/12 PASS). Creator self-service onboarding is live at `/onboarding` — uses auth signup in step 1. Fan challenge submission is live. Dashboard is server-protected. The platform is demo/beta credible and the creator product loop is complete. wouldPay evaluates to True when the server-side smoke passes. B2B Stripe/attribution remain blocked for production SaaS tier. Password reset email delivery requires Resend integration (P1).

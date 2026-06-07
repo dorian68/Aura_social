@@ -36,6 +36,7 @@
     "smoke:browser": "playwright test",
     "smoke:superfan": "node scripts/smoke-superfan.mjs",
     "smoke:signals": "node scripts/smoke-superfan.mjs",
+    "smoke:auth": "node scripts/smoke-auth.mjs",
     "smoke:business": "node scripts/business-smoke.mjs --report",
     "seed:demo": "node scripts/seed-demo.mjs",
     "demo:urls": "node scripts/get-demo-urls.mjs",
