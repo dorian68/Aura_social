@@ -23,9 +23,9 @@
   /* ── INFLUENCER MAP ─────────────────────────────────────────────── */
   var INFLUENCERS = [
     { sel: '[data-fx="well"]', idx: 0, xFrac: 0.74, yFrac: 0.46,
-      str: 3.5, radPx: 380, isBH: true,
-      extra: { swirlStr: 4.8, accR: 2.0, accT: 0.16,
-               glowBoost: 5.0, ringPull: 3.5, maxDisp: 2.2, coreDark: 1.8 } },
+      str: 6.0, radPx: 380, isBH: true,
+      extra: { swirlStr: 0.05, accR: 2.0, accT: 0.16,
+               glowBoost: 5.0, ringPull: 3.2, maxDisp: 2.2, coreDark: 1.8 } },
     { sel: '[data-fx="node"]',       idx: 1, xFrac: 0.26, yFrac: 0.50, str: 1.0, radPx: 200 },
     { sel: '[data-fx="trajectory"]', idx: 2, xFrac: 0.70, yFrac: 0.60, str: 0.8, radPx: 170 },
     { sel: '#loyalty',               idx: -1, xFrac: 0.28, yFrac: 0.55, str: 0,  radPx: 0   },
@@ -74,18 +74,24 @@
   function applyBHProgress(prog) {
     var a = api();
     if (!a) return;
-    var e   = BH_INF.extra;
-    var cx  = BH_INF.xFrac * window.innerWidth;
-    var cy  = BH_INF.yFrac * window.innerHeight;
-    var fc  = a.toField(cx, cy);
-    var rad = pxToFieldRadius(BH_INF);
+    var e    = BH_INF.extra;
+    var mob  = window.innerWidth < 768;
+    var xFrac = mob ? 0.50 : BH_INF.xFrac;
+    var yFrac = mob ? 0.38 : BH_INF.yFrac;
+    var radPx = mob ? 160  : BH_INF.radPx;
+    var accR  = mob ? 0.85 : e.accR;
+    var cx   = xFrac * window.innerWidth;
+    var cy   = yFrac * window.innerHeight;
+    var fc   = a.toField(cx, cy);
+    var fc1  = a.toField(cx + radPx, cy);
+    var rad  = Math.abs(fc1.x - fc.x);
 
     /* Background grid: lensing + Z depression + core dark */
     a.setWell(0, fc.x, fc.y, BH_INF.str * prog, rad);
     if (a.setWellExtra) {
       a.setWellExtra(0,
         e.swirlStr  * sstep(0.35, 1.00, prog),
-        e.accR, e.accT,
+        accR, e.accT,
         e.glowBoost * sstep(0.45, 1.00, prog),
         e.ringPull  * sstep(0.25, 0.75, prog),
         e.maxDisp,
@@ -95,7 +101,7 @@
 
     /* Orbital accretion disk */
     if (a.setBHProgress) {
-      a.setBHProgress(sstep(0.20, 0.80, prog), fc.x, fc.y, e.accR);
+      a.setBHProgress(sstep(0.20, 0.80, prog), fc.x, fc.y, accR);
     }
   }
 
