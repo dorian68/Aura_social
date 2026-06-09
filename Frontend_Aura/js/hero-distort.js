@@ -49,6 +49,10 @@
   var bundleSwapped  = false;
   var resizeAttached = false;
   var observers      = [];
+  var bhTear         = 0;    // 0→1 spike at snap, then decays ~0.028/frame
+  var bhSnapFired    = false;
+  var bhPreCrack1    = false;
+  var bhPreCrack2    = false;
 
   /* ================================================================
      FIELD API
@@ -98,6 +102,9 @@
         e.coreDark  * sstep(0.10, 0.45, prog)
       );
     }
+
+    /* Spacetime tear burst — drives crack displacement in backgroundPoints */
+    if (a.setTear) a.setTear(bhTear);
 
     /* Orbital accretion disk */
     if (a.setBHProgress) {
@@ -205,6 +212,54 @@
 
     if (bhState === 'forming') {
       activationProgress = Math.min(1, activationProgress + FORMATION_SPEED);
+
+      /* Pre-crack 1 — fabric begins straining (prog ~0.20) */
+      if (activationProgress >= 0.20 && !bhPreCrack1) {
+        bhPreCrack1 = true;
+        var pcA = api();
+        if (pcA) {
+          var pcMob = window.innerWidth < 768;
+          var pcFc = pcA.toField(
+            (pcMob ? 0.50 : BH_INF.xFrac) * window.innerWidth,
+            (pcMob ? 0.38 : BH_INF.yFrac) * window.innerHeight
+          );
+          pcA.addRipple(pcFc.x, pcFc.y, 1.0);
+        }
+      }
+
+      /* Pre-crack 2 — fabric straining harder (prog ~0.31) */
+      if (activationProgress >= 0.31 && !bhPreCrack2) {
+        bhPreCrack2 = true;
+        var pcB = api();
+        if (pcB) {
+          var pcMobB = window.innerWidth < 768;
+          var pcFcB = pcB.toField(
+            (pcMobB ? 0.50 : BH_INF.xFrac) * window.innerWidth,
+            (pcMobB ? 0.38 : BH_INF.yFrac) * window.innerHeight
+          );
+          pcB.addRipple(pcFcB.x, pcFcB.y, 1.6);
+        }
+      }
+
+      /* SNAP — fabric tears open (prog ~0.38): burst ripples + uTear spike */
+      if (activationProgress >= 0.38 && !bhSnapFired) {
+        bhSnapFired = true;
+        bhTear = 1.0;
+        var snA = api();
+        if (snA) {
+          var snMob = window.innerWidth < 768;
+          var snFc = snA.toField(
+            (snMob ? 0.50 : BH_INF.xFrac) * window.innerWidth,
+            (snMob ? 0.38 : BH_INF.yFrac) * window.innerHeight
+          );
+          snA.addRipple(snFc.x, snFc.y, 5.5);
+          setTimeout(function(){var a2=api();if(a2)a2.addRipple(snFc.x,snFc.y,4.8);},  70);
+          setTimeout(function(){var a2=api();if(a2)a2.addRipple(snFc.x,snFc.y,4.0);}, 155);
+          setTimeout(function(){var a2=api();if(a2)a2.addRipple(snFc.x,snFc.y,3.0);}, 270);
+          setTimeout(function(){var a2=api();if(a2)a2.addRipple(snFc.x,snFc.y,2.0);}, 420);
+        }
+      }
+
       if (activationProgress >= 1) { bhState = 'active'; activeStartTime = now; }
 
     } else if (bhState === 'handoff') {
@@ -216,6 +271,9 @@
         if (a) a.clearWell(0);
       }
     }
+
+    /* Decay tear effect (~0.5s to zero from spike) */
+    if (bhTear > 0) bhTear = Math.max(0, bhTear - 0.028);
 
     if (activationProgress > 0) applyBHProgress(activationProgress);
 
@@ -261,6 +319,10 @@
     bhCurrentRatio = 0;
     activeStartTime = 0;
     bhSection = null;
+    bhTear = 0;
+    bhSnapFired = false;
+    bhPreCrack1 = false;
+    bhPreCrack2 = false;
   }
 
   function initialize() {
